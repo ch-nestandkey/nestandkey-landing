@@ -126,6 +126,33 @@
     .btn-secondary { background: transparent; color: #2D5A3D; border: 1px solid rgba(80,130,80,0.35); }
     .btn-secondary:hover { background: rgba(80,130,80,0.08); }
 
+    /* Waitlist form */
+    .waitlist-form { margin-top: 40px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .waitlist-form input {
+      padding: 14px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(80,130,80,0.35);
+      background: #fff;
+      font-size: 15px;
+      color: #1E3A2F;
+      outline: none;
+      min-width: 260px;
+    }
+    .waitlist-form input:focus { border-color: #2D5A3D; }
+    .waitlist-form button {
+      padding: 14px 28px;
+      border-radius: 8px;
+      background: #2D5A3D;
+      color: #F4F7F4;
+      font-size: 15px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+    }
+    .waitlist-form button:hover { background: #3D7A52; }
+    .waitlist-social { margin-top: 16px; font-size: 13px; color: #8BAF8E; }
+    .waitlist-success { margin-top: 40px; font-size: 17px; font-weight: 600; color: #2D5A3D; }
+
     /* Footer */
     footer { text-align: center; padding: 32px; font-size: 13px; color: #8BAF8E; }
     footer a { color: #6B8F71; text-decoration: underline; cursor: pointer; }
@@ -182,13 +209,14 @@
 
   <!-- Tenants -->
   <section id="tenants" class="active">
-    <span class="tag">For Tenants</span>
-    <h1>Find a room<br>you'll love.</h1>
-    <p class="sub">Browse verified rooms and connect directly with landlords. No fees, no surprises.</p>
-    <div class="cta">
-      <button class="btn btn-primary">Find a Room</button>
-      <button class="btn btn-secondary">See How It Works</button>
-    </div>
+    <span class="tag">Closed Beta · SF Bay Area · Summer 2026</span>
+    <h1>Find your summer room<br>in the Bay Area.</h1>
+    <p class="sub">Interning this summer? Get matched with vetted, furnished rooms near your workplace.</p>
+    <form class="waitlist-form" onsubmit="handleWaitlist(event)">
+      <input type="email" placeholder="your@email.com" required />
+      <button type="submit">Join Waitlist</button>
+    </form>
+    <p class="waitlist-social">Already 120+ interns waiting</p>
   </section>
 
   <!-- Landlords -->
@@ -242,6 +270,13 @@
     function toggleMenu() {
       document.getElementById('mobile-menu').classList.toggle('open');
       document.getElementById('hamburger').classList.toggle('open');
+    }
+
+    function handleWaitlist(e) {
+      e.preventDefault();
+      const form = e.target;
+      const email = form.querySelector('input').value;
+      form.outerHTML = `<p class="waitlist-success">✓ You're on the list! We'll be in touch soon.</p>`;
     }
 
     function closeMenu() {
