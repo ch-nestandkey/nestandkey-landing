@@ -212,7 +212,7 @@
     <span class="tag">Closed Beta · SF Bay Area · Summer 2026</span>
     <h1>Find your summer room<br>in the Bay Area.</h1>
     <p class="sub">Interning this summer? Get matched with vetted, furnished rooms near your workplace.</p>
-    <form class="waitlist-form" onsubmit="handleWaitlist(event)">
+    <form class="waitlist-form" onsubmit="handleWaitlist(event, 'Interns')">
       <input type="email" placeholder="your@email.com" required />
       <button type="submit">Join Waitlist</button>
     </form>
@@ -221,13 +221,14 @@
 
   <!-- Landlords -->
   <section id="landlords">
-    <span class="tag">For Landlords</span>
-    <h1>List your room.<br>Find the right tenant.</h1>
-    <p class="sub">NestAndKey helps you find reliable, vetted tenants — fast. No endless back-and-forth.</p>
-    <div class="cta">
-      <button class="btn btn-primary">List My Room</button>
-      <button class="btn btn-secondary">Learn More</button>
-    </div>
+    <span class="tag">Closed Beta · SF Bay Area · Summer 2026</span>
+    <h1>List your room.<br>Find the right intern.</h1>
+    <p class="sub">Get matched with vetted summer interns looking for housing. Free to list during beta.</p>
+    <form class="waitlist-form" onsubmit="handleWaitlist(event, 'Landlords')">
+      <input type="email" placeholder="your@email.com" required />
+      <button type="submit">List My Room</button>
+    </form>
+    <p class="waitlist-social">Join landlords already on the platform</p>
   </section>
 
   <!-- Pricing -->
@@ -272,11 +273,28 @@
       document.getElementById('hamburger').classList.toggle('open');
     }
 
-    function handleWaitlist(e) {
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyDWXPn0gIKiQNHkxmnU5LW60dmsq3_ivudS1qR-OrFSilQQawqxOQmeE2hozDRvB6h/exec';
+
+    async function handleWaitlist(e, sheetName) {
       e.preventDefault();
       const form = e.target;
       const email = form.querySelector('input').value;
-      form.outerHTML = `<p class="waitlist-success">✓ You're on the list! We'll be in touch soon.</p>`;
+      const btn = form.querySelector('button');
+      btn.textContent = 'Submitting...';
+      btn.disabled = true;
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, sheet: sheetName }),
+        });
+        form.outerHTML = `<p class="waitlist-success">✓ You're on the list! We'll be in touch soon.</p>`;
+      } catch (err) {
+        btn.textContent = 'Join Waitlist';
+        btn.disabled = false;
+        alert('Something went wrong. Please try again.');
+      }
     }
 
     function closeMenu() {
