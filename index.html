@@ -1,63 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NestAndKey</title>
   <style>
-    :root {
-      --bg: #ffffff;
-      --bg-nav: #ffffff;
-      --bg-drawer: #f7f7f5;
-      --text: #0a0a0a;
-      --text-muted: rgba(0,0,0,0.45);
-      --text-active: #0a0a0a;
-      --border: rgba(0,0,0,0.08);
-      --drawer-border: rgba(0,0,0,0.06);
-      --btn-login-border: rgba(0,0,0,0.2);
-      --btn-login-color: #0a0a0a;
-      --btn-signup-bg: #0a0a0a;
-      --btn-signup-color: #fff;
-      --btn-primary-bg: #0a0a0a;
-      --btn-primary-color: #fff;
-      --btn-secondary-border: rgba(0,0,0,0.2);
-      --btn-secondary-color: #0a0a0a;
-      --hamburger-color: #0a0a0a;
-      --toggle-bg: #e5e5e5;
-      --toggle-knob: #fff;
-      --toggle-icon-dark: '🌙';
-      --toggle-icon-light: '☀️';
-    }
-
-    [data-theme="dark"] {
-      --bg: #0a0a0a;
-      --bg-nav: #0a0a0a;
-      --bg-drawer: #111;
-      --text: #ffffff;
-      --text-muted: rgba(255,255,255,0.5);
-      --text-active: #ffffff;
-      --border: rgba(255,255,255,0.08);
-      --drawer-border: rgba(255,255,255,0.06);
-      --btn-login-border: rgba(255,255,255,0.2);
-      --btn-login-color: #fff;
-      --btn-signup-bg: #fff;
-      --btn-signup-color: #000;
-      --btn-primary-bg: #fff;
-      --btn-primary-color: #000;
-      --btn-secondary-border: rgba(255,255,255,0.2);
-      --btn-secondary-color: #fff;
-      --hamburger-color: #fff;
-      --toggle-bg: #333;
-      --toggle-knob: #0a0a0a;
-    }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      background: #F4F7F4;
+      color: #1E3A2F;
       min-height: 100vh;
-      transition: background 0.3s, color 0.3s;
     }
 
     /* Nav */
@@ -67,54 +20,25 @@
       justify-content: space-between;
       padding: 0 48px;
       height: 64px;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg-nav);
+      border-bottom: 1px solid rgba(80,110,80,0.15);
+      background: #F4F7F4;
       position: relative;
       z-index: 100;
-      transition: background 0.3s, border-color 0.3s;
     }
     .nav-left { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-    .nav-logo { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; cursor: pointer; white-space: nowrap; color: var(--text); }
+    .nav-logo { cursor: pointer; white-space: nowrap; color: #1E3A2F; }
     .nav-links { display: flex; gap: 36px; align-items: center; flex: 1; justify-content: center; }
     .nav-links a {
       font-size: 15px;
-      color: var(--text-muted);
+      color: #7A9E7E;
       text-decoration: none;
       cursor: pointer;
       transition: color 0.15s;
       white-space: nowrap;
     }
-    .nav-links a:hover { color: var(--text-active); }
-    .nav-links a.active { color: var(--text-active); font-weight: 600; }
-
+    .nav-links a:hover { color: #1E3A2F; }
+    .nav-links a.active { color: #1E3A2F; font-weight: 600; }
     .nav-actions { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
-
-    /* Theme toggle */
-    .theme-toggle {
-      width: 44px;
-      height: 24px;
-      border-radius: 12px;
-      background: var(--toggle-bg);
-      border: none;
-      cursor: pointer;
-      position: relative;
-      transition: background 0.3s;
-      flex-shrink: 0;
-    }
-    .theme-toggle::after {
-      content: '';
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--toggle-knob);
-      transition: transform 0.3s, background 0.3s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    }
-    [data-theme="dark"] .theme-toggle::after { transform: translateX(20px); }
-
     .btn-login {
       padding: 8px 18px;
       border-radius: 8px;
@@ -122,21 +46,21 @@
       font-weight: 500;
       cursor: pointer;
       background: transparent;
-      color: var(--btn-login-color);
-      border: 1px solid var(--btn-login-border);
-      transition: color 0.3s, border-color 0.3s;
+      color: #2D5A3D;
+      border: 1px solid rgba(80,130,80,0.35);
     }
+    .btn-login:hover { background: rgba(80,130,80,0.08); }
     .btn-signup {
       padding: 8px 18px;
       border-radius: 8px;
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
-      background: var(--btn-signup-bg);
-      color: var(--btn-signup-color);
+      background: #2D5A3D;
+      color: #F4F7F4;
       border: none;
-      transition: background 0.3s, color 0.3s;
     }
+    .btn-signup:hover { background: #3D7A52; }
 
     /* Hamburger */
     .hamburger {
@@ -154,9 +78,9 @@
     .hamburger span {
       display: block;
       height: 2px;
-      background: var(--hamburger-color);
+      background: #1E3A2F;
       border-radius: 2px;
-      transition: transform 0.25s, opacity 0.25s, background 0.3s;
+      transition: transform 0.25s, opacity 0.25s;
     }
     .hamburger:hover span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .hamburger:hover span:nth-child(2) { opacity: 0; }
@@ -169,39 +93,43 @@
     .mobile-menu {
       display: none;
       flex-direction: column;
-      background: var(--bg-drawer);
-      border-bottom: 1px solid var(--border);
+      background: #EBF0EB;
+      border-bottom: 1px solid rgba(80,110,80,0.15);
       padding: 16px 24px 24px;
       gap: 4px;
-      transition: background 0.3s;
     }
     .mobile-menu.open { display: flex; }
     .mobile-menu a {
       font-size: 17px;
-      color: var(--text-muted);
+      color: #7A9E7E;
       text-decoration: none;
       cursor: pointer;
       padding: 12px 0;
-      border-bottom: 1px solid var(--drawer-border);
+      border-bottom: 1px solid rgba(80,110,80,0.1);
       transition: color 0.15s;
     }
     .mobile-menu a:last-of-type { border-bottom: none; }
-    .mobile-menu a:hover, .mobile-menu a.active { color: var(--text-active); font-weight: 600; }
+    .mobile-menu a:hover, .mobile-menu a.active { color: #1E3A2F; font-weight: 600; }
 
     /* Sections */
     section { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 64px); text-align: center; padding: 48px; }
     section.active { display: flex; }
 
-    h1 { font-size: clamp(36px, 6vw, 72px); font-weight: 700; letter-spacing: -2px; line-height: 1.05; max-width: 820px; }
-    p.sub { margin-top: 24px; font-size: 18px; color: var(--text-muted); max-width: 480px; line-height: 1.6; }
-    .tag { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 20px; }
+    h1 { font-size: clamp(36px, 6vw, 72px); font-weight: 700; letter-spacing: -2px; line-height: 1.05; max-width: 820px; color: #1E3A2F; }
+    p.sub { margin-top: 24px; font-size: 18px; color: #6B8F71; max-width: 480px; line-height: 1.6; }
+    .tag { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8BAF8E; margin-bottom: 20px; }
 
     .cta { margin-top: 40px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-    .btn { padding: 14px 28px; border-radius: 8px; font-size: 15px; font-weight: 500; cursor: pointer; border: none; transition: background 0.3s, color 0.3s; }
-    .btn-primary { background: var(--btn-primary-bg); color: var(--btn-primary-color); }
-    .btn-secondary { background: transparent; color: var(--btn-secondary-color); border: 1px solid var(--btn-secondary-border); }
+    .btn { padding: 14px 28px; border-radius: 8px; font-size: 15px; font-weight: 500; cursor: pointer; border: none; }
+    .btn-primary { background: #2D5A3D; color: #F4F7F4; }
+    .btn-primary:hover { background: #3D7A52; }
+    .btn-secondary { background: transparent; color: #2D5A3D; border: 1px solid rgba(80,130,80,0.35); }
+    .btn-secondary:hover { background: rgba(80,130,80,0.08); }
 
-    footer { text-align: center; padding: 32px; font-size: 13px; color: var(--text-muted); }
+    /* Footer */
+    footer { text-align: center; padding: 32px; font-size: 13px; color: #8BAF8E; }
+    footer a { color: #6B8F71; text-decoration: underline; cursor: pointer; }
+    footer a:hover { color: #1E3A2F; }
 
     /* Responsive */
     @media (max-width: 1024px) {
@@ -239,7 +167,6 @@
       <a id="nav-about" onclick="showSection('about')">About Us</a>
     </div>
     <div class="nav-actions">
-      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"></button>
       <button class="btn-login">Log in</button>
       <button class="btn-signup">Sign up</button>
     </div>
@@ -289,8 +216,8 @@
 
   <footer>
     <div style="display:flex;gap:24px;justify-content:center;margin-bottom:10px;">
-      <a onclick="showSection('about')" style="color:inherit;text-decoration:underline;cursor:pointer;">About Us</a>
-      <a href="mailto:contact@nestandkey.ai" style="color:inherit;text-decoration:underline;">Contact</a>
+      <a onclick="showSection('about')">About Us</a>
+      <a href="mailto:contact@nestandkey.ai">Contact</a>
     </div>
     <div>© 2026 NestAndKey. All rights reserved.</div>
   </footer>
@@ -321,17 +248,6 @@
       document.getElementById('mobile-menu').classList.remove('open');
       document.getElementById('hamburger').classList.remove('open');
     }
-
-    function toggleTheme() {
-      const html = document.documentElement;
-      const isDark = html.getAttribute('data-theme') === 'dark';
-      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      localStorage.setItem('theme', isDark ? 'light' : 'dark');
-    }
-
-    // Restore saved theme (default: light)
-    const saved = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', saved);
   </script>
 
 </body>
