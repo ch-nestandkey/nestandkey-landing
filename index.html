@@ -158,12 +158,55 @@
     footer a { color: #6B8F71; text-decoration: underline; cursor: pointer; }
     footer a:hover { color: #1E3A2F; }
 
+    /* Multi-content sections (Landlords, Agents) */
+    section.section-multi { justify-content: flex-start; min-height: auto; padding: 0; }
+    .hero-block { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 64px); text-align: center; padding: 48px; width: 100%; }
+    .content-section { width: 100%; max-width: 960px; margin: 0 auto; padding: 64px 24px; border-top: 1px solid rgba(80,110,80,0.12); text-align: left; }
+    .content-section.centered { text-align: center; }
+    .section-title { font-size: clamp(26px, 3.5vw, 36px); font-weight: 700; letter-spacing: -1px; color: #1E3A2F; margin-bottom: 12px; text-align: center; }
+    .section-subtitle { font-size: 16px; color: #6B8F71; text-align: center; max-width: 600px; margin: 0 auto 40px; line-height: 1.6; }
+
+    /* Steps */
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .step-card { background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 14px; padding: 28px 24px; }
+    .step-num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: #2D5A3D; color: #F4F7F4; font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+    .step-card h3 { font-size: 17px; font-weight: 700; color: #1E3A2F; margin-bottom: 8px; }
+    .step-card p { font-size: 14px; color: #6B8F71; line-height: 1.6; }
+
+    /* Trust box */
+    .trust-box { background: #EBF0EB; border-radius: 16px; padding: 36px 32px; text-align: center; }
+    .trust-box .trust-stat { font-size: 22px; font-weight: 700; color: #1E3A2F; margin-bottom: 10px; }
+    .trust-box .trust-note { font-size: 15px; color: #4A6B52; }
+
+    /* Why partner list */
+    .why-list { display: flex; flex-direction: column; gap: 16px; max-width: 640px; margin: 0 auto; }
+    .why-item { display: flex; gap: 14px; align-items: flex-start; font-size: 15px; color: #4A6B52; line-height: 1.6; }
+    .why-check { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: #2D5A3D; color: #F4F7F4; font-size: 13px; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+
+    /* Calculator */
+    .calc-card { background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 32px; max-width: 760px; margin: 0 auto; }
+    .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .calc-field { display: flex; flex-direction: column; gap: 6px; }
+    .calc-field label { font-size: 13px; font-weight: 600; color: #1E3A2F; }
+    .calc-field input { padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(80,130,80,0.35); font-size: 15px; color: #1E3A2F; outline: none; }
+    .calc-field input:focus { border-color: #2D5A3D; }
+    .calc-divider { height: 1px; background: rgba(80,110,80,0.15); margin: 28px 0; }
+    .calc-results { display: flex; flex-direction: column; gap: 14px; }
+    .result-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 15px; color: #4A6B52; padding-bottom: 10px; border-bottom: 1px solid rgba(80,110,80,0.1); }
+    .result-row:last-child { border-bottom: none; padding-top: 4px; }
+    .result-row .result-value { font-size: 18px; font-weight: 700; color: #1E3A2F; }
+    .result-row.highlight .result-value { color: #2D5A3D; font-size: 22px; }
+    .calc-note { font-size: 12px; color: #8BAF8E; margin-top: 16px; text-align: center; }
+
     /* Responsive */
     @media (max-width: 1024px) {
       nav { padding: 0 24px; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
       section { padding: 32px 24px; }
+      .hero-block { padding: 32px 24px; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .calc-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -190,6 +233,7 @@
     <div class="nav-links">
       <a id="nav-tenants" class="active" onclick="showSection('tenants')">For Tenants</a>
       <a id="nav-landlords" onclick="showSection('landlords')">For Landlords</a>
+      <a id="nav-agents" onclick="showSection('agents')">For Agents</a>
       <a id="nav-pricing" onclick="showSection('pricing')">Pricing</a>
       <a id="nav-about" onclick="showSection('about')">About Us</a>
     </div>
@@ -203,6 +247,7 @@
   <div class="mobile-menu" id="mobile-menu">
     <a id="mob-tenants" class="active" onclick="showSection('tenants')">For Tenants</a>
     <a id="mob-landlords" onclick="showSection('landlords')">For Landlords</a>
+    <a id="mob-agents" onclick="showSection('agents')">For Agents</a>
     <a id="mob-pricing" onclick="showSection('pricing')">Pricing</a>
     <a id="mob-about" onclick="showSection('about')">About Us</a>
   </div>
@@ -220,16 +265,125 @@
   </section>
 
   <!-- Landlords -->
-  <section id="landlords">
-    <span class="tag">Closed Beta · SF Bay Area · Summer 2026</span>
-    <h1>List your room.<br>Find the right intern.</h1>
-    <p class="sub">Get matched with vetted summer interns looking for housing. Free to list during beta.</p>
-    <form class="waitlist-form" onsubmit="handleWaitlist(event, 'Landlords')">
-      <input type="email" placeholder="your@email.com" required />
-      <button type="submit">List My Room</button>
-    </form>
-    <p class="waitlist-social">Join landlords already on the platform</p>
-    <p class="waitlist-social" style="margin-top:12px;"><a href="/listing-sample-socal" style="color:#2D5A3D;font-weight:500;text-decoration:none;border-bottom:1px solid rgba(80,130,80,0.4);">See a sample listing →</a></p>
+  <section id="landlords" class="section-multi">
+    <div class="hero-block">
+      <span class="tag">Closed Beta · SF Bay Area</span>
+      <h1>Find someone who fits your home, not just fills your room.</h1>
+      <p class="sub">We pre-screen based on your preferences. You only meet people you'd actually consider.</p>
+      <p class="waitlist-social" style="margin-top:24px;"><a href="/listing-sample-socal" style="color:#2D5A3D;font-weight:500;text-decoration:none;border-bottom:1px solid rgba(80,130,80,0.4);">See a sample listing →</a></p>
+    </div>
+
+    <!-- How It Works -->
+    <div class="content-section centered">
+      <h2 class="section-title">How it works</h2>
+      <p class="section-subtitle">Three steps, and you're always in control.</p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">1</span>
+          <h3>Tell us your preferences</h3>
+          <p>Lifestyle, schedule, deal-breakers — whatever matters to you.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">2</span>
+          <h3>We pre-screen candidates</h3>
+          <p>We match against your criteria and send you a shortlist.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">3</span>
+          <h3>You choose who to meet</h3>
+          <p>You decide who moves in. Always your final call.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trust Signals -->
+    <div class="content-section centered">
+      <div class="trust-box">
+        <div class="trust-stat">Already 120+ pre-screened tenants waiting</div>
+        <div class="trust-note">You always make the final call. We just narrow the list.</div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="content-section centered">
+      <h2 class="section-title">Ready to list your room?</h2>
+      <form class="waitlist-form" onsubmit="handleWaitlist(event, 'Landlords')">
+        <input type="email" placeholder="your@email.com" required />
+        <button type="submit">List My Room</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Agents -->
+  <section id="agents" class="section-multi">
+    <div class="hero-block">
+      <span class="tag">For Real Estate Agents</span>
+      <h1>Help your clients afford more home.</h1>
+      <p class="sub">Show them how renting a spare room lowers their effective mortgage — and expands what they can buy.</p>
+    </div>
+
+    <!-- Affordability Calculator -->
+    <div class="content-section centered">
+      <h2 class="section-title">Affordability calculator</h2>
+      <p class="section-subtitle">Run the numbers with your client, right here.</p>
+      <div class="calc-card">
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label for="calc-price">Home purchase price</label>
+            <input type="number" id="calc-price" value="1200000" oninput="calcAffordability()" />
+          </div>
+          <div class="calc-field">
+            <label for="calc-down">Down payment (%)</label>
+            <input type="number" id="calc-down" value="20" oninput="calcAffordability()" />
+          </div>
+          <div class="calc-field">
+            <label for="calc-rate">Estimated mortgage rate (%)</label>
+            <input type="number" id="calc-rate" value="6.5" step="0.1" oninput="calcAffordability()" />
+          </div>
+          <div class="calc-field">
+            <label for="calc-rent">Expected monthly rental income</label>
+            <input type="number" id="calc-rent" value="1800" oninput="calcAffordability()" />
+          </div>
+        </div>
+        <div class="calc-divider"></div>
+        <div class="calc-results">
+          <div class="result-row">
+            <span>Standard monthly mortgage payment</span>
+            <span class="result-value" id="result-standard">$0</span>
+          </div>
+          <div class="result-row">
+            <span>Effective monthly payment after rental income</span>
+            <span class="result-value" id="result-effective">$0</span>
+          </div>
+          <div class="result-row highlight">
+            <span>Max home price affordable with rental income</span>
+            <span class="result-value" id="result-maxprice">$0</span>
+          </div>
+        </div>
+        <p class="calc-note">Estimates assume a 30-year fixed mortgage, principal and interest only.</p>
+      </div>
+    </div>
+
+    <!-- Why Partner -->
+    <div class="content-section centered">
+      <h2 class="section-title">Why partner with Nest & Key</h2>
+      <div class="why-list">
+        <div class="why-item"><span class="why-check">✓</span>Pre-screened tenant pool already waiting — 120+ candidates.</div>
+        <div class="why-item"><span class="why-check">✓</span>Nest & Key handles all screening and matching, start to finish.</div>
+        <div class="why-item"><span class="why-check">✓</span>Your client gets a vetted housemate, not a stranger from Craigslist.</div>
+        <div class="why-item"><span class="why-check">✓</span>You close deals that otherwise wouldn't pencil out.</div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="content-section centered">
+      <h2 class="section-title">Let's talk.</h2>
+      <p class="section-subtitle">Partnership terms discussed 1:1 — no pricing listed here.</p>
+      <form class="waitlist-form" onsubmit="handleWaitlist(event, 'Agents')">
+        <input type="email" placeholder="your@email.com" required />
+        <button type="submit">Get in Touch</button>
+      </form>
+    </div>
   </section>
 
   <!-- Pricing -->
@@ -256,6 +410,7 @@
     const navMap = {
       tenants:   { desk: 'nav-tenants',   mob: 'mob-tenants' },
       landlords: { desk: 'nav-landlords', mob: 'mob-landlords' },
+      agents:    { desk: 'nav-agents',    mob: 'mob-agents' },
       pricing:   { desk: 'nav-pricing',   mob: 'mob-pricing' },
       about:     { desk: 'nav-about',     mob: 'mob-about' },
     };
@@ -301,6 +456,49 @@
     function closeMenu() {
       document.getElementById('mobile-menu').classList.remove('open');
       document.getElementById('hamburger').classList.remove('open');
+    }
+
+    function formatCurrency(n) {
+      return '$' + Math.round(n).toLocaleString('en-US');
+    }
+
+    function monthlyPayment(loanAmount, annualRatePct, months) {
+      const r = (annualRatePct / 100) / 12;
+      if (r === 0) return loanAmount / months;
+      return loanAmount * (r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
+    }
+
+    function calcAffordability() {
+      const price = parseFloat(document.getElementById('calc-price').value) || 0;
+      const downPct = parseFloat(document.getElementById('calc-down').value) || 0;
+      const rate = parseFloat(document.getElementById('calc-rate').value) || 0;
+      const rent = parseFloat(document.getElementById('calc-rent').value) || 0;
+      const months = 360;
+
+      const loanAmount = price * (1 - downPct / 100);
+      const standardPayment = monthlyPayment(loanAmount, rate, months);
+      const effectivePayment = Math.max(standardPayment - rent, 0);
+
+      const targetCapacity = standardPayment + rent;
+      const r = (rate / 100) / 12;
+      let maxLoan;
+      if (r === 0) {
+        maxLoan = targetCapacity * months;
+      } else {
+        maxLoan = targetCapacity * (Math.pow(1 + r, months) - 1) / (r * Math.pow(1 + r, months));
+      }
+      const maxPrice = downPct < 100 ? maxLoan / (1 - downPct / 100) : maxLoan;
+
+      document.getElementById('result-standard').textContent = formatCurrency(standardPayment);
+      document.getElementById('result-effective').textContent = formatCurrency(effectivePayment);
+      document.getElementById('result-maxprice').textContent = formatCurrency(maxPrice);
+    }
+
+    calcAffordability();
+
+    const initialSection = window.location.hash.replace('#', '');
+    if (navMap[initialSection]) {
+      showSection(initialSection);
     }
   </script>
 
