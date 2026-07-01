@@ -169,6 +169,9 @@
     .chat-send:hover { background: #3D7A52; }
     .chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
     .chat-confirm { padding: 32px 24px; font-size: 15px; color: #2D5A3D; font-weight: 600; line-height: 1.7; text-align: center; }
+    .chat-start-btn { width: 100%; padding: 14px; background: #2D5A3D; color: #F4F7F4; border: none; font-size: 15px; font-weight: 600; cursor: pointer; }
+    .chat-start-btn:hover { background: #3D7A52; }
+    .chat-start-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     @media (max-width: 1024px) { .chat-card { max-width: 100%; } }
 
     /* Footer */
@@ -550,7 +553,7 @@
         appendMsg('nest', data.reply);
 
         if (data.ready) {
-          await submitSearch();
+          showStartButton();
         } else {
           setChatEnabled(true);
         }
@@ -560,7 +563,15 @@
       }
     }
 
+    function showStartButton() {
+      const row = document.getElementById('chat-input-row');
+      row.innerHTML = `<button class="chat-start-btn" id="chat-start-btn" onclick="submitSearch()">Start my search →</button>`;
+    }
+
     async function submitSearch() {
+      const btn = document.getElementById('chat-start-btn');
+      if (btn) { btn.textContent = 'Starting…'; btn.disabled = true; }
+
       try {
         await fetch(SCRIPT_URL, {
           method: 'POST',
