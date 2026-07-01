@@ -507,3 +507,130 @@ All photos live in `/listing-sample-socal/photos/`.
 - Section visibility toggled with `.active` class and `display: flex`. No router library.
 - Local dev (UI only, no AI): `python3 -m http.server 3457 --directory /path/to/nestandkey-landing` → `localhost:3457`. The `/api/chat` endpoint won't work locally without Vercel CLI.
 - Logo SVG is inline in both HTML files. Update both if the logo changes.
+
+---
+
+## Part 9 — Design Improvement Plan
+
+Ordered by user impact. Priority 1 items are live gaps — users hit them today.
+
+---
+
+### Priority 1 — Chat states that don't exist yet
+
+**1a. Typing indicator (while Nest is responding)**
+
+Currently the input freezes with no visual feedback. On a slow connection it looks broken.
+
+What's needed: a thinking state rendered as a Nest message bubble with an animated three-dot indicator inside. Specs: same `.msg.nest` bubble shape, `#F4F7F4` bg, appears immediately after the user sends. Removed when the reply arrives.
+
+**1b. Error state**
+
+Currently renders as a plain Nest message: "Something went wrong — please try again." It reads like part of the conversation rather than a system error.
+
+What's needed: a distinct visual treatment inside the chat card — a subtly different bubble color (stay in the green palette or use a warm neutral, not red) with a clear retry affordance. Must not break the card layout.
+
+**1c. Empty send state**
+
+If the user hits Send with an empty textarea, nothing happens silently. Needs a visual shake on the input or a brief disabled flash on the send button.
+
+---
+
+### Priority 2 — Chat card usability
+
+**2a. Mobile keyboard and scroll**
+
+On mobile, the keyboard pushes the viewport up. New Nest messages auto-scroll in code (`box.scrollTop = box.scrollHeight`) but this may conflict with the keyboard resize event. The `max-height: 380px` messages area may clip.
+
+What's needed: test on a real iOS and Android device. Confirm that after the keyboard opens and the user sends a message, the new Nest reply is visible without manual scrolling. If not, the scroll target needs to account for keyboard height offset.
+
+**2b. Chat card height as conversation grows**
+
+The messages area is capped at `max-height: 380px` and scrolls internally. This is correct but the internal scroll feels foreign on desktop — especially during the longer qualifying questions section.
+
+Consider: increasing max-height to `480–520px` on desktop, or allowing the card to grow with content up to a cap before scrolling.
+
+**2c. "Start my search →" button treatment**
+
+Currently full-width, no border-radius, flush to card edges — it was originally designed to replace the input row but now sits above it. The flat full-width treatment looks unanchored between the messages and the input.
+
+What's needed: add horizontal padding to inset it from the card edges, or give it the standard `8px` radius consistent with other primary buttons. Also reconsider the label — alternatives: "Send my search brief", "Run my search", "Find my matches".
+
+---
+
+### Priority 3 — Page-level improvements
+
+**3a. For Landlords hero height**
+
+The hero is `min-height: 65vh`. The goal is for the "How it works" section to peek below fold, cueing the user to scroll. Verify at 1280×800 and 1440×900. If the peek isn't visible, try `60vh`. Also consider a subtle scroll cue — a small chevron or "↓" — anchored to the bottom of the hero block.
+
+**3b. About Us page**
+
+Currently a single H1 + sub placeholder: "About Nest & Key. We're building the easiest way to find and fill rooms."
+
+What's needed: founder story, mission framing, or at minimum intentional placeholder copy that matches the product's tone. Even "We're two people who've lived this problem. More soon." beats the current generic line.
+
+**3c. Footer privacy note**
+
+The chat collects income, credit, and email. The footer currently has no privacy language. Add one line below the nav links in the same muted style (`13px #8BAF8E`):
+
+> "Your data is used only to find homes you'd qualify for — never sold or shared."
+
+---
+
+### Priority 4 — Phase 2: Live brief panel
+
+The biggest unbuilt design surface. Scoped in the original design doc as Phase 2.
+
+**What it is:** A panel that renders the criteria object in real time as Nest fills it. Each field appears as it gets captured — empty fields shown as unfilled, captured fields shown with their value.
+
+**Layout:**
+- Desktop: two-column — chat card left, brief panel right, both inside the Tenants section
+- Mobile (≤768px): stacks below the chat card
+- No backend change required — reads the same `chatState` object already maintained in the browser
+
+**Design decisions to make:**
+- How do unfilled fields look vs. filled? (grayed label only vs. dashed placeholder)
+- Does the panel animate when a field fills in? (subtle fade or slide-in recommended)
+- How are Required vs. Optional fields visually distinguished?
+- Does the privacy note appear inline next to income/credit fields in the panel?
+- Panel header: "Your search brief" / "What Nest has so far" / no header
+
+**Field display order** (matches collection order):
+Room type → Location → Budget → Move-in & stay → Commute → Room needs → Work/study → Income → Credit → Email
+
+---
+
+### Priority 5 — Interaction consistency
+
+**5a. Log in / Sign up buttons**
+
+Both buttons are styled but non-functional — clicking them does nothing. For beta this is acceptable, but real users will click. Decide: hide them, show a "Coming soon" tooltip, or route to a waitlist. Currently the silent no-op is the worst option.
+
+**5b. "Apply now" on listing page**
+
+Links to `#tour` on the same page — it just jumps to "Schedule a tour." The label "Apply now" implies a real application flow. Change to "Schedule a tour" to match what it actually does and remove the implied commitment.
+
+**5c. Nav active state after Pricing removal**
+
+The `navMap` was updated when Pricing was removed. Verify no orphaned active states appear — particularly on mobile — when navigating between sections.
+
+---
+
+### Summary
+
+| # | Item | Impact | Effort |
+|---|------|--------|--------|
+| 1a | Typing indicator | High — live gap | Low |
+| 1b | Error state design | High — live gap | Low |
+| 1c | Empty send state | Low | Very low |
+| 2a | Mobile keyboard scroll | High on mobile | Medium |
+| 2b | Chat card height desktop | Medium | Low |
+| 2c | Start button treatment + label | Medium | Low |
+| 3a | Landlords hero height | Medium | Low |
+| 3b | About Us content | Low | Medium |
+| 3c | Footer privacy note | Medium | Very low |
+| 4 | Phase 2 live brief panel | High | High |
+| 5a | Log in / Sign up state | Medium | Low |
+| 5b | "Apply now" label on listing | Low | Very low |
+| 5c | Nav active state verification | Low | Very low |
