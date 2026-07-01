@@ -12,13 +12,15 @@
 
 ### 1.1 What the product is
 
-Nest & Key is a room rental marketplace for tech interns and working professionals in the SF Bay Area. It connects three audiences:
+Nest & Key is an **AI market-scanning tool** for tech interns and working professionals in the SF Bay Area — rather than a listings board you scroll, Nest scans the market on your behalf and surfaces homes that fit. It connects three audiences:
 
 - **Tenants** — tech interns and young professionals looking for pre-screened rooms or entire places
 - **Landlords** — homeowners looking for compatible housemates (not just anyone)
 - **Agents** — real estate agents who want to help clients afford homes by renting a spare room
 
 The brand positioning is deliberate: this is not Craigslist. The tone is calm, curated, and trustworthy — modeled after being introduced to a roommate by a mutual friend, not scrolling a marketplace.
+
+**Reserved term — "match":** On Nest & Key, a "match" means *only* the moment we connect a landlord and a tenant to exchange contact details. Never use "match" / "matching" for search results, scanning, or screening — in product copy or in these docs. For results, say "homes we find", "homes we surface", "listings", or "results".
 
 ### 1.2 Color tokens
 
@@ -65,6 +67,25 @@ SVG inline in both HTML files, `viewBox="40 88 160 55"`, rendered at `120×34px`
 - Button radius: `8px` standard, `50px` pill (listing CTAs)
 - Card radius: `14px` step cards, `16px` calc/chat/trust cards
 - Photo radius: `10px` grids, `12px` homeowner photo
+
+### 1.6 Funnel & pricing (downstream context — not built on the site)
+
+The tenant chat runs **Steps 1–2** of the funnel: gather criteria → free first market scan → one result email. Everything after (upsell, tier selection, checkout) happens over **email + a checkout flow**, never on this site. Captured here only so on-site copy stays consistent.
+
+**Three tiers:** Free (lead-gen entry) · Casual (decoy) · Active (conversion target).
+
+| | Free | Casual | Active |
+|---|---|---|---|
+| Price | $0 | $19.99 | $39.99 → $29.99 |
+| Access | one-time sample | 30 days | 30 days |
+| Cadence | 1 result email | 2×/week | daily |
+| Emails | 1 | ~8 | ~30 |
+| Rate/email | free | ~$2.50 | ~$1.00 |
+
+- Free's result email doesn't count against any paid tier's allotment.
+- **Casual day-29 upsell email** (downstream, email — not this site): a 9th message offers **$7 off Active → $22.99** via a unique discounted checkout link; a fresh 30-day Active window starts on purchase.
+- **Refund policy:** all purchases are final and non-refundable (digital service, begins immediately); disclosed on the checkout page **and** in the confirmation email, before payment.
+- **Extensions: excluded** from every surface — do not build, price, or reference them anywhere.
 
 ---
 
@@ -159,6 +180,7 @@ This is a **closed intake** — not open-ended chat. Nest has a goal: collect al
 ### 3.2 Chat card UI
 
 **Structure (top to bottom inside `.chat-card`):**
+
 ```
 .chat-messages          — scrollable, max-height 380px
   .msg.nest             — Nest messages, left-aligned
@@ -298,7 +320,7 @@ User: "Around $2,800"
 
 ### 4.5 The room type question
 
-`roomType` is the very first question after the opening. Never assume. Entire places and shared rooms have completely different inventory, pricing, and matching logic — getting this wrong invalidates everything downstream.
+`roomType` is the very first question after the opening. Never assume. Entire places and shared rooms have completely different inventory, pricing, and search logic — getting this wrong invalidates everything downstream.
 
 ```
 ✓   "Are you looking for an entire place to yourself, or a private room in a shared home?"
@@ -312,7 +334,7 @@ If the user's later answers contradict their stated room type (e.g., they said e
 
 ### 4.6 The neighborhood follow-up rule
 
-If a user names a city without a neighborhood, Nest always follows up. A city is too broad to match listings.
+If a user names a city without a neighborhood, Nest always follows up. A city is too broad to surface relevant listings.
 
 ```
 User: "Probably SF"
@@ -342,7 +364,7 @@ This line does not vary. It is not paraphrased. It is its own message.
 ✓  "Quick question before we move on — what's your work situation, and roughly what income range are you in? Credit range too if you know it."
 ```
 
-Tone stays matter-of-fact. Nest doesn't apologize for asking or over-hedge. These are practical matching questions.
+Tone stays matter-of-fact. Nest doesn't apologize for asking or over-hedge. These are practical questions for finding homes the user would qualify for.
 
 ### 4.8 The summary message
 
@@ -370,6 +392,7 @@ After summary, the "Start my search →" button appears above the input row. The
 `ready: true` is only set after the user explicitly confirms the summary. Confirmations include: "yes", "that's right", "looks good", "go ahead", "all good", "yep". Ambiguous answers (e.g. "sure") should be treated as confirmation.
 
 Nest's closing message after confirmation:
+
 ```
 ✓   "Perfect — starting your scan now. Results will land in your inbox soon."
 ```
@@ -401,6 +424,7 @@ User: "Actually I want an entire place, not a shared room"
 - Never asks a question it already has the answer to
 - Never uses filler affirmations: "Awesome", "Great", "Perfect", "Certainly", "Of course", "Absolutely"
 - Never says it is "logging", "noting", or "recording" anything
+- Never uses "match" or "matching" for results, scanning, or screening — that word is reserved for the landlord↔tenant contact exchange (see §1.1)
 - Never rushes toward completion — if a user wants to talk something through, Nest follows
 
 ### 4.12 Edge cases
@@ -554,7 +578,7 @@ Consider: increasing max-height to `480–520px` on desktop, or allowing the car
 
 Currently full-width, no border-radius, flush to card edges — it was originally designed to replace the input row but now sits above it. The flat full-width treatment looks unanchored between the messages and the input.
 
-What's needed: add horizontal padding to inset it from the card edges, or give it the standard `8px` radius consistent with other primary buttons. Also reconsider the label — alternatives: "Send my search brief", "Run my search", "Find my matches".
+What's needed: add horizontal padding to inset it from the card edges, or give it the standard `8px` radius consistent with other primary buttons. Also reconsider the label — alternatives: "Send my search brief", "Run my search", "Start my scan".
 
 ---
 
