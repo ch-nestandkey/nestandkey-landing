@@ -523,7 +523,7 @@
 
     // Chat
     let chatState = {
-      location:'', budget:'', stay:'', commute:'', roomNeeds:'',
+      roomType:'', location:'', budget:'', stay:'', commute:'', roomNeeds:'',
       workStatus:'', income:'', credit:'', lifestyle:'', email:''
     };
     let chatHistory = [
@@ -564,8 +564,16 @@
     }
 
     function showStartButton() {
-      const row = document.getElementById('chat-input-row');
-      row.innerHTML = `<button class="chat-start-btn" id="chat-start-btn" onclick="submitSearch()">Start my search →</button>`;
+      if (document.getElementById('chat-start-btn')) return;
+      const btn = document.createElement('button');
+      btn.className = 'chat-start-btn';
+      btn.id = 'chat-start-btn';
+      btn.textContent = 'Start my search →';
+      btn.onclick = submitSearch;
+      const card = document.getElementById('chat-card');
+      const inputRow = document.getElementById('chat-input-row');
+      card.insertBefore(btn, inputRow);
+      setChatEnabled(true);
     }
 
     async function submitSearch() {
@@ -577,7 +585,7 @@
           method: 'POST',
           mode: 'no-cors',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Searches', ...chatState, timestamp: new Date().toISOString() })
+          body: JSON.stringify({ sheet: 'Searches', ...chatState, roomType: chatState.roomType, timestamp: new Date().toISOString() })
         });
       } catch (_) {}
 
