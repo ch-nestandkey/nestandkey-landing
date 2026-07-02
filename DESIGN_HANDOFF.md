@@ -3,8 +3,20 @@
 **Product:** Nest & Key · nestandkey.ai  
 **Stage:** Closed Beta, SF Bay Area, 2026  
 **Last updated:** July 2026  
-**Codebase:** Static HTML/CSS/JS, deployed on Vercel (Hobby) from GitHub (`ch-nestandkey/nestandkey-landing`, `main` branch)  
+**Codebase:** Static HTML/CSS/JS, deployed on Vercel (Hobby) from GitHub (`ch-nestandkey/nestandkey-landing`)  
 **Live URL:** https://nestandkey.ai
+
+### Branching & deployment
+
+| Branch | Purpose | URL |
+|--------|---------|-----|
+| `main` | Production — protected, no direct pushes | https://nestandkey.ai |
+| `dev` | Default working branch — all code and design changes start here | Vercel preview URL (auto-generated on push) |
+| `feat/*` | Optional feature branches for larger work | Vercel preview URL (auto-generated on push) |
+
+**Rule:** `main` requires a pull request. Nothing reaches production without a PR review step.
+
+**For Claude Design:** design implementation work happens on `dev` (or a feature branch). When a change is ready to ship, Claude Code opens a PR from `dev` → `main`. Test on the Vercel preview URL before requesting merge.
 
 ---
 
