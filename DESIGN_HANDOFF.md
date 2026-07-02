@@ -49,7 +49,7 @@ The brand positioning is deliberate: this is not Craigslist. The tone is calm, c
 | Border | `rgba(80,110,80,0.15)` | Nav underline, section dividers |
 | Card border | `rgba(80,130,80,0.15)` | Step cards, calculator card, chat card |
 
-All greens. No blue. No red unless it's an error state (not currently designed).
+All greens, plus one gold accent — **`#C9A34E`** — used only for the Active plan's "Best value" badge and checkmarks in the pricing band (see §1.6). No blue. No red unless it's an error state (not currently designed).
 
 ### 1.3 Typography
 
@@ -80,9 +80,9 @@ SVG inline in both HTML files, `viewBox="40 88 160 55"`, rendered at `120×34px`
 - Card radius: `14px` step cards, `16px` calc/chat/trust cards
 - Photo radius: `10px` grids, `12px` homeowner photo
 
-### 1.6 Funnel & pricing (downstream context — not built on the site)
+### 1.6 Funnel & pricing
 
-The tenant chat runs **Steps 1–2** of the funnel: gather criteria → free first market scan → one result email. Everything after (upsell, tier selection, checkout) happens over **email + a checkout flow**, never on this site. Captured here only so on-site copy stays consistent.
+The tenant chat runs **Steps 1–2** of the funnel: gather criteria → free first market scan → one result email. The **upsell sequence and checkout remain downstream** (email + a separate checkout flow) — those are not on the site. **The three pricing tiers ARE now shown on the tenant page** as a pricing band below the chat (decision: Jul 2, 2026 — reversed the earlier "no pricing on site" stance to lead with pricing transparency for this audience).
 
 **Three tiers:** Free (lead-gen entry) · Casual (decoy) · Active (conversion target).
 
@@ -98,6 +98,22 @@ The tenant chat runs **Steps 1–2** of the funnel: gather criteria → free fir
 - **Casual day-29 upsell email** (downstream, email — not this site): a 9th message offers **$7 off Active → $22.99** via a unique discounted checkout link; a fresh 30-day Active window starts on purchase.
 - **Refund policy:** all purchases are final and non-refundable (digital service, begins immediately); disclosed on the checkout page **and** in the confirmation email, before payment.
 - **Extensions: excluded** from every surface — do not build, price, or reference them anywhere.
+
+#### On-page pricing band (tenant page)
+
+A pricing band sits **below the chat card** in the Tenants section. Presentation:
+
+- Eyebrow: "Simple, one-time pricing" · Heading: "Start free. Pay only once it's working." · Sub: "Every search begins with a free scan and one real result email. Upgrade for 30 days of continued scans and results — one-time payment, no subscription, no auto-renewal."
+- Three cards, left→right: **Free** ($0, "one-time sample", badge "You're here") · **Casual** ($19.99 / 30 days) · **Active** ($29.99 with $39.99 struck through / 30 days, gold "Best value" badge, filled `#2D5A3D` card).
+- Card feature bullets: Free — Nest sets up your scan · 1 real result email, free · no account or card. Casual — 2×/week cadence · ~8 emails / 30 days · ~$2.50/email. Active — daily cadence · ~30 emails / 30 days · ~$1.00/email (best rate).
+- Footer line: "One-time payment unlocks your chosen cadence for 30 days — no subscription, no auto-renewal. All purchases are final and non-refundable."
+
+**Guardrails (non-negotiable):**
+- Never expose the pricing *strategy* on the page — no "decoy", "target", "lead-gen" language. Those labels are internal only.
+- Extensions must not appear anywhere in the band.
+- The reserved-"match" rule applies to all band copy.
+- Band CTAs ("Choose Casual", "Choose Active") are visual for now — real tier selection + checkout are still downstream. Wire them to the existing flow only when checkout exists; until then they should not imply an on-site purchase completes here.
+- Introduces one new accent — **gold `#C9A34E`** for the "Best value" badge and Active-card checkmarks. This is the only non-green accent on the site; see §1.2.
 
 ---
 
@@ -126,6 +142,7 @@ Single-page app — section toggling via JS. Nav always visible (`z-index: 100`)
 - H1: "Find your place / in the Bay Area."
 - Sub: "Tell Nest what you're looking for. Your first market scan is free — results land in your inbox."
 - Main element: Nest AI chat card (see Part 3)
+- Below the chat: pricing band — Free / Casual / Active (see §1.6)
 
 **For Landlords**
 - Tag: "Closed Beta · SF Bay Area"
