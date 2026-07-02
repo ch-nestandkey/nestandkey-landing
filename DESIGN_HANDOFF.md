@@ -206,6 +206,11 @@ The Nest chat replaces the email waitlist form in the Tenants section. A tenant 
 
 This is a **closed intake** — not open-ended chat. Nest has a goal: collect all required fields, confirm with the user, and hand off to email.
 
+**Seed message (exact, verbatim — hardcoded in `index.html`, not model-generated):**
+> "Hi — I'm Nest. I'll scan the Bay Area for rooms that genuinely fit what you're after. To start: are you looking for an entire place to yourself, or a private room in a shared home?"
+
+This MUST ask room type first, matching the persona's own instruction to collect room type early. If the persona's collection order changes, update this string to match — it is a static seed and will silently drift out of sync with the model otherwise.
+
 ### 3.2 Chat card UI
 
 **Structure (top to bottom inside `.chat-card`):**
