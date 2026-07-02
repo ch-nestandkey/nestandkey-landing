@@ -670,3 +670,48 @@ The `navMap` was updated when Pricing was removed. Verify no orphaned active sta
 | 5a | Log in / Sign up state | Medium | Low |
 | 5b | "Apply now" label on listing | Low | Very low |
 | 5c | Nav active state verification | Low | Very low |
+
+---
+
+## Part 10 — User Testing Feedback Log
+
+Feedback collected from founder self-testing of the AI Home Search chat (Phase 1), July 2026. All items marked **Fixed** have been resolved in code; **Open** items are candidates for future design iteration.
+
+---
+
+### Round 1 — First complete test run
+
+**Usability**
+
+| # | Feedback | Status | Resolution |
+|---|----------|--------|------------|
+| U1 | Felt like too many questions. Each question captured one kind of information clearly, but the chat felt transactional and too long. | Fixed | Updated NEST_PERSONA to merge closely related questions into one natural exchange (e.g. commute destination + mode together, room needs + lifestyle in one pass). |
+| U2 | Nest never asked which neighborhood within the city — only captured the city (SF). | Fixed | Added guardrail to persona: when a user names a city, always follow up to ask which neighborhoods or areas. |
+| U3 | Could not see the last message before the confirmation state appeared. Transition was too fast; felt like no opportunity to share lifestyle fit, neighborhood vibe, etc. | Fixed | Changed confirmation flow: Nest now recaps in chat and keeps input open. "Start my search" button appears above the input field without replacing it — user can still type corrections before submitting. |
+
+**Design**
+
+| # | Feedback | Status | Resolution |
+|---|----------|--------|------------|
+| D1 | Sender label "NEST" appeared centered at the top of the message bubble — looked off. | Fixed | Added `text-align: left` to `.msg.nest .msg-label`. |
+| D2 | Chat UI was too narrow on desktop — looked like a mobile screen squeezed into desktop, making it unclear this was the primary interaction area. | Fixed | Increased `.chat-card` max-width from 520px to 760px. |
+
+---
+
+### Round 2 — Post-fix re-test
+
+**Usability**
+
+| # | Feedback | Status | Resolution |
+|---|----------|--------|------------|
+| U4 | Nest assumed the user was looking for shared housing (a room in a shared home). User was searching for an entire 2BR/2BA apartment with no housemates. | Fixed | Added `roomType` as the first required field; updated persona to ask room type early and explicitly — never assume. Also added `roomType` to STATE schema and REQUIRED fields list. |
+| U5 | After Nest asked "anything you'd like to adjust?", the "Start my search →" button had already replaced the open input field, so the user couldn't type a response. | Fixed | `showStartButton()` now inserts the button *above* the input row without removing it — the input stays active until the user clicks the button. |
+
+---
+
+### Open items from testing (not yet addressed)
+
+These did not surface as blockers during testing but are noted for future design iteration. See also Part 9 for the full improvement plan.
+
+- No explicit lifestyle / neighborhood vibe prompt — users may not volunteer this unless asked directly. Consider a soft prompt after room needs.
+- Confirmation summary could be styled differently to visually distinguish it from regular chat messages (e.g. a summary card vs. a bubble).
