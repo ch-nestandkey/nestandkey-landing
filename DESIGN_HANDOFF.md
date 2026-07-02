@@ -715,3 +715,16 @@ These did not surface as blockers during testing but are noted for future design
 
 - No explicit lifestyle / neighborhood vibe prompt — users may not volunteer this unless asked directly. Consider a soft prompt after room needs.
 - Confirmation summary could be styled differently to visually distinguish it from regular chat messages (e.g. a summary card vs. a bubble).
+
+---
+
+### Round 3 — Prototype design pass (design-side, pending mirror to production)
+
+Explored in the design prototype (`AI Home Search - For Tenants.dc.html`); **not yet in live `index.html` / `api/chat.js`**. Mirror to production when the next `api/chat.js` change ships.
+
+| # | Change | Where it lives now | To mirror in production |
+|---|--------|--------------------|-------------------------|
+| R1 | Confirmation restyled as a distinct **summary card** ("Ready to search — here's what I have") with the "Start my search →" button, shown **above a still-active input**. Resolves the Open "summary card vs. bubble" item and reinforces U3/U5. | Prototype (frontend only) | Frontend `index.html` — render the ready state as a card, keep input active until the button is clicked. No backend change. |
+| R2 | Soft, skippable **lifestyle / vibe prompt** offered after room needs. Resolves the Open lifestyle-prompt item. | Prototype persona | `NEST_PERSONA` in `api/chat.js` — add the soft-prompt instruction. |
+| R3 | **Split "lifestyle" and "requirements" into two fields.** Lifestyle = soft preferences; requirements = hard conditions. A single combined field read as a confusing double-negative (e.g. "Dealbreakers: No smoking" — smoker or non-smoker?). | Prototype persona + STATE + summary | `api/chat.js`: add a `requirements` field to the STATE schema alongside `lifestyle`. |
+| R4 | **Requirements phrased affirmatively.** Nest normalizes every hard-no into a positive condition the home must meet — never a bare "no X". e.g. "no smoking" → "Smoke-free home"; "no ground floor" → "Above ground floor"; "must allow pets" → "Pet-friendly". Removes the double-negative ambiguity in R3. | Prototype persona | `NEST_PERSONA` in `api/chat.js` — add the affirmative-phrasing instruction for the `requirements` field. |
