@@ -155,8 +155,12 @@
 
     /* Chat card */
     .chat-card { width: 100%; max-width: 760px; margin-top: 36px; background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; overflow: hidden; }
-    .chat-messages { padding: 24px; display: flex; flex-direction: column; gap: 16px; max-height: 380px; overflow-y: auto; }
-    .msg { max-width: 72%; font-size: 15px; line-height: 1.6; }
+    .chat-header { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 1px solid rgba(80,110,80,0.12); text-align: left; }
+    .chat-avatar { width: 30px; height: 30px; border-radius: 50%; background: #2D5A3D; color: #fff; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .chat-header-name { font-size: 14px; font-weight: 600; color: #1E3A2F; }
+    .chat-header-sub { font-size: 12px; color: #8BAF8E; }
+    .chat-messages { padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; min-height: 400px; max-height: 500px; overflow-y: auto; }
+    .msg { max-width: 72%; font-size: 15px; line-height: 1.6; text-align: left; }
     .msg.nest { align-self: flex-start; }
     .msg.nest .msg-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #2D5A3D; text-transform: uppercase; margin-bottom: 4px; text-align: left; }
     .msg.nest .msg-text { background: #F4F7F4; color: #1E3A2F; padding: 12px 16px; border-radius: 0 12px 12px 12px; }
@@ -180,15 +184,16 @@
     .chat-summary-value { color: #1E3A2F; font-weight: 500; }
     .chat-summary-hint { font-size: 11px; color: #8BAF8E; margin: 8px 16px 0; text-align: center; }
     @media (max-width: 1024px) { .chat-card { max-width: 100%; } }
+    @media (max-width: 680px) { .chat-messages { min-height: 320px; max-height: 420px; } }
 
     /* Pricing band */
     .pricing-band { width: 100%; max-width: 760px; margin-top: 48px; }
     .pricing-band .pricing-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #6B8F71; margin-bottom: 12px; }
     .pricing-band .pricing-heading { font-size: 32px; font-weight: 700; color: #1E3A2F; margin-bottom: 10px; line-height: 1.25; }
     .pricing-band .pricing-sub { font-size: 16px; color: #6B8F71; line-height: 1.6; margin: 0 auto 28px; max-width: 560px; text-align: center; }
-    .pricing-cards { display: flex; gap: 20px; align-items: stretch; text-align: left; }
-    .pricing-card { flex: 1; min-width: 180px; background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 24px 20px; display: flex; flex-direction: column; gap: 16px; }
-    .pricing-card.active-card { background: #2D5A3D; border-color: #2D5A3D; color: #fff; padding: 26px 22px; box-shadow: 0 16px 40px rgba(30,58,47,0.22); position: relative; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .pricing-cards { display: flex; gap: 28px; align-items: stretch; text-align: left; }
+    .pricing-card { flex: 1; min-width: 180px; background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 32px 26px; display: flex; flex-direction: column; gap: 16px; }
+    .pricing-card.active-card { background: #2D5A3D; border-color: #2D5A3D; color: #fff; padding: 34px 28px; box-shadow: 0 16px 40px rgba(30,58,47,0.22); position: relative; transition: transform 0.2s ease, box-shadow 0.2s ease; }
     .pricing-card.active-card:hover { transform: translateY(-4px); box-shadow: 0 22px 52px rgba(30,58,47,0.32); }
     .pricing-badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; margin-bottom: 4px; }
     .pricing-badge.here { background: rgba(80,130,80,0.12); color: #2D5A3D; }
@@ -201,7 +206,7 @@
     .active-card .pricing-price span { color: rgba(255,255,255,0.65); }
     .pricing-strike { font-size: 13px; color: #8BAF8E; text-decoration: line-through; margin-left: 6px; white-space: nowrap; }
     .active-card .pricing-strike { color: rgba(255,255,255,0.45); }
-    .pricing-features { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 11px; flex: 1; }
+    .pricing-features { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; flex: 1; }
     .pricing-features li { font-size: 13.5px; color: #4A6B52; line-height: 1.5; display: flex; align-items: flex-start; gap: 9px; }
     .pricing-features li::before { content: "✓"; font-weight: 400; color: #2D5A3D; flex-shrink: 0; margin-top: 1px; }
     .pricing-features li strong { font-weight: 600; color: #1E3A2F; }
@@ -213,7 +218,7 @@
     .pricing-cta.outline:hover { background: rgba(80,130,80,0.06); }
     .pricing-cta.filled-light { background: #F4F7F4; border: none; color: #2D5A3D; font-weight: 700; }
     .pricing-cta.filled-light:hover { background: #fff; box-shadow: inset 0 0 0 1.5px #2D5A3D; }
-    .pricing-footer { font-size: 12px; color: #8BAF8E; line-height: 1.6; margin-top: 20px; text-align: center; }
+    .pricing-footer { font-size: 12px; color: #8BAF8E; line-height: 1.6; margin-top: 28px; text-align: center; }
     @media (max-width: 680px) {
       .pricing-cards { flex-direction: column; }
       .pricing-card { min-width: unset; }
@@ -227,40 +232,40 @@
     /* Multi-content sections (Landlords, Agents) */
     section.section-multi { justify-content: flex-start; min-height: auto; padding: 0; }
     .hero-block { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 64px); text-align: center; padding: 48px; width: 100%; }
-    section.section-multi .hero-block { min-height: 65vh; }
-    #tenants .hero-block { min-height: calc(100vh - 64px); }
-    .content-section { width: 100%; max-width: 960px; margin: 0 auto; padding: 64px 24px; border-top: 1px solid rgba(80,110,80,0.12); text-align: left; }
+    section.section-multi .hero-block { min-height: 65vh; padding-top: 96px; padding-bottom: 96px; }
+    #tenants .hero-block { min-height: calc(100vh - 64px - 40px); padding-top: 96px; padding-bottom: 96px; }
+    .content-section { width: 100%; max-width: 960px; margin: 0 auto; padding: 96px 24px; border-top: 1px solid rgba(80,110,80,0.12); text-align: left; }
     .content-section.centered { text-align: center; }
-    .section-title { font-size: clamp(26px, 3.5vw, 36px); font-weight: 700; letter-spacing: -1px; color: #1E3A2F; margin-bottom: 12px; text-align: center; }
-    .section-subtitle { font-size: 16px; color: #6B8F71; text-align: center; max-width: 600px; margin: 0 auto 40px; line-height: 1.6; }
+    .section-title { font-size: clamp(26px, 3.5vw, 36px); font-weight: 700; letter-spacing: -1px; color: #1E3A2F; margin-bottom: 16px; text-align: center; }
+    .section-subtitle { font-size: 16px; color: #6B8F71; text-align: center; max-width: 600px; margin: 0 auto 56px; line-height: 1.6; }
 
 
     /* Steps */
-    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
-    .step-card { background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 14px; padding: 28px 24px; }
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; }
+    .step-card { background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 14px; padding: 36px 28px; }
     .step-num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: #2D5A3D; color: #F4F7F4; font-size: 14px; font-weight: 700; margin-bottom: 16px; }
     .step-card h3 { font-size: 17px; font-weight: 700; color: #1E3A2F; margin-bottom: 8px; }
     .step-card p { font-size: 14px; color: #6B8F71; line-height: 1.6; }
 
     /* Trust box */
-    .trust-box { background: #EBF0EB; border-radius: 16px; padding: 36px 32px; text-align: center; }
+    .trust-box { background: #EBF0EB; border-radius: 16px; padding: 48px 40px; text-align: center; }
     .trust-box .trust-stat { font-size: 22px; font-weight: 700; color: #1E3A2F; margin-bottom: 10px; }
     .trust-box .trust-note { font-size: 15px; color: #4A6B52; }
 
     /* Why partner list */
-    .why-list { display: flex; flex-direction: column; gap: 16px; max-width: 640px; margin: 0 auto; }
+    .why-list { display: flex; flex-direction: column; gap: 22px; max-width: 640px; margin: 0 auto; }
     .why-item { display: flex; gap: 14px; align-items: flex-start; font-size: 15px; color: #4A6B52; line-height: 1.6; }
     .why-check { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: #2D5A3D; color: #F4F7F4; font-size: 13px; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
 
     /* Calculator */
-    .calc-card { background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 32px; max-width: 760px; margin: 0 auto; }
-    .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .calc-card { background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 40px; max-width: 760px; margin: 0 auto; }
+    .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
     .calc-field { display: flex; flex-direction: column; gap: 6px; }
     .calc-field label { font-size: 13px; font-weight: 600; color: #1E3A2F; }
     .calc-field input { padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(80,130,80,0.35); font-size: 15px; color: #1E3A2F; outline: none; }
     .calc-field input:focus { border-color: #2D5A3D; }
-    .calc-divider { height: 1px; background: rgba(80,110,80,0.15); margin: 28px 0; }
-    .calc-results { display: flex; flex-direction: column; gap: 14px; }
+    .calc-divider { height: 1px; background: rgba(80,110,80,0.15); margin: 36px 0; }
+    .calc-results { display: flex; flex-direction: column; gap: 18px; }
     .result-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 15px; color: #4A6B52; padding-bottom: 10px; border-bottom: 1px solid rgba(80,110,80,0.1); }
     .result-row:last-child { border-bottom: none; padding-top: 4px; }
     .result-row .result-value { font-size: 18px; font-weight: 700; color: #1E3A2F; }
@@ -322,6 +327,13 @@
     <h1>Find your place<br>in the Bay Area.</h1>
     <p class="sub">Tell Nest what you're looking for. Your first market scan is free — results land in your inbox.</p>
     <div class="chat-card" id="chat-card">
+      <div class="chat-header">
+        <div class="chat-avatar">N</div>
+        <div>
+          <div class="chat-header-name">Nest</div>
+          <div class="chat-header-sub">Your home-search concierge</div>
+        </div>
+      </div>
       <div class="chat-messages" id="chat-messages">
         <div class="msg nest">
           <div class="msg-label">Nest</div>
