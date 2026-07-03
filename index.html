@@ -172,7 +172,49 @@
     .chat-start-btn { width: 100%; padding: 14px; background: #2D5A3D; color: #F4F7F4; border: none; font-size: 15px; font-weight: 600; cursor: pointer; }
     .chat-start-btn:hover { background: #3D7A52; }
     .chat-start-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .chat-summary-card { margin: 16px 16px 0; padding: 14px 16px; border: 1px solid rgba(45,90,61,0.25); background: #F4F8F4; border-radius: 12px; }
+    .chat-summary-title { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: #2D5A3D; }
+    .chat-summary-rows { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .chat-summary-row { display: flex; gap: 10px; font-size: 12.5px; line-height: 1.4; }
+    .chat-summary-label { flex-shrink: 0; width: 110px; color: #8BAF8E; font-weight: 600; }
+    .chat-summary-value { color: #1E3A2F; font-weight: 500; }
+    .chat-summary-hint { font-size: 11px; color: #8BAF8E; margin: 8px 16px 0; text-align: center; }
     @media (max-width: 1024px) { .chat-card { max-width: 100%; } }
+
+    /* Pricing band */
+    .pricing-band { width: 100%; max-width: 760px; margin-top: 48px; }
+    .pricing-band .pricing-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #6B8F71; margin-bottom: 12px; }
+    .pricing-band .pricing-heading { font-size: 32px; font-weight: 700; color: #1E3A2F; margin-bottom: 10px; line-height: 1.25; }
+    .pricing-band .pricing-sub { font-size: 16px; color: #6B8F71; line-height: 1.6; margin: 0 auto 28px; max-width: 560px; text-align: center; }
+    .pricing-cards { display: flex; gap: 20px; align-items: stretch; }
+    .pricing-card { flex: 1; min-width: 180px; background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 24px 20px; display: flex; flex-direction: column; gap: 16px; }
+    .pricing-card.active-card { background: #2D5A3D; border-color: #2D5A3D; color: #fff; padding: 26px 22px; box-shadow: 0 16px 40px rgba(30,58,47,0.22); position: relative; }
+    .pricing-badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; margin-bottom: 4px; }
+    .pricing-badge.here { background: rgba(80,130,80,0.12); color: #2D5A3D; }
+    .pricing-badge.best { background: #C9A34E; color: #1E3A2F; position: absolute; top: -11px; left: 50%; transform: translateX(-50%); white-space: nowrap; margin-bottom: 0; }
+    .pricing-plan { font-size: 16px; font-weight: 700; color: #1E3A2F; }
+    .active-card .pricing-plan { color: #fff; }
+    .pricing-price { font-size: 38px; font-weight: 700; color: #1E3A2F; line-height: 1; }
+    .pricing-price span { font-size: 13px; font-weight: 400; color: #6B8F71; margin-left: 4px; }
+    .active-card .pricing-price { color: #fff; }
+    .active-card .pricing-price span { color: rgba(255,255,255,0.65); }
+    .pricing-strike { font-size: 13px; color: #8BAF8E; text-decoration: line-through; margin-left: 6px; }
+    .active-card .pricing-strike { color: rgba(255,255,255,0.45); }
+    .pricing-features { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .pricing-features li { font-size: 13px; color: #3D5A45; line-height: 1.4; display: flex; align-items: flex-start; gap: 8px; }
+    .pricing-features li::before { content: "✓"; font-weight: 700; color: #2D5A3D; flex-shrink: 0; margin-top: 1px; }
+    .active-card .pricing-features li { color: rgba(255,255,255,0.85); }
+    .active-card .pricing-features li::before { color: #C9A34E; }
+    .pricing-cta { display: block; width: 100%; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; text-align: center; cursor: pointer; text-decoration: none; }
+    .pricing-cta.outline { background: transparent; border: 1.5px solid #2D5A3D; color: #2D5A3D; }
+    .pricing-cta.outline:hover { background: rgba(80,130,80,0.06); }
+    .pricing-cta.filled-light { background: #F4F7F4; border: none; color: #2D5A3D; }
+    .pricing-cta.filled-light:hover { background: #e8ede8; }
+    .pricing-footer { font-size: 12px; color: #8BAF8E; line-height: 1.6; margin-top: 20px; text-align: center; }
+    @media (max-width: 680px) {
+      .pricing-cards { flex-direction: column; }
+      .pricing-card { min-width: unset; }
+    }
 
     /* Footer */
     footer { text-align: center; padding: 32px; font-size: 13px; color: #8BAF8E; }
@@ -183,6 +225,7 @@
     section.section-multi { justify-content: flex-start; min-height: auto; padding: 0; }
     .hero-block { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 64px); text-align: center; padding: 48px; width: 100%; }
     section.section-multi .hero-block { min-height: 65vh; }
+    #tenants .hero-block { min-height: calc(100vh - 64px); }
     .content-section { width: 100%; max-width: 960px; margin: 0 auto; padding: 64px 24px; border-top: 1px solid rgba(80,110,80,0.12); text-align: left; }
     .content-section.centered { text-align: center; }
     .section-title { font-size: clamp(26px, 3.5vw, 36px); font-weight: 700; letter-spacing: -1px; color: #1E3A2F; margin-bottom: 12px; text-align: center; }
@@ -273,22 +316,86 @@
   </div>
 
   <!-- Tenants -->
-  <section id="tenants" class="active">
-    <span class="tag">Closed Beta · SF Bay Area · 2026</span>
-    <h1>Find your place<br>in the Bay Area.</h1>
-    <p class="sub">Tell Nest what you're looking for. Your first market scan is free — results land in your inbox.</p>
-    <div class="chat-card" id="chat-card">
+  <section id="tenants" class="active section-multi">
+    <div class="hero-block">
+      <span class="tag">Closed Beta · SF Bay Area · 2026</span>
+      <h1>Find your place<br>in the Bay Area.</h1>
+      <p class="sub">Tell Nest what you're looking for. Your first market scan is free — results land in your inbox.</p>
+      <div class="chat-card" id="chat-card">
       <div class="chat-messages" id="chat-messages">
         <div class="msg nest">
           <div class="msg-label">Nest</div>
-          <div class="msg-text">Hi — I'm Nest. I'll help you find rooms that actually fit your life. To start: which areas of the Bay Area are you looking in?</div>
+          <div class="msg-text">Hi — I'm Nest. I'll scan the Bay Area for rooms that genuinely fit what you're after. To start: are you looking for an entire place to yourself, or a private room in a shared home?</div>
         </div>
       </div>
       <div class="chat-input-row" id="chat-input-row">
         <textarea id="chat-input" placeholder="Type your answer…"></textarea>
         <button class="chat-send" id="chat-send" aria-label="Send">↑</button>
       </div>
+      </div>
     </div>
+
+    <!-- Pricing band -->
+    <div class="content-section centered">
+      <span class="tag">Simple, one-time pricing</span>
+      <h2 class="section-title">Start free. Pay only once it's working.</h2>
+      <p class="section-subtitle">Every search begins with a free scan and one real result email. Upgrade for 30 days of continued scans and results — one-time payment, no subscription, no auto-renewal.</p>
+      <div class="pricing-cards">
+
+        <!-- Free -->
+        <div class="pricing-card">
+          <div>
+            <span class="pricing-badge here">You're here</span>
+            <div class="pricing-plan">Free</div>
+          </div>
+          <div>
+            <div class="pricing-price">$0 <span>one-time sample</span></div>
+          </div>
+          <ul class="pricing-features">
+            <li>Nest sets up your AI market scan</li>
+            <li>1 real result email, delivered free</li>
+            <li>No account or card required</li>
+          </ul>
+          <a class="pricing-cta outline" href="#tenants" onclick="document.getElementById('chat-input') && document.getElementById('chat-input').focus(); return false;">Start with a free scan</a>
+        </div>
+
+        <!-- Casual -->
+        <div class="pricing-card">
+          <div>
+            <div class="pricing-plan">Casual</div>
+          </div>
+          <div>
+            <div class="pricing-price">$19.99 <span>/ 30 days</span></div>
+          </div>
+          <ul class="pricing-features">
+            <li>2× a week scan &amp; email cadence</li>
+            <li>~8 result emails over 30 days</li>
+            <li>~$2.50 per result email</li>
+          </ul>
+          <a class="pricing-cta outline" href="#tenants" onclick="return false;">Choose Casual</a>
+        </div>
+
+        <!-- Active -->
+        <div class="pricing-card active-card">
+          <span class="pricing-badge best">Best value</span>
+          <div>
+            <div class="pricing-plan">Active</div>
+          </div>
+          <div>
+            <div class="pricing-price">$29.99 <span>/ 30 days</span><span class="pricing-strike">$39.99</span></div>
+          </div>
+          <ul class="pricing-features">
+            <li>Daily scan &amp; email cadence</li>
+            <li>~30 result emails over 30 days</li>
+            <li>~$1.00 per email — best rate</li>
+          </ul>
+          <a class="pricing-cta filled-light" href="#tenants" onclick="return false;">Choose Active</a>
+        </div>
+
+      </div>
+      <p class="pricing-footer">One-time payment unlocks your chosen cadence for 30 days — no subscription, no auto-renewal. All purchases are final and non-refundable.</p>
+    </div>
+
   </section>
 
   <!-- Landlords -->
@@ -527,7 +634,7 @@
       workStatus:'', income:'', credit:'', lifestyle:'', email:''
     };
     let chatHistory = [
-      { role: 'assistant', content: "Hi — I'm Nest. I'll help you find rooms that actually fit your life. To start: which areas of the Bay Area are you looking in?" }
+      { role: 'assistant', content: "Hi — I'm Nest. I'll scan the Bay Area for rooms that genuinely fit what you're after. To start: are you looking for an entire place to yourself, or a private room in a shared home?" }
     ];
 
     async function sendChat() {
@@ -565,13 +672,39 @@
 
     function showStartButton() {
       if (document.getElementById('chat-start-btn')) return;
+
+      const card = document.getElementById('chat-card');
+      const inputRow = document.getElementById('chat-input-row');
+
+      const fieldLabels = [
+        ['roomType', 'Room type'], ['location', 'Location'], ['budget', 'Budget'],
+        ['stay', 'Move-in & stay'], ['commute', 'Commute'], ['roomNeeds', 'Room needs'],
+        ['workStatus', 'Work / study'], ['income', 'Income'], ['credit', 'Credit'],
+        ['lifestyle', 'Lifestyle'], ['email', 'Email'],
+      ];
+      const rowsHtml = fieldLabels
+        .filter(([key]) => (chatState[key] || '').trim() !== '')
+        .map(([key, label]) => `<div class="chat-summary-row"><span class="chat-summary-label">${label}</span><span class="chat-summary-value">${chatState[key]}</span></div>`)
+        .join('');
+
+      const summary = document.createElement('div');
+      summary.className = 'chat-summary-card';
+      summary.id = 'chat-summary-card';
+      summary.innerHTML = `<div class="chat-summary-title">Ready to search — here's what I have</div><div class="chat-summary-rows">${rowsHtml}</div>`;
+
+      const hint = document.createElement('p');
+      hint.className = 'chat-summary-hint';
+      hint.id = 'chat-summary-hint';
+      hint.textContent = "Not quite right? Keep typing below to adjust.";
+
       const btn = document.createElement('button');
       btn.className = 'chat-start-btn';
       btn.id = 'chat-start-btn';
       btn.textContent = 'Start my search →';
       btn.onclick = submitSearch;
-      const card = document.getElementById('chat-card');
-      const inputRow = document.getElementById('chat-input-row');
+
+      card.insertBefore(summary, inputRow);
+      card.insertBefore(hint, inputRow);
       card.insertBefore(btn, inputRow);
       setChatEnabled(true);
     }

@@ -3,8 +3,20 @@
 **Product:** Nest & Key · nestandkey.ai  
 **Stage:** Closed Beta, SF Bay Area, 2026  
 **Last updated:** July 2026  
-**Codebase:** Static HTML/CSS/JS, deployed on Vercel (Hobby) from GitHub (`ch-nestandkey/nestandkey-landing`, `main` branch)  
+**Codebase:** Static HTML/CSS/JS, deployed on Vercel (Hobby) from GitHub (`ch-nestandkey/nestandkey-landing`)  
 **Live URL:** https://nestandkey.ai
+
+### Branching & deployment
+
+| Branch | Purpose | URL |
+|--------|---------|-----|
+| `main` | Production — protected, no direct pushes | https://nestandkey.ai |
+| `dev` | Default working branch — all code and design changes start here | Vercel preview URL (auto-generated on push) |
+| `feat/*` | Optional feature branches for larger work | Vercel preview URL (auto-generated on push) |
+
+**Rule:** `main` requires a pull request. Nothing reaches production without a PR review step.
+
+**For Claude Design:** design implementation work happens on `dev` (or a feature branch). When a change is ready to ship, Claude Code opens a PR from `dev` → `main`. Test on the Vercel preview URL before requesting merge.
 
 ---
 
@@ -37,7 +49,7 @@ The brand positioning is deliberate: this is not Craigslist. The tone is calm, c
 | Border | `rgba(80,110,80,0.15)` | Nav underline, section dividers |
 | Card border | `rgba(80,130,80,0.15)` | Step cards, calculator card, chat card |
 
-All greens. No blue. No red unless it's an error state (not currently designed).
+All greens, plus one gold accent — **`#C9A34E`** — used only for the Active plan's "Best value" badge and checkmarks in the pricing band (see §1.6). No blue. No red unless it's an error state (not currently designed).
 
 ### 1.3 Typography
 
@@ -68,9 +80,9 @@ SVG inline in both HTML files, `viewBox="40 88 160 55"`, rendered at `120×34px`
 - Card radius: `14px` step cards, `16px` calc/chat/trust cards
 - Photo radius: `10px` grids, `12px` homeowner photo
 
-### 1.6 Funnel & pricing (downstream context — not built on the site)
+### 1.6 Funnel & pricing
 
-The tenant chat runs **Steps 1–2** of the funnel: gather criteria → free first market scan → one result email. Everything after (upsell, tier selection, checkout) happens over **email + a checkout flow**, never on this site. Captured here only so on-site copy stays consistent.
+The tenant chat runs **Steps 1–2** of the funnel: gather criteria → free first market scan → one result email. The **upsell sequence and checkout remain downstream** (email + a separate checkout flow) — those are not on the site. **The three pricing tiers ARE now shown on the tenant page** as a pricing band below the chat (decision: Jul 2, 2026 — reversed the earlier "no pricing on site" stance to lead with pricing transparency for this audience).
 
 **Three tiers:** Free (lead-gen entry) · Casual (decoy) · Active (conversion target).
 
@@ -86,6 +98,41 @@ The tenant chat runs **Steps 1–2** of the funnel: gather criteria → free fir
 - **Casual day-29 upsell email** (downstream, email — not this site): a 9th message offers **$7 off Active → $22.99** via a unique discounted checkout link; a fresh 30-day Active window starts on purchase.
 - **Refund policy:** all purchases are final and non-refundable (digital service, begins immediately); disclosed on the checkout page **and** in the confirmation email, before payment.
 - **Extensions: excluded** from every surface — do not build, price, or reference them anywhere.
+
+#### On-page pricing band (tenant page)
+
+A pricing band sits **below the chat card** in the Tenants section. Presentation:
+
+- Eyebrow: "Simple, one-time pricing" · Heading: "Start free. Pay only once it's working." · Sub: "Every search begins with a free scan and one real result email. Upgrade for 30 days of continued scans and results — one-time payment, no subscription, no auto-renewal."
+- Three cards, left→right: **Free** ($0, "one-time sample", badge "You're here") · **Casual** ($19.99 / 30 days) · **Active** ($29.99 with $39.99 struck through / 30 days, gold "Best value" badge, filled `#2D5A3D` card).
+- Card feature bullets: Free — Nest sets up your scan · 1 real result email, free · no account or card. Casual — 2×/week cadence · ~8 emails / 30 days · ~$2.50/email. Active — daily cadence · ~30 emails / 30 days · ~$1.00/email (best rate).
+- Footer line: "One-time payment unlocks your chosen cadence for 30 days — no subscription, no auto-renewal. All purchases are final and non-refundable."
+
+**Guardrails (non-negotiable):**
+- Never expose the pricing *strategy* on the page — no "decoy", "target", "lead-gen" language. Those labels are internal only.
+- Extensions must not appear anywhere in the band.
+- The reserved-"match" rule applies to all band copy.
+- Band CTAs ("Choose Casual", "Choose Active") are visual for now — real tier selection + checkout are still downstream. Wire them to the existing flow only when checkout exists; until then they should not imply an on-site purchase completes here.
+- Introduces one new accent — **gold `#C9A34E`** for the "Best value" badge and Active-card checkmarks. This is the only non-green accent on the site; see §1.2.
+
+**Exact type scale & Active-card treatment (matches the design prototype `AI Home Search - For Tenants.dc.html`, direction `1a` — do not substitute smaller/generic values):**
+- `pricing-heading`: `32px` (not 24px) — the heading is a headline moment, not a section label.
+- `pricing-sub`: `16px`, capped at `max-width: 560px` and centered — reads as intentional copy, not fine print.
+- `pricing-price` (the dollar figure): `38px` (not 28px) — the price is the card's visual anchor.
+- `pricing-cards` gap: `20px` (not 16px).
+- **Active card gets more visual weight than Free/Casual**, since it's the recommended tier: extra padding (`26px 22px` vs `24px 20px`), a `box-shadow: 0 16px 40px rgba(30,58,47,0.22)` lift, and its "Best value" badge **floats above the card**, overlapping the top border (`position: absolute; top: -11px`, centered) — not sitting inline next to the plan name.
+
+**Structural fix (Jul 3, 2026) — Tenants must adopt the Multi-section architecture, not just its typography:**
+
+Today `#tenants` is a plain `<section>` (base rule: `flex-direction:column; justify-content:center; min-height:calc(100vh - 64px)`) with the tag/H1/sub/chat-card **and** the pricing band all inside that one centered column — so the whole page co-centers as one clump instead of hero + content flowing independently, unlike every other Multi-section page.
+
+Fix, reusing classes that already exist in the stylesheet (`.hero-block`, `.content-section` — no new CSS needed for the container, only the scoped height override):
+1. Add `section-multi` to `#tenants`'s class list.
+2. Wrap the tag + H1 + sub + chat-card in `<div class="hero-block">`. Since `.section-multi .hero-block` defaults to `65vh` (the shared Multi-section height) and Tenants needs its full current height (chat needs the room), add a scoped override: `#tenants .hero-block { min-height: calc(100vh - 64px); }`. This preserves Tenants' current hero height exactly — nothing shrinks — while giving it the correct independent-block architecture.
+3. Replace the bespoke `.pricing-band` wrapper with `.content-section.centered` (the canonical container). Inside it, replace `.pricing-eyebrow` with `.tag`, `.pricing-heading` with `.section-title`, and `.pricing-sub` with `.section-subtitle` — all three already carry the right values site-wide, so no custom sizing is needed. Keep the pricing-specific classes (`.pricing-cards`, `.pricing-card`, `.pricing-price`, `.pricing-badge`, `.pricing-cta`, `.pricing-footer`) as-is other than the two token fixes below.
+4. Token fixes: `.pricing-card` border-color → `rgba(80,130,80,0.15)` (was `0.2`, now matches every other card on the site); `.pricing-cards` gap → `20px` (was `16px`).
+
+Net effect: hero keeps its current full-viewport height and content, pricing band keeps its current copy/tiers/prices — only the container classes and two token values change, so this is a refactor, not a redesign.
 
 ---
 
@@ -107,6 +154,8 @@ Single-page app — section toggling via JS. Nav always visible (`z-index: 100`)
 
 **Multi-section** (Landlords, Agents) — `section.section-multi`: no padding, `min-height: auto`. Hero block inside is `min-height: 65vh` — intentionally leaves the next section peeking below fold to cue scrolling. Below-fold content in `.content-section` blocks: `max-width: 960px`, `padding: 64px 24px`, separated by subtle top border.
 
+**Content-section grammar (reusable — canonical, not page-specific):** `.content-section` (max-width 960px, `64px 24px` padding, top-border divider) + `.section-title` (`clamp(26px, 3.5vw, 36px)`, `-1px` letter-spacing, centered) + `.section-subtitle` (`16px`, `#6B8F71`, max-width 600px, centered) is the standard unit for **any** below-fold content block, on any page — not just Landlords/Agents. New sections or features must reuse these three classes rather than inventing parallel ones with slightly different numbers (custom heading sizes, custom sub max-widths, custom border opacities). If a new block needs something these don't cover (e.g. pricing cards' price figures, tier badges), add only that delta as new, narrowly-scoped classes — never redeclare the container/heading/sub. **Counter-example to learn from:** the Tenants pricing band (§1.6) shipped with bespoke `.pricing-heading`/`.pricing-sub` classes and a `0.2`-opacity card border instead of reusing this grammar — it read as visually disconnected from Landlords/Agents as a result. Rebuild it against this rule.
+
 #### Section content
 
 **For Tenants (default)**
@@ -114,6 +163,7 @@ Single-page app — section toggling via JS. Nav always visible (`z-index: 100`)
 - H1: "Find your place / in the Bay Area."
 - Sub: "Tell Nest what you're looking for. Your first market scan is free — results land in your inbox."
 - Main element: Nest AI chat card (see Part 3)
+- Below the chat: pricing band — Free / Casual / Active (see §1.6)
 
 **For Landlords**
 - Tag: "Closed Beta · SF Bay Area"
@@ -177,6 +227,11 @@ The Nest chat replaces the email waitlist form in the Tenants section. A tenant 
 
 This is a **closed intake** — not open-ended chat. Nest has a goal: collect all required fields, confirm with the user, and hand off to email.
 
+**Seed message (exact, verbatim — hardcoded in `index.html`, not model-generated):**
+> "Hi — I'm Nest. I'll scan the Bay Area for rooms that genuinely fit what you're after. To start: are you looking for an entire place to yourself, or a private room in a shared home?"
+
+This MUST ask room type first, matching the persona's own instruction to collect room type early. If the persona's collection order changes, update this string to match — it is a static seed and will silently drift out of sync with the model otherwise.
+
 ### 3.2 Chat card UI
 
 **Structure (top to bottom inside `.chat-card`):**
@@ -199,7 +254,7 @@ This is a **closed intake** — not open-ended chat. Nest has a goal: collect al
 **States:**
 - **Active** — input enabled, messages scrollable
 - **Waiting** — input disabled while Nest is responding (no typing indicator yet — open design item)
-- **Summary** — "Start my search →" button inserted above input row; input stays enabled for corrections
+- **Summary** — a distinct **summary card** ("Ready to search — here's what I have") lists every captured field as label/value rows (skipping any empty/optional field), followed by the "Start my search →" button and a small hint ("Not quite right? Keep typing below to adjust.") — all inserted above the input row; input stays enabled for corrections.
 - **Confirmed** — entire card replaced with confirmation message: *"✓ Your search is set — your free first scan is underway, results will land in {email} shortly. We'll take it from here by email."*
 - **Error** — "Something went wrong — please try again." appears as a Nest message; input re-enables
 
@@ -444,6 +499,17 @@ User: "Actually I want an entire place, not a shared room"
 
 ## Part 5 — Components
 
+### Content section (canonical layout unit)
+
+```
+.content-section          — max-width 960px, padding 64px 24px, border-top rgba(80,110,80,0.12)
+.content-section.centered — text-align: center (used for nearly all cases)
+.section-title            — clamp(26px, 3.5vw, 36px), weight 700, letter-spacing -1px, centered, margin-bottom 12px
+.section-subtitle         — 16px, #6B8F71, max-width 600px, centered, margin 0 auto 40px, line-height 1.6
+```
+
+Use this for **every** below-fold content block on **any** page — it's the shared grammar Landlords and Agents both build on. Do not invent a parallel heading/sub/container with different numbers for a new feature; extend this pattern and add only what's genuinely new (e.g. price figures, badges).
+
 ### Buttons
 
 ```
@@ -658,3 +724,61 @@ The `navMap` was updated when Pricing was removed. Verify no orphaned active sta
 | 5a | Log in / Sign up state | Medium | Low |
 | 5b | "Apply now" label on listing | Low | Very low |
 | 5c | Nav active state verification | Low | Very low |
+
+---
+
+## Part 10 — User Testing Feedback Log
+
+Feedback collected from founder self-testing of the AI Home Search chat (Phase 1), July 2026. All items marked **Fixed** have been resolved in code; **Open** items are candidates for future design iteration.
+
+---
+
+### Round 1 — First complete test run
+
+**Usability**
+
+| # | Feedback | Status | Resolution |
+|---|----------|--------|------------|
+| U1 | Felt like too many questions. Each question captured one kind of information clearly, but the chat felt transactional and too long. | Fixed | Updated NEST_PERSONA to merge closely related questions into one natural exchange (e.g. commute destination + mode together, room needs + lifestyle in one pass). |
+| U2 | Nest never asked which neighborhood within the city — only captured the city (SF). | Fixed | Added guardrail to persona: when a user names a city, always follow up to ask which neighborhoods or areas. |
+| U3 | Could not see the last message before the confirmation state appeared. Transition was too fast; felt like no opportunity to share lifestyle fit, neighborhood vibe, etc. | Fixed | Changed confirmation flow: Nest now recaps in chat and keeps input open. "Start my search" button appears above the input field without replacing it — user can still type corrections before submitting. |
+
+**Design**
+
+| # | Feedback | Status | Resolution |
+|---|----------|--------|------------|
+| D1 | Sender label "NEST" appeared centered at the top of the message bubble — looked off. | Fixed | Added `text-align: left` to `.msg.nest .msg-label`. |
+| D2 | Chat UI was too narrow on desktop — looked like a mobile screen squeezed into desktop, making it unclear this was the primary interaction area. | Fixed | Increased `.chat-card` max-width from 520px to 760px. |
+
+---
+
+### Round 2 — Post-fix re-test
+
+**Usability**
+
+| # | Feedback | Status | Resolution |
+|---|----------|--------|------------|
+| U4 | Nest assumed the user was looking for shared housing (a room in a shared home). User was searching for an entire 2BR/2BA apartment with no housemates. | Fixed | Added `roomType` as the first required field; updated persona to ask room type early and explicitly — never assume. Also added `roomType` to STATE schema and REQUIRED fields list. |
+| U5 | After Nest asked "anything you'd like to adjust?", the "Start my search →" button had already replaced the open input field, so the user couldn't type a response. | Fixed | `showStartButton()` now inserts the button *above* the input row without removing it — the input stays active until the user clicks the button. |
+
+---
+
+### Open items from testing (not yet addressed)
+
+These did not surface as blockers during testing but are noted for future design iteration. See also Part 9 for the full improvement plan.
+
+- No explicit lifestyle / neighborhood vibe prompt — users may not volunteer this unless asked directly. Consider a soft prompt after room needs.
+- Confirmation summary could be styled differently to visually distinguish it from regular chat messages (e.g. a summary card vs. a bubble).
+
+---
+
+### Round 3 — Prototype design pass (design-side, pending mirror to production)
+
+Explored in the design prototype (`AI Home Search - For Tenants.dc.html`); **not yet in live `index.html` / `api/chat.js`**. Mirror to production when the next `api/chat.js` change ships.
+
+| # | Change | Where it lives now | To mirror in production |
+|---|--------|--------------------|-------------------------|
+| R1 | Confirmation restyled as a distinct **summary card** ("Ready to search — here's what I have") with the "Start my search →" button, shown **above a still-active input**. Resolves the Open "summary card vs. bubble" item and reinforces U3/U5. | Prototype (frontend only) | Frontend `index.html` — render the ready state as a card, keep input active until the button is clicked. No backend change. |
+| R2 | Soft, skippable **lifestyle / vibe prompt** offered after room needs. Resolves the Open lifestyle-prompt item. | Prototype persona | `NEST_PERSONA` in `api/chat.js` — add the soft-prompt instruction. |
+| R3 | **Split "lifestyle" and "requirements" into two fields.** Lifestyle = soft preferences; requirements = hard conditions. A single combined field read as a confusing double-negative (e.g. "Dealbreakers: No smoking" — smoker or non-smoker?). | Prototype persona + STATE + summary | `api/chat.js`: add a `requirements` field to the STATE schema alongside `lifestyle`. |
+| R4 | **Requirements phrased affirmatively.** Nest normalizes every hard-no into a positive condition the home must meet — never a bare "no X". e.g. "no smoking" → "Smoke-free home"; "no ground floor" → "Above ground floor"; "must allow pets" → "Pet-friendly". Removes the double-negative ambiguity in R3. | Prototype persona | `NEST_PERSONA` in `api/chat.js` — add the affirmative-phrasing instruction for the `requirements` field. |
