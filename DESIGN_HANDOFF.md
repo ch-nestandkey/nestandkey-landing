@@ -233,7 +233,7 @@ This MUST ask room type first, matching the persona's own instruction to collect
 **States:**
 - **Active** — input enabled, messages scrollable
 - **Waiting** — input disabled while Nest is responding (no typing indicator yet — open design item)
-- **Summary** — "Start my search →" button inserted above input row; input stays enabled for corrections
+- **Summary** — a distinct **summary card** ("Ready to search — here's what I have") lists every captured field as label/value rows (skipping any empty/optional field), followed by the "Start my search →" button and a small hint ("Not quite right? Keep typing below to adjust.") — all inserted above the input row; input stays enabled for corrections.
 - **Confirmed** — entire card replaced with confirmation message: *"✓ Your search is set — your free first scan is underway, results will land in {email} shortly. We'll take it from here by email."*
 - **Error** — "Something went wrong — please try again." appears as a Nest message; input re-enables
 
