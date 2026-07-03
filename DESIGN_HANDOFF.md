@@ -122,6 +122,18 @@ A pricing band sits **below the chat card** in the Tenants section. Presentation
 - `pricing-cards` gap: `20px` (not 16px).
 - **Active card gets more visual weight than Free/Casual**, since it's the recommended tier: extra padding (`26px 22px` vs `24px 20px`), a `box-shadow: 0 16px 40px rgba(30,58,47,0.22)` lift, and its "Best value" badge **floats above the card**, overlapping the top border (`position: absolute; top: -11px`, centered) — not sitting inline next to the plan name.
 
+**Structural fix (Jul 3, 2026) — Tenants must adopt the Multi-section architecture, not just its typography:**
+
+Today `#tenants` is a plain `<section>` (base rule: `flex-direction:column; justify-content:center; min-height:calc(100vh - 64px)`) with the tag/H1/sub/chat-card **and** the pricing band all inside that one centered column — so the whole page co-centers as one clump instead of hero + content flowing independently, unlike every other Multi-section page.
+
+Fix, reusing classes that already exist in the stylesheet (`.hero-block`, `.content-section` — no new CSS needed for the container, only the scoped height override):
+1. Add `section-multi` to `#tenants`'s class list.
+2. Wrap the tag + H1 + sub + chat-card in `<div class="hero-block">`. Since `.section-multi .hero-block` defaults to `65vh` (the shared Multi-section height) and Tenants needs its full current height (chat needs the room), add a scoped override: `#tenants .hero-block { min-height: calc(100vh - 64px); }`. This preserves Tenants' current hero height exactly — nothing shrinks — while giving it the correct independent-block architecture.
+3. Replace the bespoke `.pricing-band` wrapper with `.content-section.centered` (the canonical container). Inside it, replace `.pricing-eyebrow` with `.tag`, `.pricing-heading` with `.section-title`, and `.pricing-sub` with `.section-subtitle` — all three already carry the right values site-wide, so no custom sizing is needed. Keep the pricing-specific classes (`.pricing-cards`, `.pricing-card`, `.pricing-price`, `.pricing-badge`, `.pricing-cta`, `.pricing-footer`) as-is other than the two token fixes below.
+4. Token fixes: `.pricing-card` border-color → `rgba(80,130,80,0.15)` (was `0.2`, now matches every other card on the site); `.pricing-cards` gap → `20px` (was `16px`).
+
+Net effect: hero keeps its current full-viewport height and content, pricing band keeps its current copy/tiers/prices — only the container classes and two token values change, so this is a refactor, not a redesign.
+
 ---
 
 ## Part 2 — Pages & Layout
