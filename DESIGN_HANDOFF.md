@@ -115,6 +115,13 @@ A pricing band sits **below the chat card** in the Tenants section. Presentation
 - Band CTAs ("Choose Casual", "Choose Active") are visual for now — real tier selection + checkout are still downstream. Wire them to the existing flow only when checkout exists; until then they should not imply an on-site purchase completes here.
 - Introduces one new accent — **gold `#C9A34E`** for the "Best value" badge and Active-card checkmarks. This is the only non-green accent on the site; see §1.2.
 
+**Exact type scale & Active-card treatment (matches the design prototype `AI Home Search - For Tenants.dc.html`, direction `1a` — do not substitute smaller/generic values):**
+- `pricing-heading`: `32px` (not 24px) — the heading is a headline moment, not a section label.
+- `pricing-sub`: `16px`, capped at `max-width: 560px` and centered — reads as intentional copy, not fine print.
+- `pricing-price` (the dollar figure): `38px` (not 28px) — the price is the card's visual anchor.
+- `pricing-cards` gap: `20px` (not 16px).
+- **Active card gets more visual weight than Free/Casual**, since it's the recommended tier: extra padding (`26px 22px` vs `24px 20px`), a `box-shadow: 0 16px 40px rgba(30,58,47,0.22)` lift, and its "Best value" badge **floats above the card**, overlapping the top border (`position: absolute; top: -11px`, centered) — not sitting inline next to the plan name.
+
 ---
 
 ## Part 2 — Pages & Layout
