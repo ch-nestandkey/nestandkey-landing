@@ -155,11 +155,14 @@
 
     /* Chat card */
     .chat-card { width: 100%; max-width: 760px; margin-top: 36px; background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; overflow: hidden; }
-    .chat-header { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 1px solid rgba(80,110,80,0.12); text-align: left; }
-    .chat-avatar { width: 30px; height: 30px; border-radius: 50%; background: #2D5A3D; color: #fff; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .chat-header-name { font-size: 14px; font-weight: 600; color: #1E3A2F; }
-    .chat-header-sub { font-size: 12px; color: #8BAF8E; }
+    /* Chat header */
+    .chat-header { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid rgba(80,110,80,0.1); text-align: left; }
+    .chat-header .chat-avatar { width: 30px; height: 30px; border-radius: 50%; background: #2D5A3D; color: #F4F7F4; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .chat-header .chat-header-name { font-size: 14px; font-weight: 600; color: #1E3A2F; }
+    .chat-header .chat-header-sub { font-size: 12px; color: #8BAF8E; }
+
     .chat-messages { padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; min-height: 400px; max-height: 500px; overflow-y: auto; }
+    @media (max-width: 680px) { .chat-messages { min-height: 320px; max-height: 420px; } }
     .msg { max-width: 72%; font-size: 15px; line-height: 1.6; text-align: left; }
     .msg.nest { align-self: flex-start; }
     .msg.nest .msg-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #2D5A3D; text-transform: uppercase; margin-bottom: 4px; text-align: left; }
@@ -184,7 +187,6 @@
     .chat-summary-value { color: #1E3A2F; font-weight: 500; }
     .chat-summary-hint { font-size: 11px; color: #8BAF8E; margin: 8px 16px 0; text-align: center; }
     @media (max-width: 1024px) { .chat-card { max-width: 100%; } }
-    @media (max-width: 680px) { .chat-messages { min-height: 320px; max-height: 420px; } }
 
     /* Pricing band */
     .pricing-band { width: 100%; max-width: 760px; margin-top: 48px; }
@@ -192,20 +194,22 @@
     .pricing-band .pricing-heading { font-size: 32px; font-weight: 700; color: #1E3A2F; margin-bottom: 10px; line-height: 1.25; }
     .pricing-band .pricing-sub { font-size: 16px; color: #6B8F71; line-height: 1.6; margin: 0 auto 28px; max-width: 560px; text-align: center; }
     .pricing-cards { display: flex; gap: 28px; align-items: stretch; text-align: left; }
-    .pricing-card { flex: 1; min-width: 180px; background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 32px 26px; display: flex; flex-direction: column; gap: 16px; }
+    .pricing-card { flex: 1; min-width: 180px; background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 32px 26px; display: flex; flex-direction: column; gap: 20px; }
     .pricing-card.active-card { background: #2D5A3D; border-color: #2D5A3D; color: #fff; padding: 34px 28px; box-shadow: 0 16px 40px rgba(30,58,47,0.22); position: relative; transition: transform 0.2s ease, box-shadow 0.2s ease; }
     .pricing-card.active-card:hover { transform: translateY(-4px); box-shadow: 0 22px 52px rgba(30,58,47,0.32); }
-    .pricing-badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; margin-bottom: 4px; }
-    .pricing-badge.here { background: rgba(80,130,80,0.12); color: #2D5A3D; }
+    .pricing-badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; margin-bottom: 4px; line-height: 1.4; }
+    .pricing-badge.here { background: rgba(80,130,80,0.12); color: #2D5A3D; margin-bottom: 0; }
     .pricing-badge.best { background: #C9A34E; color: #1E3A2F; position: absolute; top: -11px; left: 50%; transform: translateX(-50%); white-space: nowrap; margin-bottom: 0; }
     .pricing-plan { font-size: 16px; font-weight: 700; color: #1E3A2F; }
     .active-card .pricing-plan { color: #fff; }
-    .pricing-price { font-size: 38px; font-weight: 700; color: #1E3A2F; line-height: 1; }
+    .pricing-price { font-size: 38px; font-weight: 700; color: #1E3A2F; line-height: 1; white-space: nowrap; }
     .pricing-price span { font-size: 13px; font-weight: 400; color: #6B8F71; margin-left: 4px; white-space: nowrap; }
-    .active-card .pricing-price { color: #fff; }
+    .active-card .pricing-price { color: #fff; font-size: 32px; }
     .active-card .pricing-price span { color: rgba(255,255,255,0.65); }
     .pricing-strike { font-size: 13px; color: #8BAF8E; text-decoration: line-through; margin-left: 6px; white-space: nowrap; }
     .active-card .pricing-strike { color: rgba(255,255,255,0.45); }
+    .pricing-caption { font-size: 12.5px; color: #8BAF8E; margin-top: 12px; }
+    .active-card .pricing-caption { color: rgba(255,255,255,0.55); }
     .pricing-features { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; flex: 1; }
     .pricing-features li { font-size: 13.5px; color: #4A6B52; line-height: 1.5; display: flex; align-items: flex-start; gap: 9px; }
     .pricing-features li::before { content: "✓"; font-weight: 400; color: #2D5A3D; flex-shrink: 0; margin-top: 1px; }
@@ -219,6 +223,8 @@
     .pricing-cta.filled-light { background: #F4F7F4; border: none; color: #2D5A3D; font-weight: 700; }
     .pricing-cta.filled-light:hover { background: #fff; box-shadow: inset 0 0 0 1.5px #2D5A3D; }
     .pricing-footer { font-size: 12px; color: #8BAF8E; line-height: 1.6; margin-top: 28px; text-align: center; }
+    .pricing-hint { margin-top: auto; min-height: 43px; display: flex; align-items: center; justify-content: center; font-size: 12.5px; color: #8BAF8E; text-align: center; line-height: 1.4; text-wrap: balance; }
+    .active-card .pricing-hint { color: rgba(255,255,255,0.6); }
     @media (max-width: 680px) {
       .pricing-cards { flex-direction: column; }
       .pricing-card { min-width: unset; }
@@ -233,23 +239,22 @@
     section.section-multi { justify-content: flex-start; min-height: auto; padding: 0; }
     .hero-block { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 64px); text-align: center; padding: 48px; width: 100%; }
     section.section-multi .hero-block { min-height: 65vh; padding-top: 96px; padding-bottom: 96px; }
-    #tenants .hero-block { min-height: calc(100vh - 64px - 40px); padding-top: 96px; padding-bottom: 96px; }
+    #tenants .hero-block { min-height: calc(100vh - 64px - 40px); padding-top: 96px; padding-bottom: 96px; position: relative; }
     .content-section { width: 100%; max-width: 960px; margin: 0 auto; padding: 96px 24px; border-top: 1px solid rgba(80,110,80,0.12); text-align: left; }
     .content-section.centered { text-align: center; }
     .section-title { font-size: clamp(26px, 3.5vw, 36px); font-weight: 700; letter-spacing: -1px; color: #1E3A2F; margin-bottom: 16px; text-align: center; }
     .section-subtitle { font-size: 16px; color: #6B8F71; text-align: center; max-width: 600px; margin: 0 auto 56px; line-height: 1.6; }
 
-
     /* Steps */
     .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; }
     .step-card { background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 14px; padding: 36px 28px; }
-    .step-num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: #2D5A3D; color: #F4F7F4; font-size: 14px; font-weight: 700; margin-bottom: 16px; }
-    .step-card h3 { font-size: 17px; font-weight: 700; color: #1E3A2F; margin-bottom: 8px; }
+    .step-num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: #2D5A3D; color: #F4F7F4; font-size: 14px; font-weight: 700; margin-bottom: 20px; }
+    .step-card h3 { font-size: 17px; font-weight: 700; color: #1E3A2F; margin-bottom: 10px; }
     .step-card p { font-size: 14px; color: #6B8F71; line-height: 1.6; }
 
     /* Trust box */
     .trust-box { background: #EBF0EB; border-radius: 16px; padding: 48px 40px; text-align: center; }
-    .trust-box .trust-stat { font-size: 22px; font-weight: 700; color: #1E3A2F; margin-bottom: 10px; }
+    .trust-box .trust-stat { font-size: 22px; font-weight: 700; color: #1E3A2F; margin-bottom: 14px; }
     .trust-box .trust-note { font-size: 15px; color: #4A6B52; }
 
     /* Why partner list */
@@ -260,7 +265,7 @@
     /* Calculator */
     .calc-card { background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 40px; max-width: 760px; margin: 0 auto; }
     .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .calc-field { display: flex; flex-direction: column; gap: 6px; }
+    .calc-field { display: flex; flex-direction: column; gap: 8px; }
     .calc-field label { font-size: 13px; font-weight: 600; color: #1E3A2F; }
     .calc-field input { padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(80,130,80,0.35); font-size: 15px; color: #1E3A2F; outline: none; }
     .calc-field input:focus { border-color: #2D5A3D; }
@@ -328,10 +333,10 @@
     <p class="sub">Tell Nest what you're looking for. Your first market scan is free — results land in your inbox.</p>
     <div class="chat-card" id="chat-card">
       <div class="chat-header">
-        <div class="chat-avatar">N</div>
-        <div>
-          <div class="chat-header-name">Nest</div>
-          <div class="chat-header-sub">Your home-search concierge</div>
+        <span class="chat-avatar">N</span>
+        <div style="display:flex; flex-direction:column;">
+          <span class="chat-header-name">Nest</span>
+          <span class="chat-header-sub">Your home-search concierge</span>
         </div>
       </div>
       <div class="chat-messages" id="chat-messages">
@@ -356,12 +361,13 @@
 
         <!-- Free -->
         <div class="pricing-card">
-          <div style="display:flex; align-items:center; gap:8px;">
+          <div style="display:flex; align-items:center; gap:8px; line-height:1;">
             <span class="pricing-plan">Free</span>
             <span class="pricing-badge here">You're here</span>
           </div>
           <div>
             <div class="pricing-price">$0 <span>one-time sample</span></div>
+            <div class="pricing-caption">Try it, no commitment</div>
           </div>
           <ul class="pricing-features">
             <li>Nest sets up your AI market scan</li>
@@ -377,14 +383,15 @@
             <div class="pricing-plan">Casual</div>
           </div>
           <div>
-            <div class="pricing-price">$19.99 <span>/ 30 days</span></div>
+            <div class="pricing-price">$19.99 <span>for 30 days</span></div>
+            <div class="pricing-caption">For browsing the market</div>
           </div>
           <ul class="pricing-features">
             <li><span><strong>2× a week</strong> scan &amp; email cadence</span></li>
             <li>~8 result emails over 30 days</li>
             <li>~$2.50 per result email</li>
           </ul>
-          <a class="pricing-cta outline" href="#tenants" onclick="return false;">Choose Casual</a>
+          <p class="pricing-hint">Available after your free scan</p>
         </div>
 
         <!-- Active -->
@@ -394,14 +401,15 @@
             <div class="pricing-plan">Active</div>
           </div>
           <div>
-            <div class="pricing-price">$29.99 <span class="pricing-strike">$39.99</span><span>/ 30 days</span></div>
+            <div class="pricing-price">$29.99 <span class="pricing-strike">$39.99</span><span>for 30 days</span></div>
+            <div class="pricing-caption">For a real move-in plan</div>
           </div>
           <ul class="pricing-features">
             <li><span><strong>Daily</strong> scan &amp; email cadence</span></li>
             <li>~30 result emails over 30 days</li>
             <li><span><strong>~$1.00 per email</strong> — best rate</span></li>
           </ul>
-          <a class="pricing-cta filled-light" href="#tenants" onclick="return false;">Choose Active</a>
+          <p class="pricing-hint">Available after your free scan</p>
         </div>
 
       </div>
@@ -541,12 +549,12 @@
   <footer>
     <div style="display:flex;gap:24px;justify-content:center;margin-bottom:10px;">
       <a onclick="showSection('about')">About Us</a>
-      <a href="mailto:contact@nestandkey.ai">Contact</a>
+      <a href="/cdn-cgi/l/email-protection#5b3834352f3a382f1b353e282f3a353f303e22753a32">Contact</a>
     </div>
     <div>© 2026 NestAndKey. All rights reserved.</div>
   </footer>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     const navMap = {
       tenants:   { desk: 'nav-tenants',   mob: 'mob-tenants' },
       landlords: { desk: 'nav-landlords', mob: 'mob-landlords' },

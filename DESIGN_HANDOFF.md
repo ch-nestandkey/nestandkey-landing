@@ -79,6 +79,7 @@ SVG inline in both HTML files, `viewBox="40 88 160 55"`, rendered at `120×34px`
 - Button radius: `8px` standard, `50px` pill (listing CTAs)
 - Card radius: `14px` step cards, `16px` calc/chat/trust cards
 - Photo radius: `10px` grids, `12px` homeowner photo
+- Content-section vertical padding: `96px` (increased from `64px`, Jul 3 2026 — see "Content section" spacing update below)
 
 ### 1.6 Funnel & pricing
 
@@ -134,6 +135,11 @@ Fix, reusing classes that already exist in the stylesheet (`.hero-block`, `.cont
 
 Net effect: hero keeps its current full-viewport height and content, pricing band keeps its current copy/tiers/prices — only the container classes and two token values change, so this is a refactor, not a redesign.
 
+**Pricing card copy & CTA update (Jul 3, 2026):**
+- **No on-site CTA for Casual/Active.** Both tiers are purchased downstream via email (see the day-29 upsell flow above) — there is no on-site checkout yet. "Choose Casual" / "Choose Active" buttons were removed; only Free's "Start with a free scan" CTA remains, since that's the one action that actually happens on this page. In their place, each card shows a quiet hint line — **"Available after your free scan"** — vertically centered in a `43px` slot (`.pricing-hint`) so it lines up exactly with the Free card's button row across all three cards.
+- **No "/" in price lines.** Changed "$19.99 / 30 days" → "$19.99 for 30 days" (same for Active). A slash reads as a recurring-billing convention; these are one-time payments unlocking a fixed 30-day window, not subscriptions.
+- **One-line "who it's for" caption under every price** (`.pricing-caption`, `12.5px`, `#8BAF8E` / `rgba(255,255,255,.55)` on Active, `12px` margin-top from the price): Free — "Try it, no commitment." · Casual — "For browsing the market." · Active — "For a real move-in plan." Same slot on all three cards, no box or legend — evaluated and rejected a shared legend row above the cards and per-card boxed callouts in favor of this quieter, more consistent treatment (fewer nested containers, reads as one typographic system rather than added chrome).
+
 ---
 
 ## Part 2 — Pages & Layout
@@ -154,7 +160,13 @@ Single-page app — section toggling via JS. Nav always visible (`z-index: 100`)
 
 **Multi-section** (Landlords, Agents) — `section.section-multi`: no padding, `min-height: auto`. Hero block inside is `min-height: 65vh` — intentionally leaves the next section peeking below fold to cue scrolling. Below-fold content in `.content-section` blocks: `max-width: 960px`, `padding: 64px 24px`, separated by subtle top border.
 
-**Content-section grammar (reusable — canonical, not page-specific):** `.content-section` (max-width 960px, `64px 24px` padding, top-border divider) + `.section-title` (`clamp(26px, 3.5vw, 36px)`, `-1px` letter-spacing, centered) + `.section-subtitle` (`16px`, `#6B8F71`, max-width 600px, centered) is the standard unit for **any** below-fold content block, on any page — not just Landlords/Agents. New sections or features must reuse these three classes rather than inventing parallel ones with slightly different numbers (custom heading sizes, custom sub max-widths, custom border opacities). If a new block needs something these don't cover (e.g. pricing cards' price figures, tier badges), add only that delta as new, narrowly-scoped classes — never redeclare the container/heading/sub. **Counter-example to learn from:** the Tenants pricing band (§1.6) shipped with bespoke `.pricing-heading`/`.pricing-sub` classes and a `0.2`-opacity card border instead of reusing this grammar — it read as visually disconnected from Landlords/Agents as a result. Rebuild it against this rule.
+**Hero-height consistency (important — do not vary per page):** all Multi-section pages share the exact same hero height (`65vh`), even though their content lengths differ. Nav switching between sections is instant (`display:none`/`flex` toggling, no scroll animation) — a shared fixed height means the fold line lands in the same place every time you switch tabs, so the page never visually "jumps." Never give one Multi-section page a taller or shorter hero than the others to fit its content; adjust content spacing instead, not the hero height.
+
+**Hero top-padding floor (Jul 3, 2026):** hero blocks vertically-center their content via flex `justify-content:center`, so on short viewports the gap above the tag/eyebrow could shrink toward zero. All hero blocks (`#tenants .hero-block` and `section.section-multi .hero-block`, covering Landlords + Agents) now carry `padding-top: 96px; padding-bottom: 96px` as a floor — matching `.content-section`'s top padding — so that gap never collapses below 96px regardless of viewport height; flex centering still adds extra room on taller screens.
+
+**Tenants' hero is a documented exception, not a violation:** Tenants uses a taller `calc(100vh - 64px)` hero (full first viewport) instead of the shared `65vh`, because it hosts the primary product interaction (the Nest chat) rather than marketing copy alone — the chat needs real room to be usable. This means Tenants should be restructured to follow the Multi-section *architecture* (a `.hero-block` that does NOT vertically-center with what follows, plus `.content-section` blocks flowing normally below it — see the pricing band in §1.6) while intentionally keeping its own taller hero height. Do not force Tenants to `65vh` — that would cramp the chat. Do not, either, let its hero co-center with the pricing band below it (today's bug) — they must be independent blocks, same as every other Multi-section page.
+
+**Content-section grammar (reusable — canonical, not page-specific):** `.content-section` (max-width 960px, `96px 24px` padding, top-border divider) + `.section-title` (`clamp(26px, 3.5vw, 36px)`, `-1px` letter-spacing, centered) + `.section-subtitle` (`16px`, `#6B8F71`, max-width 600px, centered) is the standard unit for **any** below-fold content block, on any page — not just Landlords/Agents. New sections or features must reuse these three classes rather than inventing parallel ones with slightly different numbers (custom heading sizes, custom sub max-widths, custom border opacities). If a new block needs something these don't cover (e.g. pricing cards' price figures, tier badges), add only that delta as new, narrowly-scoped classes — never redeclare the container/heading/sub. **Counter-example to learn from:** the Tenants pricing band (§1.6) shipped with bespoke `.pricing-heading`/`.pricing-sub` classes and a `0.2`-opacity card border instead of reusing this grammar — it read as visually disconnected from Landlords/Agents as a result. Rebuild it against this rule.
 
 #### Section content
 
@@ -237,10 +249,14 @@ This MUST ask room type first, matching the persona's own instruction to collect
 **Structure (top to bottom inside `.chat-card`):**
 
 ```
-.chat-messages          — scrollable, max-height 380px
-  .msg.nest             — Nest messages, left-aligned
+.chat-header            — avatar + name + role, border-bottom rgba(80,110,80,0.1) (added Jul 3 2026)
+  .chat-avatar          — 30px circle, #2D5A3D bg, white "N", left-aligned
+  .chat-header-name     — "Nest", 14px 600 #1E3A2F
+  .chat-header-sub      — "Your home-search concierge", 12px #8BAF8E
+.chat-messages          — scrollable, min-height 400px / max-height 500px (desktop), 320/420 mobile
+  .msg.nest             — Nest messages, left-aligned, text-align left
     .msg-label          — "NEST" in 11px uppercase #2D5A3D, left-aligned above bubble
-    .msg-text           — #F4F7F4 bg, border-radius 0 12px 12px 12px
+    .msg-text           — #F4F7F4 bg, border-radius 0 12px 12px 12px, text-align left
   .msg.user             — User messages, right-aligned
     .msg-text           — #2D5A3D bg, white text, border-radius 12px 0 12px 12px
 .chat-start-btn         — appears above input row after summary step (full-width, #2D5A3D)
@@ -250,6 +266,8 @@ This MUST ask room type first, matching the persona's own instruction to collect
 ```
 
 **Card specs:** `max-width: 760px`, white bg, `rgba(80,130,80,0.15)` border, `16px` radius, `overflow: hidden`. Full width on mobile.
+
+**Note (Jul 3 2026):** the messages area's height changed from a flat `max-height: 380px` to a `min-height`/`max-height` pair (400–500px desktop) so the card reads as a spacious, just-started conversation rather than a tightly-wrapped box — this addresses Priority 2b in Part 9 (below). The header (avatar/name/role) mirrors the treatment already prototyped in `AI Home Search - For Tenants.dc.html` direction `1a`.
 
 **States:**
 - **Active** — input enabled, messages scrollable
@@ -502,11 +520,13 @@ User: "Actually I want an entire place, not a shared room"
 ### Content section (canonical layout unit)
 
 ```
-.content-section          — max-width 960px, padding 64px 24px, border-top rgba(80,110,80,0.12)
+.content-section          — max-width 960px, padding 96px 24px, border-top rgba(80,110,80,0.12)
 .content-section.centered — text-align: center (used for nearly all cases)
-.section-title            — clamp(26px, 3.5vw, 36px), weight 700, letter-spacing -1px, centered, margin-bottom 12px
-.section-subtitle         — 16px, #6B8F71, max-width 600px, centered, margin 0 auto 40px, line-height 1.6
+.section-title            — clamp(26px, 3.5vw, 36px), weight 700, letter-spacing -1px, centered, margin-bottom 16px
+.section-subtitle         — 16px, #6B8F71, max-width 600px, centered, margin 0 auto 56px, line-height 1.6
 ```
+
+**Updated Jul 3 2026** — vertical padding and title/subtitle margins increased (was `64px 24px` / `12px` / `40px`) so below-fold sections feel as spacious as the hero rather than dense and packed. Card-level spacing increased to match: step cards `36px 28px` padding, pricing cards `28px` gap / `32px 26px` padding, calculator card `40px` padding, trust box `48px 40px` padding, why-list `22px` gap. Content and structure unchanged — spacing only.
 
 Use this for **every** below-fold content block on **any** page — it's the shared grammar Landlords and Agents both build on. Do not invent a parallel heading/sub/container with different numbers for a new feature; extend this pattern and add only what's genuinely new (e.g. price figures, badges).
 
@@ -634,11 +654,9 @@ On mobile, the keyboard pushes the viewport up. New Nest messages auto-scroll in
 
 What's needed: test on a real iOS and Android device. Confirm that after the keyboard opens and the user sends a message, the new Nest reply is visible without manual scrolling. If not, the scroll target needs to account for keyboard height offset.
 
-**2b. Chat card height as conversation grows**
+**2b. Chat card height as conversation grows — Addressed Jul 3 2026**
 
-The messages area is capped at `max-height: 380px` and scrolls internally. This is correct but the internal scroll feels foreign on desktop — especially during the longer qualifying questions section.
-
-Consider: increasing max-height to `480–520px` on desktop, or allowing the card to grow with content up to a cap before scrolling.
+The messages area is now `min-height: 400px` / `max-height: 500px` desktop (`320`/`420` mobile) instead of a flat `380px` cap — the card opens with visible empty space below the first message (reads as a fresh thread) and only scrolls once content exceeds the max.
 
 **2c. "Start my search →" button treatment**
 
