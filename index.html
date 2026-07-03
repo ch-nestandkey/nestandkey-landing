@@ -184,17 +184,17 @@
     /* Pricing band */
     .pricing-band { width: 100%; max-width: 760px; margin-top: 48px; }
     .pricing-band .pricing-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #6B8F71; margin-bottom: 12px; }
-    .pricing-band .pricing-heading { font-size: 24px; font-weight: 700; color: #1E3A2F; margin-bottom: 10px; line-height: 1.25; }
-    .pricing-band .pricing-sub { font-size: 14px; color: #6B8F71; line-height: 1.6; margin-bottom: 28px; }
-    .pricing-cards { display: flex; gap: 16px; align-items: stretch; }
+    .pricing-band .pricing-heading { font-size: 32px; font-weight: 700; color: #1E3A2F; margin-bottom: 10px; line-height: 1.25; }
+    .pricing-band .pricing-sub { font-size: 16px; color: #6B8F71; line-height: 1.6; margin: 0 auto 28px; max-width: 560px; text-align: center; }
+    .pricing-cards { display: flex; gap: 20px; align-items: stretch; }
     .pricing-card { flex: 1; min-width: 180px; background: #fff; border: 1px solid rgba(80,130,80,0.2); border-radius: 16px; padding: 24px 20px; display: flex; flex-direction: column; gap: 16px; }
-    .pricing-card.active-card { background: #2D5A3D; border-color: #2D5A3D; color: #fff; }
+    .pricing-card.active-card { background: #2D5A3D; border-color: #2D5A3D; color: #fff; padding: 26px 22px; box-shadow: 0 16px 40px rgba(30,58,47,0.22); position: relative; }
     .pricing-badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; margin-bottom: 4px; }
     .pricing-badge.here { background: rgba(80,130,80,0.12); color: #2D5A3D; }
-    .pricing-badge.best { background: #C9A34E; color: #fff; }
+    .pricing-badge.best { background: #C9A34E; color: #1E3A2F; position: absolute; top: -11px; left: 50%; transform: translateX(-50%); white-space: nowrap; margin-bottom: 0; }
     .pricing-plan { font-size: 16px; font-weight: 700; color: #1E3A2F; }
     .active-card .pricing-plan { color: #fff; }
-    .pricing-price { font-size: 28px; font-weight: 700; color: #1E3A2F; line-height: 1; }
+    .pricing-price { font-size: 38px; font-weight: 700; color: #1E3A2F; line-height: 1; }
     .pricing-price span { font-size: 13px; font-weight: 400; color: #6B8F71; margin-left: 4px; }
     .active-card .pricing-price { color: #fff; }
     .active-card .pricing-price span { color: rgba(255,255,255,0.65); }
@@ -374,8 +374,8 @@
 
         <!-- Active -->
         <div class="pricing-card active-card">
+          <span class="pricing-badge best">Best value</span>
           <div>
-            <span class="pricing-badge best">Best value</span>
             <div class="pricing-plan">Active</div>
           </div>
           <div>
