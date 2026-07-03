@@ -187,7 +187,7 @@
     .pricing-band .pricing-heading { font-size: 32px; font-weight: 700; color: #1E3A2F; margin-bottom: 10px; line-height: 1.25; }
     .pricing-band .pricing-sub { font-size: 16px; color: #6B8F71; line-height: 1.6; margin: 0 auto 28px; max-width: 560px; text-align: center; }
     .pricing-cards { display: flex; gap: 20px; align-items: stretch; }
-    .pricing-card { flex: 1; min-width: 180px; background: #fff; border: 1px solid rgba(80,130,80,0.2); border-radius: 16px; padding: 24px 20px; display: flex; flex-direction: column; gap: 16px; }
+    .pricing-card { flex: 1; min-width: 180px; background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 24px 20px; display: flex; flex-direction: column; gap: 16px; }
     .pricing-card.active-card { background: #2D5A3D; border-color: #2D5A3D; color: #fff; padding: 26px 22px; box-shadow: 0 16px 40px rgba(30,58,47,0.22); position: relative; }
     .pricing-badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; margin-bottom: 4px; }
     .pricing-badge.here { background: rgba(80,130,80,0.12); color: #2D5A3D; }
@@ -225,6 +225,7 @@
     section.section-multi { justify-content: flex-start; min-height: auto; padding: 0; }
     .hero-block { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 64px); text-align: center; padding: 48px; width: 100%; }
     section.section-multi .hero-block { min-height: 65vh; }
+    #tenants .hero-block { min-height: calc(100vh - 64px); }
     .content-section { width: 100%; max-width: 960px; margin: 0 auto; padding: 64px 24px; border-top: 1px solid rgba(80,110,80,0.12); text-align: left; }
     .content-section.centered { text-align: center; }
     .section-title { font-size: clamp(26px, 3.5vw, 36px); font-weight: 700; letter-spacing: -1px; color: #1E3A2F; margin-bottom: 12px; text-align: center; }
@@ -315,11 +316,12 @@
   </div>
 
   <!-- Tenants -->
-  <section id="tenants" class="active">
-    <span class="tag">Closed Beta · SF Bay Area · 2026</span>
-    <h1>Find your place<br>in the Bay Area.</h1>
-    <p class="sub">Tell Nest what you're looking for. Your first market scan is free — results land in your inbox.</p>
-    <div class="chat-card" id="chat-card">
+  <section id="tenants" class="active section-multi">
+    <div class="hero-block">
+      <span class="tag">Closed Beta · SF Bay Area · 2026</span>
+      <h1>Find your place<br>in the Bay Area.</h1>
+      <p class="sub">Tell Nest what you're looking for. Your first market scan is free — results land in your inbox.</p>
+      <div class="chat-card" id="chat-card">
       <div class="chat-messages" id="chat-messages">
         <div class="msg nest">
           <div class="msg-label">Nest</div>
@@ -330,13 +332,14 @@
         <textarea id="chat-input" placeholder="Type your answer…"></textarea>
         <button class="chat-send" id="chat-send" aria-label="Send">↑</button>
       </div>
+      </div>
     </div>
 
     <!-- Pricing band -->
-    <div class="pricing-band">
-      <p class="pricing-eyebrow">Simple, one-time pricing</p>
-      <h2 class="pricing-heading">Start free. Pay only once it's working.</h2>
-      <p class="pricing-sub">Every search begins with a free scan and one real result email. Upgrade for 30 days of continued scans and results — one-time payment, no subscription, no auto-renewal.</p>
+    <div class="content-section centered">
+      <span class="tag">Simple, one-time pricing</span>
+      <h2 class="section-title">Start free. Pay only once it's working.</h2>
+      <p class="section-subtitle">Every search begins with a free scan and one real result email. Upgrade for 30 days of continued scans and results — one-time payment, no subscription, no auto-renewal.</p>
       <div class="pricing-cards">
 
         <!-- Free -->
