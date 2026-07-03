@@ -172,6 +172,13 @@
     .chat-start-btn { width: 100%; padding: 14px; background: #2D5A3D; color: #F4F7F4; border: none; font-size: 15px; font-weight: 600; cursor: pointer; }
     .chat-start-btn:hover { background: #3D7A52; }
     .chat-start-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .chat-summary-card { margin: 16px 16px 0; padding: 14px 16px; border: 1px solid rgba(45,90,61,0.25); background: #F4F8F4; border-radius: 12px; }
+    .chat-summary-title { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: #2D5A3D; }
+    .chat-summary-rows { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .chat-summary-row { display: flex; gap: 10px; font-size: 12.5px; line-height: 1.4; }
+    .chat-summary-label { flex-shrink: 0; width: 110px; color: #8BAF8E; font-weight: 600; }
+    .chat-summary-value { color: #1E3A2F; font-weight: 500; }
+    .chat-summary-hint { font-size: 11px; color: #8BAF8E; margin: 8px 16px 0; text-align: center; }
     @media (max-width: 1024px) { .chat-card { max-width: 100%; } }
 
     /* Pricing band */
@@ -662,13 +669,39 @@
 
     function showStartButton() {
       if (document.getElementById('chat-start-btn')) return;
+
+      const card = document.getElementById('chat-card');
+      const inputRow = document.getElementById('chat-input-row');
+
+      const fieldLabels = [
+        ['roomType', 'Room type'], ['location', 'Location'], ['budget', 'Budget'],
+        ['stay', 'Move-in & stay'], ['commute', 'Commute'], ['roomNeeds', 'Room needs'],
+        ['workStatus', 'Work / study'], ['income', 'Income'], ['credit', 'Credit'],
+        ['lifestyle', 'Lifestyle'], ['email', 'Email'],
+      ];
+      const rowsHtml = fieldLabels
+        .filter(([key]) => (chatState[key] || '').trim() !== '')
+        .map(([key, label]) => `<div class="chat-summary-row"><span class="chat-summary-label">${label}</span><span class="chat-summary-value">${chatState[key]}</span></div>`)
+        .join('');
+
+      const summary = document.createElement('div');
+      summary.className = 'chat-summary-card';
+      summary.id = 'chat-summary-card';
+      summary.innerHTML = `<div class="chat-summary-title">Ready to search — here's what I have</div><div class="chat-summary-rows">${rowsHtml}</div>`;
+
+      const hint = document.createElement('p');
+      hint.className = 'chat-summary-hint';
+      hint.id = 'chat-summary-hint';
+      hint.textContent = "Not quite right? Keep typing below to adjust.";
+
       const btn = document.createElement('button');
       btn.className = 'chat-start-btn';
       btn.id = 'chat-start-btn';
       btn.textContent = 'Start my search →';
       btn.onclick = submitSearch;
-      const card = document.getElementById('chat-card');
-      const inputRow = document.getElementById('chat-input-row');
+
+      card.insertBefore(summary, inputRow);
+      card.insertBefore(hint, inputRow);
       card.insertBefore(btn, inputRow);
       setChatEnabled(true);
     }
