@@ -142,6 +142,8 @@ Single-page app — section toggling via JS. Nav always visible (`z-index: 100`)
 
 **Multi-section** (Landlords, Agents) — `section.section-multi`: no padding, `min-height: auto`. Hero block inside is `min-height: 65vh` — intentionally leaves the next section peeking below fold to cue scrolling. Below-fold content in `.content-section` blocks: `max-width: 960px`, `padding: 64px 24px`, separated by subtle top border.
 
+**Content-section grammar (reusable — canonical, not page-specific):** `.content-section` (max-width 960px, `64px 24px` padding, top-border divider) + `.section-title` (`clamp(26px, 3.5vw, 36px)`, `-1px` letter-spacing, centered) + `.section-subtitle` (`16px`, `#6B8F71`, max-width 600px, centered) is the standard unit for **any** below-fold content block, on any page — not just Landlords/Agents. New sections or features must reuse these three classes rather than inventing parallel ones with slightly different numbers (custom heading sizes, custom sub max-widths, custom border opacities). If a new block needs something these don't cover (e.g. pricing cards' price figures, tier badges), add only that delta as new, narrowly-scoped classes — never redeclare the container/heading/sub. **Counter-example to learn from:** the Tenants pricing band (§1.6) shipped with bespoke `.pricing-heading`/`.pricing-sub` classes and a `0.2`-opacity card border instead of reusing this grammar — it read as visually disconnected from Landlords/Agents as a result. Rebuild it against this rule.
+
 #### Section content
 
 **For Tenants (default)**
@@ -484,6 +486,17 @@ User: "Actually I want an entire place, not a shared room"
 ---
 
 ## Part 5 — Components
+
+### Content section (canonical layout unit)
+
+```
+.content-section          — max-width 960px, padding 64px 24px, border-top rgba(80,110,80,0.12)
+.content-section.centered — text-align: center (used for nearly all cases)
+.section-title            — clamp(26px, 3.5vw, 36px), weight 700, letter-spacing -1px, centered, margin-bottom 12px
+.section-subtitle         — 16px, #6B8F71, max-width 600px, centered, margin 0 auto 40px, line-height 1.6
+```
+
+Use this for **every** below-fold content block on **any** page — it's the shared grammar Landlords and Agents both build on. Do not invent a parallel heading/sub/container with different numbers for a new feature; extend this pattern and add only what's genuinely new (e.g. price figures, badges).
 
 ### Buttons
 
