@@ -287,6 +287,98 @@
       .steps-grid { grid-template-columns: 1fr; }
       .calc-grid { grid-template-columns: 1fr; }
     }
+
+    /* ── Buyers page ── */
+    .scenario-prompt { font-size: 13px; font-weight: 600; color: #1E3A2F; margin-bottom: 12px; }
+    .scenario-picker { display: flex; gap: 16px; margin-bottom: 28px; }
+    .scenario-btn {
+      flex: 1; padding: 20px 24px; border-radius: 14px; border: 2px solid rgba(80,130,80,0.2);
+      background: #fff; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .scenario-btn:hover { border-color: rgba(45,90,61,0.45); }
+    .scenario-btn.selected { border-color: #2D5A3D; background: #EFF4F0; box-shadow: 0 4px 18px rgba(45,90,61,0.13); }
+    .sb-check {
+      width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(80,130,80,0.3);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      font-size: 11px; color: transparent; margin-bottom: 8px; transition: all 0.15s;
+    }
+    .scenario-btn.selected .sb-check { background: #2D5A3D; border-color: #2D5A3D; color: #fff; }
+    .sb-title { font-size: 16px; font-weight: 700; color: #1E3A2F; }
+    .sb-sub { font-size: 13px; color: #6B8F71; line-height: 1.4; }
+
+    .calc-controls-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .calc-label-group { display: flex; flex-direction: column; gap: 2px; }
+    .calc-section-label { font-size: 11.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #1E3A2F; }
+    .calc-section-cap { font-size: 11px; color: #8BAF8E; }
+    .pill-toggle { display: flex; background: #E4EBE4; border-radius: 999px; padding: 3px; gap: 2px; }
+    .pill-btn {
+      padding: 6px 16px; border-radius: 999px; font-size: 13px; font-weight: 500;
+      color: #6B8F71; border: none; background: transparent; cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    }
+    .pill-btn.active { background: #fff; color: #1E3A2F; font-weight: 600; box-shadow: 0 1px 4px rgba(30,58,47,0.08); }
+
+    .bcalc-card { background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 18px; padding: 40px; box-shadow: 0 18px 50px rgba(30,58,47,0.10); max-width: 760px; margin: 0 auto; text-align: left; }
+    .bcalc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .bcalc-field { display: flex; flex-direction: column; gap: 5px; }
+    .bcalc-field label { font-size: 12.5px; font-weight: 600; color: #1E3A2F; }
+    .field-hint { font-size: 11px; color: #8BAF8E; line-height: 1.35; margin-top: 1px; }
+    .bcalc-field input {
+      padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(80,130,80,0.35);
+      font-size: 14px; color: #1E3A2F; outline: none; font-family: inherit; background: #fff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .bcalc-field input:focus { border-color: #2D5A3D; box-shadow: 0 0 0 3px rgba(45,90,61,0.06); }
+    .bcalc-field input.awaiting { border-color: rgba(45,90,61,0.55); box-shadow: 0 0 0 3px rgba(45,90,61,0.08); }
+    .bcalc-field input::placeholder { color: #AEC3B1; }
+    .bcalc-adv { display: none; }
+    .bcalc-adv.visible { display: flex; }
+
+    .bcalc-divider { height: 1px; background: rgba(80,110,80,0.15); margin: 32px 0; }
+    .takeaway-panel { background: #EFF4F0; border-radius: 12px; padding: 16px 20px; font-size: 15px; color: #1E3A2F; line-height: 1.6; margin-bottom: 24px; }
+    .takeaway-empty { background: #F4F7F4; border-radius: 12px; padding: 20px; font-size: 14px; color: #8BAF8E; font-style: italic; text-align: center; }
+    .result-bars { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+    .bar-row { display: flex; flex-direction: column; gap: 7px; }
+    .bar-lbl-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+    .bar-lbl { font-size: 13px; color: #4A6B52; }
+    .bar-val { font-size: 14px; font-weight: 700; color: #1E3A2F; white-space: nowrap; }
+    .bar-track { height: 10px; background: #E4EBE4; border-radius: 999px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 999px; transition: width 0.25s ease; }
+    .bar-muted { background: #B7C9BA; }
+    .bar-accent { background: #2D5A3D; }
+    .unlock-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0 2px; border-top: 1px solid rgba(80,110,80,0.10); margin-top: 8px; }
+    .unlock-lbl { font-size: 13px; font-weight: 600; color: #1E3A2F; }
+    .unlock-val { font-size: 18px; font-weight: 700; color: #2D5A3D; }
+
+    .adv-rows { border: 1px solid rgba(80,110,80,0.12); border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
+    .adv-row-item { display: flex; justify-content: space-between; align-items: center; padding: 13px 18px; font-size: 14px; border-bottom: 1px solid rgba(80,110,80,0.08); gap: 12px; }
+    .adv-row-item:last-child { border-bottom: none; }
+    .adv-row-lbl { color: #4A6B52; }
+    .adv-row-val { font-weight: 600; color: #1E3A2F; white-space: nowrap; }
+    .adv-row-item.row-hl { background: #EFF4F0; }
+    .adv-row-item.row-hl .adv-row-lbl { font-weight: 600; color: #1E3A2F; }
+    .adv-row-item.row-hl .adv-row-val { color: #2D5A3D; font-size: 16px; }
+
+    .calc-fn { font-size: 11.5px; color: #8BAF8E; line-height: 1.5; text-align: center; margin-top: 4px; }
+
+    .market-stats { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .market-stat { flex: 1; min-width: 160px; max-width: 220px; background: #EBF0EB; border-radius: 16px; padding: 36px 24px; text-align: center; }
+    .market-stat-num { font-size: 32px; font-weight: 700; color: #1E3A2F; margin-bottom: 8px; }
+    .market-stat-lbl { font-size: 14px; color: #4A6B52; line-height: 1.4; }
+
+    .steps-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+
+    @media (max-width: 1024px) {
+      .steps-grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .bcalc-card { padding: 28px 20px; }
+    }
+    @media (max-width: 680px) {
+      .scenario-picker { flex-direction: column; }
+      .bcalc-grid { grid-template-columns: 1fr; }
+      .steps-grid-4 { grid-template-columns: 1fr; }
+      .market-stat { max-width: none; }
+      .calc-controls-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+    }
   </style>
 </head>
 <body>
@@ -312,7 +404,7 @@
     <div class="nav-links">
       <a id="nav-tenants" class="active" onclick="showSection('tenants')">For Tenants</a>
       <a id="nav-landlords" onclick="showSection('landlords')">For Landlords</a>
-      <a id="nav-agents" onclick="showSection('agents')">For Agents</a>
+      <a id="nav-buyers" onclick="showSection('buyers')">For Home Buyers</a>
       <a id="nav-about" onclick="showSection('about')">About Us</a>
     </div>
   </nav>
@@ -321,7 +413,7 @@
   <div class="mobile-menu" id="mobile-menu">
     <a id="mob-tenants" class="active" onclick="showSection('tenants')">For Tenants</a>
     <a id="mob-landlords" onclick="showSection('landlords')">For Landlords</a>
-    <a id="mob-agents" onclick="showSection('agents')">For Agents</a>
+    <a id="mob-buyers" onclick="showSection('buyers')">For Home Buyers</a>
     <a id="mob-about" onclick="showSection('about')">About Us</a>
   </div>
 
@@ -546,6 +638,164 @@
     <p class="sub">We're building the easiest way to find and fill rooms. More to come.</p>
   </section>
 
+  <!-- Home Buyers -->
+  <section id="buyers" class="section-multi">
+
+    <!-- Hero -->
+    <div class="hero-block">
+      <span class="tag">FOR HOME BUYERS · SF BAY AREA</span>
+      <h1>A spare room can lower your mortgage — or pay for itself.</h1>
+      <p class="sub">Renting out a room cuts your monthly payment if you're buying to live in it, or generates cash flow from day one if you're buying to invest. Either way, we find, screen, and keep the tenant.</p>
+    </div>
+
+    <!-- Calculator -->
+    <div class="content-section centered">
+      <h2 class="section-title">Run your numbers</h2>
+      <p class="section-subtitle">Same inputs, two ways to read them.</p>
+      <div class="bcalc-card">
+
+        <!-- Scenario picker -->
+        <p class="scenario-prompt">What's your plan for the home?</p>
+        <div class="scenario-picker">
+          <button class="scenario-btn selected" id="btn-livein" onclick="bSetScenario('livein')">
+            <div class="sb-check">✓</div>
+            <div class="sb-title">Live in it</div>
+            <div class="sb-sub">Rent out a spare room, lower your payment</div>
+          </button>
+          <button class="scenario-btn" id="btn-invest" onclick="bSetScenario('invest')">
+            <div class="sb-check">✓</div>
+            <div class="sb-title">Invest</div>
+            <div class="sb-sub">Rent out the whole place, maximize returns</div>
+          </button>
+        </div>
+
+        <!-- Controls row -->
+        <div class="calc-controls-row">
+          <div class="calc-label-group">
+            <span class="calc-section-label">YOUR NUMBERS</span>
+            <span class="calc-section-cap">Detail</span>
+          </div>
+          <div class="pill-toggle">
+            <button class="pill-btn active" id="pill-basic" onclick="bSetDetail('basic')">Basic</button>
+            <button class="pill-btn" id="pill-adv" onclick="bSetDetail('advanced')">Advanced</button>
+          </div>
+        </div>
+
+        <!-- Input grid -->
+        <div class="bcalc-grid">
+          <div class="bcalc-field">
+            <label for="b-price">Home price</label>
+            <input type="number" id="b-price" value="1200000" oninput="bRunCalc()" />
+            <span class="field-hint">The purchase price you're considering.</span>
+          </div>
+          <div class="bcalc-field">
+            <label for="b-down">Down payment (%)</label>
+            <input type="number" id="b-down" value="20" min="0" max="100" oninput="bRunCalc()" />
+            <span class="field-hint" id="b-down-hint">$240,000 up front · first-timers usually put 5–20%.</span>
+          </div>
+          <div class="bcalc-field">
+            <label for="b-rate">Mortgage rate (%)</label>
+            <input type="number" id="b-rate" value="6.5" step="0.1" oninput="bRunCalc()" />
+            <span class="field-hint">Around 6.5% for a 30-year loan right now.</span>
+          </div>
+          <div class="bcalc-field">
+            <label for="b-rent" id="b-rent-label">Spare room rent ($/mo)</label>
+            <input type="number" id="b-rent" placeholder="e.g. 1,800" oninput="bRunCalc()" class="awaiting" />
+            <span class="field-hint" id="b-rent-hint">Bay Area rooms often rent for $1,200–2,200/mo.</span>
+          </div>
+
+          <!-- Advanced-only fields -->
+          <div class="bcalc-field bcalc-adv">
+            <label for="b-tax">Property tax rate (%/yr)</label>
+            <input type="number" id="b-tax" value="1.2" step="0.1" oninput="bRunCalc()" />
+            <span class="field-hint">CA base rate is 1% + local assessments.</span>
+          </div>
+          <div class="bcalc-field bcalc-adv">
+            <label for="b-ins">Home insurance ($/yr)</label>
+            <input type="number" id="b-ins" value="1800" oninput="bRunCalc()" />
+            <span class="field-hint">Typical range $1,200–$2,400/yr.</span>
+          </div>
+          <div class="bcalc-field bcalc-adv">
+            <label for="b-hoa">HOA dues ($/mo)</label>
+            <input type="number" id="b-hoa" value="0" oninput="bRunCalc()" />
+            <span class="field-hint">Enter 0 if no HOA.</span>
+          </div>
+          <div class="bcalc-field bcalc-adv">
+            <label for="b-extra" id="b-extra-label">Lender rent-credit (%)</label>
+            <input type="number" id="b-extra" value="75" min="0" max="100" oninput="bRunCalc()" />
+            <span class="field-hint" id="b-extra-hint">Lenders typically count 70–75% of rental income.</span>
+          </div>
+        </div>
+
+        <div class="bcalc-divider"></div>
+
+        <!-- Results (populated by JS) -->
+        <div id="b-results">
+          <div class="takeaway-empty">Enter a rent estimate above to see your numbers.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Market proof -->
+    <div class="content-section centered">
+      <h2 class="section-title">A market built for this</h2>
+      <p class="section-subtitle">The Bay Area has stayed investor-friendly and renter-hungry for years.</p>
+      <div class="market-stats">
+        <div class="market-stat">
+          <div class="market-stat-num">4.2%</div>
+          <div class="market-stat-lbl">avg annual rent growth</div>
+        </div>
+        <div class="market-stat">
+          <div class="market-stat-num">&lt;3%</div>
+          <div class="market-stat-lbl">typical room vacancy</div>
+        </div>
+        <div class="market-stat">
+          <div class="market-stat-num">120+</div>
+          <div class="market-stat-lbl">tenants pre-screened, waiting</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <div class="content-section centered">
+      <h2 class="section-title">From closing to your first tenant.</h2>
+      <div class="steps-grid-4">
+        <div class="step-card">
+          <span class="step-num">1</span>
+          <h3>Buy with the room in mind</h3>
+          <p>A hot Bay Area market, high demand, low room vacancy.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">2</span>
+          <h3>Run your numbers</h3>
+          <p>Lower effective payment, or real cash-on-cash return.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">3</span>
+          <h3>We screen your tenant</h3>
+          <p>Never a stranger from Craigslist.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">4</span>
+          <h3>You collect rent, we handle the vetting</h3>
+          <p>Ongoing, always pre-screened.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="content-section centered">
+      <h2 class="section-title">Get early access</h2>
+      <p class="section-subtitle">We're onboarding buyers in SF Bay Area first.</p>
+      <form class="waitlist-form" onsubmit="handleWaitlist(event, 'Buyers')">
+        <input type="email" placeholder="your@email.com" required />
+        <button type="submit">Join the Waitlist</button>
+      </form>
+    </div>
+
+  </section>
+
   <footer>
     <div style="display:flex;gap:24px;justify-content:center;margin-bottom:10px;">
       <a onclick="showSection('about')">About Us</a>
@@ -558,7 +808,7 @@
     const navMap = {
       tenants:   { desk: 'nav-tenants',   mob: 'mob-tenants' },
       landlords: { desk: 'nav-landlords', mob: 'mob-landlords' },
-      agents:    { desk: 'nav-agents',    mob: 'mob-agents' },
+      buyers:    { desk: 'nav-buyers',    mob: 'mob-buyers' },
       about:     { desk: 'nav-about',     mob: 'mob-about' },
     };
 
@@ -768,6 +1018,252 @@
     document.getElementById('chat-input').addEventListener('keydown', function(e) {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
     });
+
+    // ── Buyers Calculator ──
+    let bScenario = 'livein';
+    let bDetail   = 'basic';
+
+    function bSetScenario(s) {
+      bScenario = s;
+      document.getElementById('btn-livein').classList.toggle('selected', s === 'livein');
+      document.getElementById('btn-invest').classList.toggle('selected', s === 'invest');
+
+      const rentInput = document.getElementById('b-rent');
+      rentInput.value = '';
+      rentInput.classList.add('awaiting');
+
+      if (s === 'livein') {
+        document.getElementById('b-rent-label').textContent = 'Spare room rent ($/mo)';
+        document.getElementById('b-rent-hint').textContent  = 'Bay Area rooms often rent for $1,200–2,200/mo.';
+        rentInput.placeholder = 'e.g. 1,800';
+        document.getElementById('b-extra-label').textContent = 'Lender rent-credit (%)';
+        document.getElementById('b-extra-hint').textContent  = 'Lenders typically count 70–75% of rental income.';
+        document.getElementById('b-extra').value = '75';
+      } else {
+        document.getElementById('b-rent-label').textContent = 'Whole unit\'s rent ($/mo)';
+        document.getElementById('b-rent-hint').textContent  = 'Whole Bay Area units often rent for $4,000–6,500/mo.';
+        rentInput.placeholder = 'e.g. 5,500';
+        document.getElementById('b-extra-label').textContent = 'Vacancy allowance (%)';
+        document.getElementById('b-extra-hint').textContent  = 'Typical vacancy allowance is 5–10%.';
+        document.getElementById('b-extra').value = '10';
+      }
+      bRunCalc();
+    }
+
+    function bSetDetail(d) {
+      bDetail = d;
+      document.getElementById('pill-basic').classList.toggle('active', d === 'basic');
+      document.getElementById('pill-adv').classList.toggle('active', d === 'advanced');
+      document.querySelectorAll('.bcalc-adv').forEach(el => el.classList.toggle('visible', d === 'advanced'));
+      bRunCalc();
+    }
+
+    function bPI(loan, ratePct, n) {
+      n = n || 360;
+      const r = ratePct / 100 / 12;
+      if (r === 0) return loan / n;
+      return loan * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+    }
+
+    function bFmt(n) {
+      return '$' + Math.round(Math.max(n, 0)).toLocaleString('en-US');
+    }
+
+    function bFmtSigned(n) {
+      const abs = Math.round(Math.abs(n)).toLocaleString('en-US');
+      return (n < 0 ? '−$' : '$') + abs;
+    }
+
+    function bFmtPct(n, d) {
+      d = d === undefined ? 1 : d;
+      const sign = n < 0 ? '−' : '';
+      return sign + Math.abs(n).toFixed(d) + '%';
+    }
+
+    function bBsearch(fn, target) {
+      let lo = 0, hi = 60000000;
+      for (let i = 0; i < 60; i++) {
+        const mid = (lo + hi) / 2;
+        if (fn(mid) < target) lo = mid; else hi = mid;
+      }
+      return (lo + hi) / 2;
+    }
+
+    function bCarryBasic(price, down, rate) {
+      const loan = price * (1 - down / 100);
+      return bPI(loan, rate) + price * 0.012 / 12 + 150;
+    }
+
+    function bCarryAdv(price, down, rate, tax, ins, hoa) {
+      const loan = price * (1 - down / 100);
+      const pmi  = down < 20 ? loan * 0.006 / 12 : 0;
+      return bPI(loan, rate) + price * (tax / 100) / 12 + ins / 12 + hoa + pmi;
+    }
+
+    function bRunCalc() {
+      const price = parseFloat(document.getElementById('b-price').value) || 0;
+      const down  = parseFloat(document.getElementById('b-down').value)  || 0;
+      const rate  = parseFloat(document.getElementById('b-rate').value)  || 0;
+      const rentRaw = document.getElementById('b-rent').value;
+      const rent  = rentRaw === '' ? null : (parseFloat(rentRaw) || 0);
+
+      const tax   = parseFloat(document.getElementById('b-tax').value)   || 1.2;
+      const ins   = parseFloat(document.getElementById('b-ins').value)   || 1800;
+      const hoa   = parseFloat(document.getElementById('b-hoa').value)   || 0;
+      const extra = parseFloat(document.getElementById('b-extra').value) || (bScenario === 'livein' ? 75 : 10);
+
+      // Update awaiting state on rent input
+      const ri = document.getElementById('b-rent');
+      ri.classList.toggle('awaiting', rentRaw === '');
+
+      // Update down-payment dollar hint
+      const downAmt = Math.round(price * down / 100).toLocaleString('en-US');
+      document.getElementById('b-down-hint').textContent = '$' + downAmt + ' up front · first-timers usually put 5–20%.';
+
+      const el = document.getElementById('b-results');
+
+      if (rent === null || price === 0) {
+        el.innerHTML = '<div class="takeaway-empty">Enter a rent estimate above to see your numbers.</div>';
+        return;
+      }
+
+      el.innerHTML = bDetail === 'basic'
+        ? bRenderBasic(price, down, rate, rent)
+        : bRenderAdv(price, down, rate, rent, tax, ins, hoa, extra);
+    }
+
+    function bBars(rows) {
+      return '<div class="result-bars">' + rows.map(function(r) {
+        return '<div class="bar-row">'
+          + '<div class="bar-lbl-row"><span class="bar-lbl">' + r.label + '</span><span class="bar-val">' + r.value + '</span></div>'
+          + '<div class="bar-track"><div class="bar-fill ' + r.cls + '" style="width:' + r.pct + '%"></div></div>'
+          + '</div>';
+      }).join('') + '</div>';
+    }
+
+    function bRenderBasic(price, down, rate, rent) {
+      const allIn = bCarryBasic(price, down, rate);
+
+      if (bScenario === 'livein') {
+        const effective = Math.max(allIn - rent, 0);
+        const pctLess   = allIn > 0 ? Math.round((1 - effective / allIn) * 100) : 0;
+        const maxPrice  = bBsearch(function(p) { return bCarryBasic(p, down, rate); }, allIn + rent);
+
+        const takeaway = rent >= allIn
+          ? 'The rent covers your entire payment — you\'d live there for free.'
+          : 'You\'d pay ' + bFmt(effective) + '/mo instead of ' + bFmt(allIn) + ' — ' + pctLess + '% less than going it alone.';
+
+        const roomPct = allIn > 0 ? Math.max((effective / allIn) * 100, 0) : 0;
+
+        return '<div class="takeaway-panel">' + takeaway + '</div>'
+          + bBars([
+              { label: 'On your own',     value: bFmt(allIn) + '/mo',      cls: 'bar-muted',  pct: 100 },
+              { label: 'With a roommate', value: bFmt(effective) + '/mo',  cls: 'bar-accent', pct: roomPct },
+            ])
+          + '<div class="unlock-row"><span class="unlock-lbl">The home price this could unlock</span><span class="unlock-val">' + bFmt(maxPrice) + '</span></div>'
+          + '<p class="calc-fn">Rough all-in estimate — assumes ~1.2%/yr property tax and ~$150/mo insurance. Switch to Advanced to set your own.</p>';
+      } else {
+        const cashFlow = rent - allIn;
+        const downAmt  = price * down / 100;
+        const coc = downAmt > 0 ? (cashFlow * 12 / downAmt) * 100 : 0;
+
+        const takeaway = cashFlow >= 0
+          ? 'Nets ' + bFmt(cashFlow) + '/mo cash flow — about ' + bFmtPct(coc) + ' cash-on-cash.'
+          : 'You\'d be ' + bFmt(-cashFlow) + '/mo out of pocket at this price/rent combo.';
+
+        const maxBar = Math.max(allIn, rent);
+        const cPct = maxBar > 0 ? (allIn / maxBar) * 100 : 0;
+        const rPct = maxBar > 0 ? (rent  / maxBar) * 100 : 0;
+
+        return '<div class="takeaway-panel">' + takeaway + '</div>'
+          + bBars([
+              { label: 'Monthly costs', value: bFmt(allIn) + '/mo', cls: 'bar-muted',  pct: cPct },
+              { label: 'Rent income',   value: bFmt(rent)  + '/mo', cls: 'bar-accent', pct: rPct },
+            ])
+          + '<p class="calc-fn">Rough all-in estimate — assumes ~1.2%/yr property tax and ~$150/mo insurance. Switch to Advanced to set your own.</p>';
+      }
+    }
+
+    function bRenderAdv(price, down, rate, rent, tax, ins, hoa, extra) {
+      const loan  = price * (1 - down / 100);
+      const pi    = bPI(loan, rate);
+      const pmi   = down < 20 ? loan * 0.006 / 12 : 0;
+      const total = bCarryAdv(price, down, rate, tax, ins, hoa);
+
+      if (bScenario === 'livein') {
+        const effective = Math.max(total - rent, 0);
+        const pctLess   = total > 0 ? Math.round((1 - effective / total) * 100) : 0;
+        const creditPct = extra / 100;
+        const maxPrice  = bBsearch(function(p) { return bCarryAdv(p, down, rate, tax, ins, hoa); }, total + rent * creditPct);
+
+        const takeaway = rent >= total
+          ? 'The rent covers your entire payment — you\'d live there for free.'
+          : 'You\'d pay ' + bFmt(effective) + '/mo instead of ' + bFmt(total) + ' — ' + pctLess + '% less.';
+
+        const roomPct = total > 0 ? Math.max((effective / total) * 100, 0) : 0;
+        const pmiNote = pmi > 0 ? ' + PMI' : '';
+
+        const rows = [
+          { lbl: 'Total monthly cost (PITI + HOA' + pmiNote + ')',  val: bFmt(total) + '/mo',     hl: false },
+          { lbl: 'Rent you collect',                                  val: bFmt(rent) + '/mo',      hl: false },
+          { lbl: 'Effective monthly cost',                            val: bFmt(effective) + '/mo', hl: false },
+          { lbl: 'Max home price <small style="font-weight:400;color:#8BAF8E">(lender counts ' + extra + '% of rent)</small>', val: bFmt(maxPrice), hl: true },
+        ];
+
+        return '<div class="takeaway-panel">' + takeaway + '</div>'
+          + bBars([
+              { label: 'On your own',     value: bFmt(total) + '/mo',    cls: 'bar-muted',  pct: 100 },
+              { label: 'With a roommate', value: bFmt(effective) + '/mo', cls: 'bar-accent', pct: roomPct },
+            ])
+          + bAdvRows(rows)
+          + '<p class="calc-fn">Full PITI, PMI at 0.6%/yr of loan when down payment is under 20%, rent credited at the lender-recognized %. Confirm with a lender.</p>';
+      } else {
+        const vacPct        = extra / 100;
+        const effRentAnnual = rent * 12 * (1 - vacPct);
+        const NOI           = effRentAnnual - (price * (tax / 100) + ins + hoa * 12);
+        const capRate       = price > 0 ? (NOI / price) * 100 : 0;
+        const annualCF      = NOI - (pi + pmi) * 12;
+        const downAmt       = price * down / 100;
+        const coc           = downAmt > 0 ? (annualCF / downAmt) * 100 : 0;
+        const moCF          = annualCF / 12;
+        const moNOI         = NOI / 12;
+
+        const takeaway = 'Nets ' + bFmtSigned(moCF) + '/mo after all costs — about ' + bFmtPct(coc) + ' cash-on-cash.';
+
+        const maxBar = Math.max(total, rent);
+        const cPct = maxBar > 0 ? (total / maxBar) * 100 : 0;
+        const rPct = maxBar > 0 ? (rent  / maxBar) * 100 : 0;
+
+        const rows = [
+          { lbl: 'NOI (/mo)',                              val: bFmtSigned(moNOI) + '/mo', hl: false },
+          { lbl: 'Monthly cash flow after debt service',   val: bFmtSigned(moCF)  + '/mo', hl: false },
+          { lbl: 'Cap rate',                               val: bFmtPct(capRate),           hl: false },
+          { lbl: 'Cash-on-cash return',                    val: bFmtPct(coc),               hl: true  },
+        ];
+
+        return '<div class="takeaway-panel">' + takeaway + '</div>'
+          + bBars([
+              { label: 'Monthly costs', value: bFmt(total) + '/mo', cls: 'bar-muted',  pct: cPct },
+              { label: 'Rent income',   value: bFmt(rent)  + '/mo', cls: 'bar-accent', pct: rPct },
+            ])
+          + bAdvRows(rows)
+          + '<p class="calc-fn">Full PITI + PMI, income net of vacancy and operating costs. Confirm real numbers with a lender.</p>';
+      }
+    }
+
+    function bAdvRows(rows) {
+      return '<div class="adv-rows">' + rows.map(function(r) {
+        return '<div class="adv-row-item' + (r.hl ? ' row-hl' : '') + '">'
+          + '<span class="adv-row-lbl">' + r.lbl + '</span>'
+          + '<span class="adv-row-val">' + r.val + '</span>'
+          + '</div>';
+      }).join('') + '</div>';
+    }
+
+    // Init buyers calc on first load if hash matches
+    (function() {
+      if (window.location.hash === '#buyers') bRunCalc();
+    })();
   </script>
 
 </body>
