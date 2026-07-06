@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Find Your Room in the SF Bay Area | Nest &amp; Key</title>
-  <meta name="description" content="Tell Nest what you're looking for. Your first market scan is free — results land in your inbox. Nest &amp; Key finds and screens rooms for renters in the SF Bay Area." />
+  <title>About | Nest &amp; Key</title>
+  <meta name="description" content="Nest &amp; Key is building the easiest way to find and fill rooms in the SF Bay Area." />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
@@ -28,238 +28,34 @@
       </a>
     </div>
     <div class="nav-links">
-      <a href="/" class="active">For Tenants</a>
+      <a href="/">For Tenants</a>
       <a href="/landlords">For Landlords</a>
       <a href="/buyers">For Home Buyers</a>
-      <a href="/about">About Us</a>
+      <a href="/about" class="active">About Us</a>
     </div>
   </nav>
 
   <div class="mobile-menu" id="mobile-menu">
-    <a href="/" class="active">For Tenants</a>
+    <a href="/">For Tenants</a>
     <a href="/landlords">For Landlords</a>
     <a href="/buyers">For Home Buyers</a>
-    <a href="/about">About Us</a>
+    <a href="/about" class="active">About Us</a>
   </div>
 
-  <section id="tenants" class="section-multi">
-    <div class="hero-block">
-      <span class="tag">Closed Beta · SF Bay Area · 2026</span>
-      <h1>Find your place<br>in the Bay Area.</h1>
-      <p class="sub">Tell Nest what you're looking for. Your first market scan is free — results land in your inbox.</p>
-      <div class="chat-card" id="chat-card">
-        <div class="chat-header">
-          <span class="chat-avatar">N</span>
-          <div style="display:flex; flex-direction:column;">
-            <span class="chat-header-name">Nest</span>
-            <span class="chat-header-sub">Your home-search concierge</span>
-          </div>
-        </div>
-        <div class="chat-messages" id="chat-messages">
-          <div class="msg nest">
-            <div class="msg-label">Nest</div>
-            <div class="msg-text">Hi — I'm Nest. I'll scan the Bay Area for rooms that genuinely fit what you're after. To start: are you looking for an entire place to yourself, or a private room in a shared home?</div>
-          </div>
-        </div>
-        <div class="chat-input-row" id="chat-input-row">
-          <textarea id="chat-input" placeholder="Type your answer…"></textarea>
-          <button class="chat-send" id="chat-send" aria-label="Send">↑</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="content-section centered">
-      <span class="tag">Simple, one-time pricing</span>
-      <h2 class="section-title">Start free. Pay only once it's working.</h2>
-      <p class="section-subtitle">Every search begins with a free scan and one real result email. Upgrade for 30 days of continued scans and results — one-time payment, no subscription, no auto-renewal.</p>
-      <div class="pricing-cards">
-
-        <div class="pricing-card">
-          <div style="display:flex; align-items:center; gap:8px; line-height:1;">
-            <span class="pricing-plan">Free</span>
-            <span class="pricing-badge here">You're here</span>
-          </div>
-          <div>
-            <div class="pricing-price">$0 <span>one-time sample</span></div>
-            <div class="pricing-caption">Try it, no commitment</div>
-          </div>
-          <ul class="pricing-features">
-            <li>Nest sets up your AI market scan</li>
-            <li><span><strong>1</strong> real result email, delivered free</span></li>
-            <li>No account or card required</li>
-          </ul>
-          <a class="pricing-cta outline" href="#chat-card" onclick="const hero = document.querySelector('#tenants .hero-block'); if (hero) { window.scrollTo({ top: hero.getBoundingClientRect().top + window.scrollY - 24, behavior: 'smooth' }); const input = document.getElementById('chat-input'); if (input) setTimeout(() => input.focus(), 400); } return false;">Start with a free scan</a>
-        </div>
-
-        <div class="pricing-card">
-          <div>
-            <div class="pricing-plan">Casual</div>
-          </div>
-          <div>
-            <div class="pricing-price">$19.99 <span>for 30 days</span></div>
-            <div class="pricing-caption">For browsing the market</div>
-          </div>
-          <ul class="pricing-features">
-            <li><span><strong>2× a week</strong> scan &amp; email cadence</span></li>
-            <li>~8 result emails over 30 days</li>
-            <li>~$2.50 per result email</li>
-          </ul>
-          <p class="pricing-hint">Available after your free scan</p>
-        </div>
-
-        <div class="pricing-card active-card">
-          <span class="pricing-badge best">Best value</span>
-          <div>
-            <div class="pricing-plan">Active</div>
-          </div>
-          <div>
-            <div class="pricing-price">$29.99 <span class="pricing-strike">$39.99</span><span>for 30 days</span></div>
-            <div class="pricing-caption">For a real move-in plan</div>
-          </div>
-          <ul class="pricing-features">
-            <li><span><strong>Daily</strong> scan &amp; email cadence</span></li>
-            <li>~30 result emails over 30 days</li>
-            <li><span><strong>~$1.00 per email</strong> — best rate</span></li>
-          </ul>
-          <p class="pricing-hint">Available after your free scan</p>
-        </div>
-
-      </div>
-      <p class="pricing-footer">One-time payment unlocks your chosen cadence for 30 days — no subscription, no auto-renewal. All purchases are final and non-refundable.</p>
-    </div>
-
+  <section id="about">
+    <h1>About Nest &amp; Key.</h1>
+    <p class="sub">We're building the easiest way to find and fill rooms. More to come.</p>
   </section>
 
   <footer>
     <div style="display:flex;gap:24px;justify-content:center;margin-bottom:10px;">
-      <a href="/about">About Us</a>
+      <a href="/about" class="active">About Us</a>
       <a href="mailto:hello@nestandkey.ai">Contact</a>
     </div>
     <div>© 2026 NestAndKey. All rights reserved.</div>
   </footer>
 
   <script src="/shared.js"></script>
-  <script>
-    let chatState = {
-      roomType:'', location:'', budget:'', stay:'', commute:'', roomNeeds:'',
-      workStatus:'', income:'', credit:'', lifestyle:'', email:''
-    };
-    let chatHistory = [
-      { role: 'assistant', content: "Hi — I'm Nest. I'll scan the Bay Area for rooms that genuinely fit what you're after. To start: are you looking for an entire place to yourself, or a private room in a shared home?" }
-    ];
-
-    async function sendChat() {
-      const input = document.getElementById('chat-input');
-      const text = input.value.trim();
-      if (!text) return;
-
-      appendMsg('user', text);
-      chatHistory.push({ role: 'user', content: text });
-      input.value = '';
-      setChatEnabled(false);
-
-      try {
-        const res = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ messages: chatHistory, state: chatState })
-        });
-        if (!res.ok) throw new Error('api error');
-        const data = await res.json();
-        chatState = data.state;
-        chatHistory.push({ role: 'assistant', content: data.reply });
-        appendMsg('nest', data.reply);
-
-        if (data.ready) {
-          showStartButton();
-        } else {
-          setChatEnabled(true);
-        }
-      } catch (err) {
-        appendMsg('nest', 'Something went wrong — please try again.');
-        setChatEnabled(true);
-      }
-    }
-
-    function showStartButton() {
-      if (document.getElementById('chat-start-btn')) return;
-
-      const card = document.getElementById('chat-card');
-      const inputRow = document.getElementById('chat-input-row');
-
-      const fieldLabels = [
-        ['roomType', 'Room type'], ['location', 'Location'], ['budget', 'Budget'],
-        ['stay', 'Move-in & stay'], ['commute', 'Commute'], ['roomNeeds', 'Room needs'],
-        ['workStatus', 'Work / study'], ['income', 'Income'], ['credit', 'Credit'],
-        ['lifestyle', 'Lifestyle'], ['email', 'Email'],
-      ];
-      const rowsHtml = fieldLabels
-        .filter(([key]) => (chatState[key] || '').trim() !== '')
-        .map(([key, label]) => `<div class="chat-summary-row"><span class="chat-summary-label">${label}</span><span class="chat-summary-value">${chatState[key]}</span></div>`)
-        .join('');
-
-      const summary = document.createElement('div');
-      summary.className = 'chat-summary-card';
-      summary.id = 'chat-summary-card';
-      summary.innerHTML = `<div class="chat-summary-title">Ready to search — here's what I have</div><div class="chat-summary-rows">${rowsHtml}</div>`;
-
-      const hint = document.createElement('p');
-      hint.className = 'chat-summary-hint';
-      hint.id = 'chat-summary-hint';
-      hint.textContent = "Not quite right? Keep typing below to adjust.";
-
-      const btn = document.createElement('button');
-      btn.className = 'chat-start-btn';
-      btn.id = 'chat-start-btn';
-      btn.textContent = 'Start my search →';
-      btn.onclick = submitSearch;
-
-      card.insertBefore(summary, inputRow);
-      card.insertBefore(hint, inputRow);
-      card.insertBefore(btn, inputRow);
-      setChatEnabled(true);
-    }
-
-    async function submitSearch() {
-      const btn = document.getElementById('chat-start-btn');
-      if (btn) { btn.textContent = 'Starting…'; btn.disabled = true; }
-
-      try {
-        await fetch(SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Searches', ...chatState, roomType: chatState.roomType, timestamp: new Date().toISOString() })
-        });
-      } catch (_) {}
-
-      document.getElementById('chat-card').innerHTML =
-        `<div class="chat-confirm">✓ Your search is set — your free first scan is underway,<br>results will land in <strong>${chatState.email}</strong> shortly.<br>We'll take it from here by email.</div>`;
-    }
-
-    function appendMsg(role, text) {
-      const box = document.getElementById('chat-messages');
-      const div = document.createElement('div');
-      div.className = `msg ${role}`;
-      div.innerHTML = role === 'nest'
-        ? `<div class="msg-label">Nest</div><div class="msg-text">${text}</div>`
-        : `<div class="msg-text">${text}</div>`;
-      box.appendChild(div);
-      box.scrollTop = box.scrollHeight;
-    }
-
-    function setChatEnabled(on) {
-      const input = document.getElementById('chat-input');
-      const btn = document.getElementById('chat-send');
-      if (input) input.disabled = !on;
-      if (btn) btn.disabled = !on;
-    }
-
-    document.getElementById('chat-send').addEventListener('click', sendChat);
-    document.getElementById('chat-input').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
-    });
-  </script>
 
 </body>
 </html>
