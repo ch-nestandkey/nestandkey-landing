@@ -21,6 +21,10 @@
       cursor: pointer; flex-shrink: 0; line-height: 1; transition: all 0.15s; padding: 0;
     }
     .gloss-btn.open { background: #2D5A3D; border-color: #2D5A3D; color: #F4F7F4; }
+    /* Allow popovers to escape the adv-rows container */
+    .adv-rows { overflow: visible; }
+    .adv-row-item:first-child { border-radius: 12px 12px 0 0; }
+    .adv-row-item:last-child  { border-radius: 0 0 12px 12px; }
     /* Glossary popover */
     .gloss-pop {
       position: absolute; top: 100%; left: 0; right: 0; margin-top: 6px; z-index: 6;
