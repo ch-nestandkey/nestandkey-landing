@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home Buyer Calculator — SF Bay Area | Nest &amp; Key</title>
+  <meta name="description" content="Run your numbers as a home buyer in the SF Bay Area. See how renting a spare room lowers your mortgage payment or generates cash flow from day one." />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <a class="nav-logo" href="/">
+        <svg width="120" height="34" viewBox="40 88 160 55" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+          <path d="M206.475 119.691C206.475 126.019 204.839 130.495 201.611 133.25C198.942 135.488 195.542 136.65 191.324 136.65C188.655 136.65 187.321 135.832 187.321 134.283C187.321 133.163 187.881 132.604 188.957 132.561C189.473 132.604 190.248 132.69 191.281 132.819C197.866 132.733 201.654 129.849 202.687 124.125C202.902 122.79 203.031 121.413 203.031 119.95C200.75 123.135 198.512 124.727 196.317 124.727C194.939 124.727 193.906 124.297 193.132 123.35C192.314 122.446 191.926 121.284 191.926 119.864C191.926 119.003 192.013 117.625 192.228 115.818C192.443 114.01 192.572 112.719 192.572 111.858C192.572 111.6 192.486 111.255 192.357 110.739C192.185 110.222 192.142 109.878 192.142 109.62C192.142 108.544 192.744 107.984 194.036 107.984C194.724 107.984 195.284 108.458 195.671 109.404C196.015 110.179 196.188 111.126 196.188 112.159C196.188 112.546 196.015 113.752 195.757 115.732C195.499 117.712 195.37 119.046 195.37 119.734C195.37 120.509 195.671 120.897 196.36 120.897C197.307 120.897 198.297 120.251 199.33 118.96C200.104 118.013 201.137 116.334 202.472 113.967C203.117 112.848 203.031 110.524 204.452 110.524C205.786 110.524 206.475 113.795 206.475 116.808V119.691Z" fill="currentColor"/>
+          <path d="M188.711 125.976C188.711 127.353 187.248 128.085 184.364 128.085C181.093 128.085 178.682 126.621 177.133 123.652H175.842C174.723 123.652 173.647 123.436 172.528 122.963C171.064 122.36 170.375 121.586 170.375 120.639C170.375 119.434 170.935 118.831 172.054 118.831C172.312 118.831 172.743 119.046 173.345 119.477C173.948 119.907 174.507 120.122 175.11 120.122H176.1C175.971 119.39 175.928 118.788 175.928 118.357C175.928 116.291 176.444 114.355 177.477 112.547C178.682 110.438 180.189 109.362 182.04 109.362C183.116 109.362 184.149 109.878 185.182 110.911C186.215 111.944 186.731 113.106 186.731 114.312C186.731 117.497 184.579 120.251 180.275 122.576C181.308 123.824 182.427 124.426 183.718 124.426C184.063 124.426 184.622 124.383 185.354 124.297C186.086 124.211 186.645 124.125 186.989 124.125C187.42 124.125 187.85 124.34 188.195 124.685C188.539 125.115 188.711 125.545 188.711 125.976ZM183.331 114.484C183.331 114.139 183.159 113.838 182.901 113.494C182.556 113.236 182.212 113.063 181.868 113.063C181.093 113.063 180.49 113.709 180.06 115C179.629 116.076 179.457 117.195 179.457 118.357V119.132C182.04 117.454 183.331 115.904 183.331 114.484Z" fill="currentColor"/>
+          <path d="M171.391 102.217C171.391 103.422 170.659 104.326 169.282 105.014C168.206 105.617 167.603 105.875 167.431 105.875C167.216 105.875 166.829 105.746 166.226 105.488C162.395 107.769 158.608 110.782 154.906 114.527C156.068 116.162 157.446 117.798 159.038 119.433C160.803 121.327 162.266 122.662 163.471 123.393C163.816 123.393 163.988 123.35 164.074 123.35C164.461 123.35 164.892 123.565 165.365 123.953L167.905 126.234C168.808 127.052 169.282 127.783 169.282 128.386C169.282 128.86 169.11 129.29 168.765 129.677C168.378 130.065 167.948 130.28 167.474 130.28C166.656 130.28 165.666 129.849 164.461 129.075C160.458 126.406 156.413 122.403 152.367 117.109C151.635 117.755 150.86 118.185 150.085 118.357C149.87 120.38 149.784 122.231 149.784 123.867C149.784 125.933 149.784 127.396 149.87 128.171C149.87 128.343 149.87 128.644 149.956 129.032C149.999 129.462 150.042 129.72 150.042 129.849C150.042 130.28 149.87 130.667 149.569 131.012C149.225 131.356 148.88 131.528 148.45 131.528C147.761 131.528 147.202 131.141 146.814 130.452C146.47 129.893 146.341 129.29 146.341 128.515C146.341 128.085 146.341 127.009 146.384 125.244C146.384 123.522 146.384 122.575 146.384 122.317C146.384 118.486 147.029 113.795 148.321 108.243C149.483 103.121 150.903 98.6442 152.539 94.8135C152.969 93.8666 153.486 93.3501 154.131 93.3501C155.25 93.3501 155.853 93.8666 155.853 94.8996C155.853 95.2439 155.38 96.7934 154.476 99.5051C153.4 102.733 152.84 104.498 152.754 104.756C151.893 107.769 151.248 110.653 150.774 113.494L154.949 109.534C156.8 107.812 159.21 105.918 162.223 103.938C165.709 101.528 168.163 100.323 169.626 100.323C170.057 100.323 170.444 100.538 170.788 100.925C171.176 101.313 171.391 101.743 171.391 102.217Z" fill="currentColor"/>
+          <path d="M134.182 111.556C134.182 112.159 134.053 112.633 133.881 112.891C133.622 113.192 133.235 113.493 132.632 113.752C131.599 114.311 130.222 114.785 128.457 115.172C128.543 115.904 128.586 116.678 128.586 117.453C128.586 119.562 127.984 121.585 126.865 123.479C127.769 124.254 129.017 125.459 130.652 127.051C130.911 127.439 131.083 127.912 131.083 128.429C131.083 129.548 130.48 130.107 129.318 130.107C128.629 130.107 127.037 128.816 124.454 126.148C122.044 127.912 119.634 128.773 117.137 128.773C114.641 128.773 112.618 127.998 111.025 126.449C109.433 124.899 108.658 122.876 108.658 120.294C108.658 118.142 109.089 116.334 110.036 114.828C110.724 113.709 111.972 112.374 113.866 110.782C112.833 108.113 112.36 106.09 112.36 104.627C112.36 102.302 112.962 100.323 114.254 98.6009C115.545 96.8362 117.31 95.9323 119.462 95.9323C121.097 95.9323 122.431 96.4919 123.508 97.6109C124.584 98.687 125.143 100.064 125.143 101.786C125.143 104.11 124.454 106.09 123.12 107.726C122.302 108.759 120.71 110.179 118.299 111.901C119.591 114.354 120.796 116.248 121.872 117.582L124.282 120.724C124.885 119.605 125.186 118.529 125.186 117.453C125.186 116.851 125.014 115.99 124.756 114.914C124.411 113.881 124.282 113.278 124.282 113.02C124.282 112.546 124.454 112.159 124.885 111.815C125.229 111.513 125.66 111.341 126.09 111.341C126.176 111.341 126.434 111.384 126.779 111.427C127.08 111.513 127.295 111.513 127.424 111.513C127.941 111.513 129.017 111.212 130.695 110.523C131.47 110.222 132.159 110.05 132.804 110.05C133.149 110.05 133.45 110.222 133.794 110.523C134.053 110.825 134.182 111.169 134.182 111.556ZM121.571 102.259C121.571 101.571 121.398 100.925 121.097 100.366C120.753 99.8922 120.322 99.6339 119.806 99.6339C117.223 99.6339 115.932 101.269 115.932 104.455C115.932 105.574 116.19 106.951 116.707 108.587C119.935 106.521 121.571 104.412 121.571 102.259ZM121.958 123.393C118.859 119.433 116.664 116.334 115.416 114.053C113.221 115.947 112.145 117.927 112.145 119.993C112.145 121.542 112.532 122.79 113.307 123.737C114.081 124.641 115.244 125.072 116.707 125.072C118.558 125.072 120.322 124.512 121.958 123.393Z" fill="currentColor"/>
+          <path d="M98.6138 110.782C98.6138 111.299 98.4416 111.772 98.1403 112.203C97.796 112.633 97.4086 112.848 97.0212 112.848C96.4186 112.848 95.8591 112.676 95.4287 112.246C95.1274 112.246 94.3957 112.246 93.1905 112.203C91.9854 112.203 91.2106 112.16 90.7802 112.16C90.0055 115.517 89.532 117.583 89.3598 118.401C88.8433 120.811 88.5851 123.006 88.499 124.9C88.9294 125.244 89.1446 125.718 89.1446 126.406C89.1446 126.837 88.9294 127.224 88.5421 127.612C88.1116 127.956 87.7243 128.128 87.2939 128.128C85.8735 128.128 85.1848 126.923 85.1848 124.599C85.1848 123.307 85.4431 121.241 86.0026 118.444L87.2939 112.246C85.9596 112.246 85.3139 111.643 85.3139 110.395C85.3139 109.62 85.5722 109.104 86.0887 108.845C86.433 108.673 87.0786 108.544 88.1116 108.544C89.2307 103.982 90.1776 100.452 90.9524 97.8697C91.2106 96.9658 91.7271 96.4924 92.5019 96.4924C93.6209 96.4924 94.2235 97.138 94.3527 98.4292C94.0944 99.3331 93.7501 100.366 93.3627 101.571C92.8462 103.336 92.2867 105.617 91.6841 108.458C91.9854 108.458 93.0614 108.501 94.8691 108.544C97.3656 108.673 98.6138 109.405 98.6138 110.782Z" fill="currentColor"/>
+          <path d="M81.4732 110.265C81.4732 110.782 81.301 111.169 80.9998 111.428C80.6554 111.772 80.268 111.901 79.8376 111.901C79.6224 111.901 79.235 111.901 78.7186 111.815C78.2021 111.815 77.8147 111.772 77.5564 111.772C76.4374 111.772 75.8778 112.202 75.8778 113.02C75.8778 113.537 76.3943 115.129 77.4704 117.798C78.5033 120.509 79.0629 122.532 79.0629 123.824C79.0629 125.072 78.5464 126.062 77.5564 126.88C76.4374 127.697 74.9309 128.128 73.0371 128.128C69.9381 128.128 68.4316 127.482 68.4316 126.277C68.4316 125.803 68.5608 125.33 68.9051 124.9C69.1633 124.469 69.5077 124.211 69.895 124.211C69.9811 124.211 70.4546 124.297 71.3154 124.383C72.1762 124.512 72.908 124.555 73.4245 124.555C74.8448 124.555 75.5765 124.082 75.5765 123.049C75.5765 122.446 75.017 120.811 73.984 118.228C72.951 115.646 72.4345 113.709 72.4345 112.504C72.4345 110.524 73.4244 109.146 75.4474 108.415C75.8778 107.726 76.6956 107.339 77.9868 107.339C79.9668 107.339 81.0428 107.984 81.215 109.275C81.3871 109.62 81.4732 109.964 81.4732 110.265Z" fill="currentColor"/>
+          <path d="M67.1106 125.115C67.1106 126.492 65.6472 127.224 62.7634 127.224C59.4922 127.224 57.0819 125.761 55.5324 122.791H54.2412C53.1221 122.791 52.0461 122.576 50.927 122.102C49.4636 121.5 48.7749 120.725 48.7749 119.778C48.7749 118.573 49.3344 117.97 50.4535 117.97C50.7118 117.97 51.1422 118.185 51.7448 118.616C52.3473 119.046 52.9069 119.261 53.5095 119.261H54.4994C54.3703 118.53 54.3273 117.927 54.3273 117.497C54.3273 115.431 54.8438 113.494 55.8767 111.686C57.0819 109.577 58.5884 108.501 60.4391 108.501C61.5152 108.501 62.5482 109.018 63.5812 110.051C64.6142 111.084 65.1307 112.246 65.1307 113.451C65.1307 116.636 62.9786 119.391 58.6744 121.715C59.7074 122.963 60.8265 123.566 62.1178 123.566C62.4621 123.566 63.0216 123.523 63.7533 123.437C64.485 123.35 65.0446 123.264 65.3889 123.264C65.8193 123.264 66.2497 123.48 66.5941 123.824C66.9384 124.254 67.1106 124.685 67.1106 125.115ZM61.7304 113.623C61.7304 113.279 61.5582 112.977 61.3 112.633C60.9556 112.375 60.6113 112.203 60.267 112.203C59.4922 112.203 58.8897 112.848 58.4592 114.14C58.0288 115.216 57.8567 116.335 57.8567 117.497V118.272C60.4391 116.593 61.7304 115.043 61.7304 113.623Z" fill="currentColor"/>
+          <path d="M47.7147 96.2768C47.7147 96.535 47.5856 97.0515 47.3704 97.7833C45.6487 103.207 44.8309 109.146 44.8309 115.603C44.8309 116.549 45.0892 118.874 45.6918 122.575C45.7778 123.178 45.8209 123.479 45.8209 123.522C45.8209 124.727 45.2183 125.287 44.0562 125.287C43.7549 125.287 43.4106 125.158 42.9801 124.813C42.6358 124.77 42.2054 124.426 41.6028 123.824C41.4306 123.651 40.2685 122.317 38.0734 119.735C35.4909 116.765 33.8123 114.785 33.0376 113.752C31.402 111.686 29.9816 109.491 28.7765 107.252C27.6574 113.709 27.0978 118.874 27.0118 122.704H27.3991C27.5713 123.049 27.7004 123.393 27.7004 123.78C27.7004 124.857 27.3991 126.664 26.7965 129.247C26.5813 130.108 26.1079 130.538 25.3331 130.538C24.9027 130.538 24.5153 130.323 24.128 129.935C23.6976 129.548 23.5254 129.161 23.5254 128.73V125.115C23.5254 119.089 24.4723 111.212 26.3661 101.528C26.237 101.356 26.194 101.141 26.194 100.925C26.194 100.538 26.4092 100.108 26.9257 99.591C27.4422 99.1176 27.8726 98.8593 28.26 98.8593C28.7765 98.8593 29.2069 99.0315 29.5512 99.3758C29.8955 99.7201 30.0677 100.151 30.0677 100.667C30.0677 100.839 29.9816 101.054 29.8955 101.399C31.445 105.789 35.4048 111.514 41.6889 118.572C41.5167 116.42 41.4737 114.828 41.4737 113.752C41.4737 111.298 41.7319 108.285 42.2915 104.67C42.851 100.753 43.5397 97.8263 44.3575 95.8464C44.7018 94.9855 45.2613 94.5121 46.0361 94.5121C46.4665 94.5121 46.8539 94.7273 47.1982 95.0716C47.5425 95.459 47.7147 95.8464 47.7147 96.2768Z" fill="currentColor"/>
+        </svg>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="/">For Tenants</a>
+      <a href="/landlords">For Landlords</a>
+      <a href="/buyers" class="active">For Home Buyers</a>
+      <a href="/about">About Us</a>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/">For Tenants</a>
+    <a href="/landlords">For Landlords</a>
+    <a href="/buyers" class="active">For Home Buyers</a>
+    <a href="/about">About Us</a>
+  </div>
+
+  <section id="buyers" class="section-multi">
+
+    <div class="hero-block">
+      <span class="tag">FOR HOME BUYERS · SF BAY AREA</span>
+      <h1>A spare room can lower your mortgage — or pay for itself.</h1>
+      <p class="sub">Renting out a room cuts your monthly payment if you're buying to live in it, or generates cash flow from day one if you're buying to invest. Either way, we find, screen, and keep the tenant.</p>
+    </div>
+
+    <div class="content-section centered">
+      <h2 class="section-title">Run your numbers</h2>
+      <p class="section-subtitle">Same inputs, two ways to read them.</p>
+      <div class="bcalc-card">
+
+        <p class="scenario-prompt">What's your plan for the home?</p>
+        <div class="scenario-picker">
+          <button class="scenario-btn selected" id="btn-livein" onclick="bSetScenario('livein')">
+            <div class="sb-check">✓</div>
+            <div class="sb-title">Live in it</div>
+            <div class="sb-sub">Rent out a spare room, lower your payment</div>
+          </button>
+          <button class="scenario-btn" id="btn-invest" onclick="bSetScenario('invest')">
+            <div class="sb-check">✓</div>
+            <div class="sb-title">Invest</div>
+            <div class="sb-sub">Rent out the whole place, maximize returns</div>
+          </button>
+        </div>
+
+        <div class="calc-controls-row">
+          <div class="calc-label-group">
+            <span class="calc-section-label">YOUR NUMBERS</span>
+            <span class="calc-section-cap">Detail</span>
+          </div>
+          <div class="pill-toggle">
+            <button class="pill-btn active" id="pill-basic" onclick="bSetDetail('basic')">Basic</button>
+            <button class="pill-btn" id="pill-adv" onclick="bSetDetail('advanced')">Advanced</button>
+          </div>
+        </div>
+
+        <div class="bcalc-grid">
+          <div class="bcalc-field">
+            <label for="b-price">Home price</label>
+            <input type="number" id="b-price" value="1200000" oninput="bRunCalc()" />
+            <span class="field-hint">The purchase price you're considering.</span>
+          </div>
+          <div class="bcalc-field">
+            <label for="b-down">Down payment (%)</label>
+            <input type="number" id="b-down" value="20" min="0" max="100" oninput="bRunCalc()" />
+            <span class="field-hint" id="b-down-hint">$240,000 up front · first-timers usually put 5–20%.</span>
+          </div>
+          <div class="bcalc-field">
+            <label for="b-rate">Mortgage rate (%)</label>
+            <input type="number" id="b-rate" value="6.5" step="0.1" oninput="bRunCalc()" />
+            <span class="field-hint">Around 6.5% for a 30-year loan right now.</span>
+          </div>
+          <div class="bcalc-field">
+            <label for="b-rent" id="b-rent-label">Spare room rent ($/mo)</label>
+            <input type="number" id="b-rent" placeholder="e.g. 1,800" oninput="bRunCalc()" class="awaiting" />
+            <span class="field-hint" id="b-rent-hint">Bay Area rooms often rent for $1,200–2,200/mo.</span>
+          </div>
+
+          <div class="bcalc-field bcalc-adv">
+            <label for="b-tax">Property tax rate (%/yr)</label>
+            <input type="number" id="b-tax" value="1.2" step="0.1" oninput="bRunCalc()" />
+            <span class="field-hint">CA base rate is 1% + local assessments.</span>
+          </div>
+          <div class="bcalc-field bcalc-adv">
+            <label for="b-ins">Home insurance ($/yr)</label>
+            <input type="number" id="b-ins" value="1800" oninput="bRunCalc()" />
+            <span class="field-hint">Typical range $1,200–$2,400/yr.</span>
+          </div>
+          <div class="bcalc-field bcalc-adv">
+            <label for="b-hoa">HOA dues ($/mo)</label>
+            <input type="number" id="b-hoa" value="0" oninput="bRunCalc()" />
+            <span class="field-hint">Enter 0 if no HOA.</span>
+          </div>
+          <div class="bcalc-field bcalc-adv">
+            <label for="b-extra" id="b-extra-label">Lender rent-credit (%)</label>
+            <input type="number" id="b-extra" value="75" min="0" max="100" oninput="bRunCalc()" />
+            <span class="field-hint" id="b-extra-hint">Lenders typically count 70–75% of rental income.</span>
+          </div>
+        </div>
+
+        <div class="bcalc-divider"></div>
+
+        <div id="b-results">
+          <div class="takeaway-empty">Enter a rent estimate above to see your numbers.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="content-section centered">
+      <h2 class="section-title">A market built for this</h2>
+      <p class="section-subtitle">The Bay Area has stayed investor-friendly and renter-hungry for years.</p>
+      <div class="market-stats">
+        <div class="market-stat">
+          <div class="market-stat-num">4.2%</div>
+          <div class="market-stat-lbl">avg annual rent growth</div>
+        </div>
+        <div class="market-stat">
+          <div class="market-stat-num">&lt;3%</div>
+          <div class="market-stat-lbl">typical room vacancy</div>
+        </div>
+        <div class="market-stat">
+          <div class="market-stat-num">120+</div>
+          <div class="market-stat-lbl">tenants pre-screened, waiting</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section centered">
+      <h2 class="section-title">From closing to your first tenant.</h2>
+      <div class="steps-grid-4">
+        <div class="step-card">
+          <span class="step-num">1</span>
+          <h3>Buy with the room in mind</h3>
+          <p>A hot Bay Area market, high demand, low room vacancy.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">2</span>
+          <h3>Run your numbers</h3>
+          <p>Lower effective payment, or real cash-on-cash return.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">3</span>
+          <h3>We screen your tenant</h3>
+          <p>Never a stranger from Craigslist.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">4</span>
+          <h3>You collect rent, we handle the vetting</h3>
+          <p>Ongoing, always pre-screened.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section centered">
+      <h2 class="section-title">Get early access</h2>
+      <p class="section-subtitle">We're onboarding buyers in SF Bay Area first.</p>
+      <form class="waitlist-form" onsubmit="handleWaitlist(event, 'Buyers')">
+        <input type="email" placeholder="your@email.com" required />
+        <button type="submit">Join the Waitlist</button>
+      </form>
+    </div>
+
+  </section>
+
+  <footer>
+    <div style="display:flex;gap:24px;justify-content:center;margin-bottom:10px;">
+      <a href="/about">About Us</a>
+      <a href="mailto:hello@nestandkey.ai">Contact</a>
+    </div>
+    <div>© 2026 NestAndKey. All rights reserved.</div>
+  </footer>
+
+  <script src="/shared.js"></script>
+  <script>
+    let bScenario = 'livein';
+    let bDetail   = 'basic';
+
+    function bSetScenario(s) {
+      bScenario = s;
+      document.getElementById('btn-livein').classList.toggle('selected', s === 'livein');
+      document.getElementById('btn-invest').classList.toggle('selected', s === 'invest');
+
+      const rentInput = document.getElementById('b-rent');
+      rentInput.value = '';
+      rentInput.classList.add('awaiting');
+
+      if (s === 'livein') {
+        document.getElementById('b-rent-label').textContent = 'Spare room rent ($/mo)';
+        document.getElementById('b-rent-hint').textContent  = 'Bay Area rooms often rent for $1,200–2,200/mo.';
+        rentInput.placeholder = 'e.g. 1,800';
+        document.getElementById('b-extra-label').textContent = 'Lender rent-credit (%)';
+        document.getElementById('b-extra-hint').textContent  = 'Lenders typically count 70–75% of rental income.';
+        document.getElementById('b-extra').value = '75';
+      } else {
+        document.getElementById('b-rent-label').textContent = 'Whole unit\'s rent ($/mo)';
+        document.getElementById('b-rent-hint').textContent  = 'Whole Bay Area units often rent for $4,000–6,500/mo.';
+        rentInput.placeholder = 'e.g. 5,500';
+        document.getElementById('b-extra-label').textContent = 'Vacancy allowance (%)';
+        document.getElementById('b-extra-hint').textContent  = 'Typical vacancy allowance is 5–10%.';
+        document.getElementById('b-extra').value = '10';
+      }
+      bRunCalc();
+    }
+
+    function bSetDetail(d) {
+      bDetail = d;
+      document.getElementById('pill-basic').classList.toggle('active', d === 'basic');
+      document.getElementById('pill-adv').classList.toggle('active', d === 'advanced');
+      document.querySelectorAll('.bcalc-adv').forEach(el => el.classList.toggle('visible', d === 'advanced'));
+      bRunCalc();
+    }
+
+    function bPI(loan, ratePct, n) {
+      n = n || 360;
+      const r = ratePct / 100 / 12;
+      if (r === 0) return loan / n;
+      return loan * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+    }
+
+    function bFmt(n) { return '$' + Math.round(Math.max(n, 0)).toLocaleString('en-US'); }
+    function bFmtSigned(n) { const abs = Math.round(Math.abs(n)).toLocaleString('en-US'); return (n < 0 ? '−$' : '$') + abs; }
+    function bFmtPct(n, d) { d = d === undefined ? 1 : d; return (n < 0 ? '−' : '') + Math.abs(n).toFixed(d) + '%'; }
+
+    function bBsearch(fn, target) {
+      let lo = 0, hi = 60000000;
+      for (let i = 0; i < 60; i++) { const mid = (lo + hi) / 2; if (fn(mid) < target) lo = mid; else hi = mid; }
+      return (lo + hi) / 2;
+    }
+
+    function bCarryBasic(price, down, rate) {
+      const loan = price * (1 - down / 100);
+      return bPI(loan, rate) + price * 0.012 / 12 + 150;
+    }
+
+    function bCarryAdv(price, down, rate, tax, ins, hoa) {
+      const loan = price * (1 - down / 100);
+      const pmi  = down < 20 ? loan * 0.006 / 12 : 0;
+      return bPI(loan, rate) + price * (tax / 100) / 12 + ins / 12 + hoa + pmi;
+    }
+
+    function bRunCalc() {
+      const price   = parseFloat(document.getElementById('b-price').value) || 0;
+      const down    = parseFloat(document.getElementById('b-down').value)  || 0;
+      const rate    = parseFloat(document.getElementById('b-rate').value)  || 0;
+      const rentRaw = document.getElementById('b-rent').value;
+      const rent    = rentRaw === '' ? null : (parseFloat(rentRaw) || 0);
+      const tax     = parseFloat(document.getElementById('b-tax').value)   || 1.2;
+      const ins     = parseFloat(document.getElementById('b-ins').value)   || 1800;
+      const hoa     = parseFloat(document.getElementById('b-hoa').value)   || 0;
+      const extra   = parseFloat(document.getElementById('b-extra').value) || (bScenario === 'livein' ? 75 : 10);
+
+      document.getElementById('b-rent').classList.toggle('awaiting', rentRaw === '');
+
+      const downAmt = Math.round(price * down / 100).toLocaleString('en-US');
+      document.getElementById('b-down-hint').textContent = '$' + downAmt + ' up front · first-timers usually put 5–20%.';
+
+      const el = document.getElementById('b-results');
+      if (rent === null || price === 0) {
+        el.innerHTML = '<div class="takeaway-empty">Enter a rent estimate above to see your numbers.</div>';
+        return;
+      }
+      el.innerHTML = bDetail === 'basic'
+        ? bRenderBasic(price, down, rate, rent)
+        : bRenderAdv(price, down, rate, rent, tax, ins, hoa, extra);
+    }
+
+    function bBars(rows) {
+      return '<div class="result-bars">' + rows.map(function(r) {
+        return '<div class="bar-row">'
+          + '<div class="bar-lbl-row"><span class="bar-lbl">' + r.label + '</span><span class="bar-val">' + r.value + '</span></div>'
+          + '<div class="bar-track"><div class="bar-fill ' + r.cls + '" style="width:' + r.pct + '%"></div></div>'
+          + '</div>';
+      }).join('') + '</div>';
+    }
+
+    function bRenderBasic(price, down, rate, rent) {
+      const allIn = bCarryBasic(price, down, rate);
+      if (bScenario === 'livein') {
+        const effective = Math.max(allIn - rent, 0);
+        const pctLess   = allIn > 0 ? Math.round((1 - effective / allIn) * 100) : 0;
+        const maxPrice  = bBsearch(function(p) { return bCarryBasic(p, down, rate); }, allIn + rent);
+        const takeaway  = rent >= allIn
+          ? 'The rent covers your entire payment — you\'d live there for free.'
+          : 'You\'d pay ' + bFmt(effective) + '/mo instead of ' + bFmt(allIn) + ' — ' + pctLess + '% less than going it alone.';
+        const roomPct = allIn > 0 ? Math.max((effective / allIn) * 100, 0) : 0;
+        return '<div class="takeaway-panel">' + takeaway + '</div>'
+          + bBars([
+              { label: 'On your own',     value: bFmt(allIn) + '/mo',     cls: 'bar-muted',  pct: 100 },
+              { label: 'With a roommate', value: bFmt(effective) + '/mo', cls: 'bar-accent', pct: roomPct },
+            ])
+          + '<div class="unlock-row"><span class="unlock-lbl">The home price this could unlock</span><span class="unlock-val">' + bFmt(maxPrice) + '</span></div>'
+          + '<p class="calc-fn">Rough all-in estimate — assumes ~1.2%/yr property tax and ~$150/mo insurance. Switch to Advanced to set your own.</p>';
+      } else {
+        const cashFlow = rent - allIn;
+        const downAmt  = price * down / 100;
+        const coc = downAmt > 0 ? (cashFlow * 12 / downAmt) * 100 : 0;
+        const takeaway = cashFlow >= 0
+          ? 'Nets ' + bFmt(cashFlow) + '/mo cash flow — about ' + bFmtPct(coc) + ' cash-on-cash.'
+          : 'You\'d be ' + bFmt(-cashFlow) + '/mo out of pocket at this price/rent combo.';
+        const maxBar = Math.max(allIn, rent);
+        return '<div class="takeaway-panel">' + takeaway + '</div>'
+          + bBars([
+              { label: 'Monthly costs', value: bFmt(allIn) + '/mo', cls: 'bar-muted',  pct: maxBar > 0 ? (allIn / maxBar) * 100 : 0 },
+              { label: 'Rent income',   value: bFmt(rent)  + '/mo', cls: 'bar-accent', pct: maxBar > 0 ? (rent  / maxBar) * 100 : 0 },
+            ])
+          + '<p class="calc-fn">Rough all-in estimate — assumes ~1.2%/yr property tax and ~$150/mo insurance. Switch to Advanced to set your own.</p>';
+      }
+    }
+
+    function bRenderAdv(price, down, rate, rent, tax, ins, hoa, extra) {
+      const loan  = price * (1 - down / 100);
+      const pi    = bPI(loan, rate);
+      const pmi   = down < 20 ? loan * 0.006 / 12 : 0;
+      const total = bCarryAdv(price, down, rate, tax, ins, hoa);
+
+      if (bScenario === 'livein') {
+        const effective  = Math.max(total - rent, 0);
+        const pctLess    = total > 0 ? Math.round((1 - effective / total) * 100) : 0;
+        const creditPct  = extra / 100;
+        const maxPrice   = bBsearch(function(p) { return bCarryAdv(p, down, rate, tax, ins, hoa); }, total + rent * creditPct);
+        const takeaway   = rent >= total
+          ? 'The rent covers your entire payment — you\'d live there for free.'
+          : 'You\'d pay ' + bFmt(effective) + '/mo instead of ' + bFmt(total) + ' — ' + pctLess + '% less.';
+        const roomPct  = total > 0 ? Math.max((effective / total) * 100, 0) : 0;
+        const pmiNote  = pmi > 0 ? ' + PMI' : '';
+        const rows = [
+          { lbl: 'Total monthly cost (PITI + HOA' + pmiNote + ')',  val: bFmt(total) + '/mo',     hl: false },
+          { lbl: 'Rent you collect',                                  val: bFmt(rent) + '/mo',      hl: false },
+          { lbl: 'Effective monthly cost',                            val: bFmt(effective) + '/mo', hl: false },
+          { lbl: 'Max home price <small style="font-weight:400;color:#8BAF8E">(lender counts ' + extra + '% of rent)</small>', val: bFmt(maxPrice), hl: true },
+        ];
+        return '<div class="takeaway-panel">' + takeaway + '</div>'
+          + bBars([
+              { label: 'On your own',     value: bFmt(total) + '/mo',     cls: 'bar-muted',  pct: 100 },
+              { label: 'With a roommate', value: bFmt(effective) + '/mo', cls: 'bar-accent', pct: roomPct },
+            ])
+          + bAdvRows(rows)
+          + '<p class="calc-fn">Full PITI, PMI at 0.6%/yr of loan when down payment is under 20%, rent credited at the lender-recognized %. Confirm with a lender.</p>';
+      } else {
+        const vacPct        = extra / 100;
+        const effRentAnnual = rent * 12 * (1 - vacPct);
+        const NOI           = effRentAnnual - (price * (tax / 100) + ins + hoa * 12);
+        const capRate       = price > 0 ? (NOI / price) * 100 : 0;
+        const annualCF      = NOI - (pi + pmi) * 12;
+        const downAmt       = price * down / 100;
+        const coc           = downAmt > 0 ? (annualCF / downAmt) * 100 : 0;
+        const moCF          = annualCF / 12;
+        const moNOI         = NOI / 12;
+        const takeaway      = 'Nets ' + bFmtSigned(moCF) + '/mo after all costs — about ' + bFmtPct(coc) + ' cash-on-cash.';
+        const maxBar        = Math.max(total, rent);
+        const rows = [
+          { lbl: 'NOI (/mo)',                            val: bFmtSigned(moNOI) + '/mo', hl: false },
+          { lbl: 'Monthly cash flow after debt service', val: bFmtSigned(moCF)  + '/mo', hl: false },
+          { lbl: 'Cap rate',                             val: bFmtPct(capRate),           hl: false },
+          { lbl: 'Cash-on-cash return',                  val: bFmtPct(coc),               hl: true  },
+        ];
+        return '<div class="takeaway-panel">' + takeaway + '</div>'
+          + bBars([
+              { label: 'Monthly costs', value: bFmt(total) + '/mo', cls: 'bar-muted',  pct: maxBar > 0 ? (total / maxBar) * 100 : 0 },
+              { label: 'Rent income',   value: bFmt(rent)  + '/mo', cls: 'bar-accent', pct: maxBar > 0 ? (rent  / maxBar) * 100 : 0 },
+            ])
+          + bAdvRows(rows)
+          + '<p class="calc-fn">Full PITI + PMI, income net of vacancy and operating costs. Confirm real numbers with a lender.</p>';
+      }
+    }
+
+    function bAdvRows(rows) {
+      return '<div class="adv-rows">' + rows.map(function(r) {
+        return '<div class="adv-row-item' + (r.hl ? ' row-hl' : '') + '">'
+          + '<span class="adv-row-lbl">' + r.lbl + '</span>'
+          + '<span class="adv-row-val">' + r.val + '</span>'
+          + '</div>';
+      }).join('') + '</div>';
+    }
+  </script>
+
+</body>
+</html>
