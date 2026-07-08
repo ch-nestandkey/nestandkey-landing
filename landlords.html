@@ -81,10 +81,37 @@
 
     <div class="content-section centered">
       <h2 class="section-title">Ready to list your room?</h2>
-      <form class="waitlist-form" onsubmit="handleWaitlist(event, 'Landlords')">
-        <input type="email" placeholder="your@email.com" required />
-        <button type="submit">List My Room</button>
-      </form>
+      <p class="section-subtitle">A quick chat is all it takes — Key will handle the rest.</p>
+      <div class="key-intake-wrap">
+
+        <div class="chat-card" id="key-chat-card">
+          <div class="chat-header">
+            <span class="chat-avatar">K</span>
+            <div>
+              <span class="chat-header-name">Key</span>
+              <span class="chat-header-sub">Your listing concierge</span>
+            </div>
+          </div>
+          <div class="chat-messages" id="key-chat-messages"></div>
+          <div class="chat-input-row" id="key-chat-input-row">
+            <textarea id="key-chat-input" placeholder="Type your answer…"></textarea>
+            <button class="chat-send" id="key-chat-send" aria-label="Send">↑</button>
+          </div>
+        </div>
+
+        <div class="key-photo-widget">
+          <div class="key-photo-title">Photos</div>
+          <div class="key-photo-sub">Key will ask during the chat — you can also add them here directly. Photos may be uploaded after your listing is submitted.</div>
+          <div class="key-photo-drop">
+            <input type="file" id="key-photo-input" accept="image/jpeg,image/png,image/webp,image/heic" multiple style="display:none" />
+            <button class="key-photo-btn" onclick="document.getElementById('key-photo-input').click()" type="button">Add photos</button>
+            <div class="key-photo-hint">JPG, PNG, HEIC · up to 10 photos</div>
+          </div>
+          <div id="key-photo-list"></div>
+          <button class="key-photo-later" id="key-photo-later" type="button" onclick="keySetPhotoPending()">I'll add photos later</button>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -97,6 +124,188 @@
   </footer>
 
   <script src="/shared.js"></script>
+  <script>
+    // TODO: Fill these in from your Cloudinary dashboard before deploying photo upload
+    const CLOUDINARY_CLOUD_NAME = '';
+    const CLOUDINARY_UPLOAD_PRESET = '';
+
+    let keyState = {
+      city:'', neighborhood:'', zip:'', propertyType:'', roomDetails:'',
+      furnished:'', availability:'', rent:'', utilities:'', minStay:'',
+      isOwner:'', household:'', parking:'', photosStatus:'', email:'',
+      houseRules:'', lifestyle:''
+    };
+
+    let keyHistory = [
+      { role: 'assistant', content: "Hi — I'm Key. I'll help you list your place and pre-screen renters who actually fit. First — is this a private room in a home you live in, or a separate property you're renting out?" }
+    ];
+
+    let keyPhotoUrls = [];
+
+    appendKeyMsg('assistant', keyHistory[0].content);
+
+    async function sendKeyChat() {
+      const input = document.getElementById('key-chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendKeyMsg('user', text);
+      keyHistory.push({ role: 'user', content: text });
+      input.value = '';
+      setKeyChatEnabled(false);
+
+      try {
+        const res = await fetch('/api/key-chat', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ messages: keyHistory, state: keyState })
+        });
+        const data = await res.json();
+        keyState = data.state;
+        keyHistory.push({ role: 'assistant', content: data.reply });
+        appendKeyMsg('assistant', data.reply);
+        setKeyChatEnabled(true);
+        if (data.ready) showKeyReady();
+      } catch (_) {
+        appendKeyMsg('assistant', "Something went wrong — please try again.");
+        setKeyChatEnabled(true);
+      }
+    }
+
+    function appendKeyMsg(role, text) {
+      const box = document.getElementById('key-chat-messages');
+      const div = document.createElement('div');
+      div.className = 'msg msg-' + role;
+      div.textContent = text;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function setKeyChatEnabled(on) {
+      const input = document.getElementById('key-chat-input');
+      const btn = document.getElementById('key-chat-send');
+      if (input) input.disabled = !on;
+      if (btn) btn.disabled = !on;
+    }
+
+    function showKeyReady() {
+      if (document.getElementById('key-start-btn')) return;
+
+      const card = document.getElementById('key-chat-card');
+      const inputRow = document.getElementById('key-chat-input-row');
+
+      const SUMMARY_LABELS = [
+        ['propertyType','Property type'], ['isOwner','Owner-occupied'],
+        ['city','City'], ['neighborhood','Neighborhood'], ['zip','Zip'],
+        ['roomDetails','Room details'], ['furnished','Furnished'],
+        ['availability','Available'], ['rent','Monthly rent'],
+        ['utilities','Utilities'], ['minStay','Minimum stay'],
+        ['household','Household'], ['parking','Parking'],
+        ['houseRules','House rules'], ['lifestyle','Lifestyle fit'],
+        ['photosStatus','Photos'], ['email','Email'],
+      ];
+
+      const rowsHtml = SUMMARY_LABELS
+        .filter(([key]) => (keyState[key] || '').trim() !== '')
+        .map(([key, label]) =>
+          `<div class="chat-summary-row"><span class="chat-summary-label">${label}</span><span class="chat-summary-value">${keyState[key]}</span></div>`)
+        .join('');
+
+      const summary = document.createElement('div');
+      summary.className = 'chat-summary-card';
+      summary.innerHTML = `<div class="chat-summary-title">Listing brief — here's what Key has</div><div class="chat-summary-rows">${rowsHtml}</div>`;
+
+      const hint = document.createElement('p');
+      hint.className = 'chat-summary-hint';
+      hint.textContent = 'Looks right? Hit the button below to start pre-screening.';
+
+      const btn = document.createElement('button');
+      btn.className = 'chat-start-btn';
+      btn.id = 'key-start-btn';
+      btn.textContent = 'Start pre-screening →';
+      btn.addEventListener('click', submitKeyListing);
+
+      card.insertBefore(summary, inputRow);
+      card.insertBefore(hint, inputRow);
+      card.insertBefore(btn, inputRow);
+    }
+
+    async function submitKeyListing() {
+      const btn = document.getElementById('key-start-btn');
+      btn.textContent = 'Submitting...';
+      btn.disabled = true;
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sheet: 'Listings',
+            ...keyState,
+            photoUrls: keyPhotoUrls.join(', '),
+            timestamp: new Date().toISOString()
+          })
+        });
+      } catch (_) {
+        // no-cors — response unreadable; proceed to confirmation
+      }
+
+      const pendingNote = keyState.photosStatus === 'pending'
+        ? ' When you\'re ready, add photos using the uploader on the right.'
+        : '';
+
+      document.getElementById('key-chat-card').innerHTML =
+        `<div class="chat-confirm">✓ Your listing is set — Key is pre-screening renters now, and candidates who fit will land in <strong>${keyState.email}</strong> shortly. You always make the final call on who you meet.${pendingNote}</div>`;
+    }
+
+    async function uploadKeyPhoto(file) {
+      if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) return null;
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+        { method: 'POST', body: fd }
+      );
+      const data = await res.json();
+      return data.secure_url || null;
+    }
+
+    function keySetPhotoPending() {
+      keyState.photosStatus = 'pending';
+      const btn = document.getElementById('key-photo-later');
+      btn.textContent = 'Adding later — you can still upload above';
+      btn.disabled = true;
+    }
+
+    document.getElementById('key-photo-input').addEventListener('change', async function(e) {
+      const files = Array.from(e.target.files).slice(0, 10 - keyPhotoUrls.length);
+      const list = document.getElementById('key-photo-list');
+      for (const file of files) {
+        const url = await uploadKeyPhoto(file);
+        if (url) {
+          keyPhotoUrls.push(url);
+          keyState.photosStatus = 'provided';
+          const item = document.createElement('div');
+          item.className = 'key-photo-item';
+          item.textContent = '✓ ' + file.name;
+          list.appendChild(item);
+        } else if (!CLOUDINARY_CLOUD_NAME) {
+          // Config not yet set — acknowledge the file locally so UX isn't broken
+          const item = document.createElement('div');
+          item.className = 'key-photo-item';
+          item.textContent = '· ' + file.name + ' (upload pending config)';
+          list.appendChild(item);
+        }
+      }
+    });
+
+    document.getElementById('key-chat-send').addEventListener('click', sendKeyChat);
+    document.getElementById('key-chat-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendKeyChat(); }
+    });
+  </script>
 
 </body>
 </html>

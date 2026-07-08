@@ -284,6 +284,20 @@ section.section-multi .hero-block { min-height: 65vh; padding-top: 96px; padding
 .market-stat-lbl { font-size: 14px; color: #4A6B52; line-height: 1.4; }
 .steps-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 
+/* Key listing intake */
+.key-intake-wrap { display: grid; grid-template-columns: 1fr 280px; gap: 24px; align-items: start; max-width: 1080px; margin: 0 auto; }
+.key-photo-widget { background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 24px; box-shadow: 0 14px 36px rgba(30,58,47,0.06); }
+.key-photo-title { font-size: 13px; font-weight: 700; color: #1E3A2F; margin-bottom: 6px; }
+.key-photo-sub { font-size: 12px; color: #8BAF8E; line-height: 1.55; margin-bottom: 16px; }
+.key-photo-drop { border: 1.5px dashed rgba(80,130,80,0.35); border-radius: 10px; padding: 20px 16px; text-align: center; margin-bottom: 12px; }
+.key-photo-btn { padding: 9px 18px; border-radius: 7px; background: #2D5A3D; color: #F4F7F4; border: none; font-size: 13px; font-weight: 600; cursor: pointer; min-height: 44px; }
+.key-photo-btn:hover { background: #3D7A52; }
+.key-photo-hint { font-size: 11px; color: #B0C4B3; margin-top: 8px; }
+.key-photo-item { font-size: 12px; color: #4A6B52; padding: 4px 0; }
+.key-photo-later { background: none; border: none; color: #8BAF8E; font-size: 12px; cursor: pointer; padding: 0; margin-top: 12px; text-decoration: underline; display: block; }
+.key-photo-later:hover { color: #4A6B52; }
+.key-photo-later:disabled { opacity: 0.5; cursor: default; }
+
 /* Responsive */
 @media (max-width: 1024px) {
   nav { padding: 0 24px; }
@@ -296,6 +310,7 @@ section.section-multi .hero-block { min-height: 65vh; padding-top: 96px; padding
   .bcalc-card { padding: 28px 20px; }
   .chat-card { max-width: 100%; }
   .chat-messages { min-height: 320px; max-height: 420px; }
+  .key-intake-wrap { grid-template-columns: 1fr; }
 }
 @media (max-width: 680px) {
   .pricing-cards { flex-direction: column; }
