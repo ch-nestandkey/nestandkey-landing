@@ -174,12 +174,25 @@
     async function sendChat() {
       const input = document.getElementById('chat-input');
       const text = input.value.trim();
-      if (!text) return;
+      if (!text) {
+        input.classList.remove('shake');
+        void input.offsetWidth;
+        input.classList.add('shake');
+        input.addEventListener('animationend', () => input.classList.remove('shake'), { once: true });
+        return;
+      }
 
       appendMsg('user', text);
       chatHistory.push({ role: 'user', content: text });
       input.value = '';
       setChatEnabled(false);
+
+      const box = document.getElementById('chat-messages');
+      const typing = document.createElement('div');
+      typing.className = 'msg nest typing-indicator';
+      typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+      box.appendChild(typing);
+      box.scrollTop = box.scrollHeight;
 
       try {
         const res = await fetch('/api/chat', {
@@ -187,6 +200,7 @@
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ messages: chatHistory, state: chatState })
         });
+        typing.remove();
         if (!res.ok) throw new Error('api error');
         const data = await res.json();
         chatState = data.state;
@@ -199,9 +213,46 @@
           setChatEnabled(true);
         }
       } catch (err) {
-        appendMsg('nest', 'Something went wrong — please try again.');
+        typing.remove();
+        appendNestError();
         setChatEnabled(true);
       }
+    }
+
+    function appendNestError() {
+      const box = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = 'msg error';
+      div.innerHTML = '<div class="msg-label">Nest</div><div class="msg-text">Something went wrong. <button class="msg-retry-btn" onclick="retryLastMessage()">Retry</button></div>';
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function retryLastMessage() {
+      const box = document.getElementById('chat-messages');
+      const err = box.querySelector('.msg.error');
+      if (err) err.remove();
+
+      setChatEnabled(false);
+      const typing = document.createElement('div');
+      typing.className = 'msg nest typing-indicator';
+      typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+      box.appendChild(typing);
+      box.scrollTop = box.scrollHeight;
+
+      fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ messages: chatHistory, state: chatState })
+      })
+        .then(res => { typing.remove(); if (!res.ok) throw new Error(); return res.json(); })
+        .then(data => {
+          chatState = data.state;
+          chatHistory.push({ role: 'assistant', content: data.reply });
+          appendMsg('nest', data.reply);
+          if (data.ready) showStartButton(); else setChatEnabled(true);
+        })
+        .catch(() => { typing.remove(); appendNestError(); setChatEnabled(true); });
     }
 
     function showStartButton() {

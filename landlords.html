@@ -99,9 +99,11 @@
           </div>
         </div>
 
-        <div class="key-photo-widget">
-          <div class="key-photo-title">Photos</div>
-          <div class="key-photo-sub">Key will ask during the chat — you can also add them here directly. Photos may be uploaded after your listing is submitted.</div>
+        <div class="key-brief-panel" id="key-brief-panel">
+          <div>
+            <div class="key-brief-title">Your listing brief</div>
+            <div class="key-brief-sub">Fills in as you chat with Key.</div>
+          </div>
           <div class="key-photo-drop">
             <input type="file" id="key-photo-input" accept="image/jpeg,image/png,image/webp,image/heic" multiple style="display:none" />
             <button class="key-photo-btn" onclick="document.getElementById('key-photo-input').click()" type="button">Add photos</button>
@@ -109,6 +111,11 @@
           </div>
           <div id="key-photo-list"></div>
           <button class="key-photo-later" id="key-photo-later" type="button" onclick="keySetPhotoPending()">I'll add photos later</button>
+          <div class="key-brief-fields" id="key-brief-fields">
+            <div class="key-brief-empty">Keep chatting — your brief will appear here.</div>
+          </div>
+          <div class="key-brief-footer">You always make the final call on who you meet.</div>
+          <div class="key-brief-status" id="key-brief-status">Keep chatting to finish</div>
         </div>
 
       </div>
@@ -144,15 +151,72 @@
 
     appendKeyMsg('assistant', keyHistory[0].content);
 
+    const KEY_BRIEF_FIELDS = [
+      { key: 'propertyType', label: 'Property type', required: true },
+      { key: 'isOwner', label: 'Owner-occupied', required: true },
+      { key: 'city', label: 'City', required: true },
+      { key: 'neighborhood', label: 'Neighborhood', required: true },
+      { key: 'zip', label: 'Zip', required: false },
+      { key: 'roomDetails', label: 'Room details', required: true },
+      { key: 'furnished', label: 'Furnished', required: true },
+      { key: 'availability', label: 'Available from', required: true },
+      { key: 'rent', label: 'Monthly rent', required: true },
+      { key: 'utilities', label: 'Utilities', required: false },
+      { key: 'minStay', label: 'Min stay', required: true },
+      { key: 'household', label: 'Household', required: false },
+      { key: 'parking', label: 'Parking', required: false },
+      { key: 'houseRules', label: 'House rules', required: false },
+      { key: 'lifestyle', label: 'Lifestyle fit', required: false },
+      { key: 'photosStatus', label: 'Photos', required: false },
+      { key: 'email', label: 'Email', required: true },
+    ];
+
+    function renderKeyBrief() {
+      const fieldsEl = document.getElementById('key-brief-fields');
+      const statusEl = document.getElementById('key-brief-status');
+      if (!fieldsEl) return;
+
+      const filled = KEY_BRIEF_FIELDS.filter(f => (keyState[f.key] || '').trim() !== '');
+      fieldsEl.innerHTML = filled.length === 0
+        ? '<div class="key-brief-empty">Keep chatting — your brief will appear here.</div>'
+        : filled.map(f => `<div class="key-brief-row"><span class="key-brief-check">✓</span><div class="key-brief-row-text"><span class="key-brief-label">${f.label}</span><span class="key-brief-value">${f.key === 'email' ? String(keyState[f.key]).replace(/</g,'&lt;') : keyState[f.key]}</span></div></div>`).join('');
+
+      if (statusEl && !document.getElementById('key-brief-submit')) {
+        const allReq = KEY_BRIEF_FIELDS.filter(f => f.required).every(f => (keyState[f.key] || '').trim() !== '');
+        const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(keyState.email || '');
+        if (allReq && emailOk) {
+          const btn = document.createElement('button');
+          btn.id = 'key-brief-submit';
+          btn.className = 'key-brief-status ready';
+          btn.textContent = 'Start pre-screening →';
+          btn.addEventListener('click', submitKeyListing);
+          statusEl.replaceWith(btn);
+        }
+      }
+    }
+
     async function sendKeyChat() {
       const input = document.getElementById('key-chat-input');
       const text = input.value.trim();
-      if (!text) return;
+      if (!text) {
+        input.classList.remove('shake');
+        void input.offsetWidth;
+        input.classList.add('shake');
+        input.addEventListener('animationend', () => input.classList.remove('shake'), { once: true });
+        return;
+      }
 
       appendKeyMsg('user', text);
       keyHistory.push({ role: 'user', content: text });
       input.value = '';
       setKeyChatEnabled(false);
+
+      const box = document.getElementById('key-chat-messages');
+      const typing = document.createElement('div');
+      typing.className = 'msg key typing-indicator';
+      typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+      box.appendChild(typing);
+      box.scrollTop = box.scrollHeight;
 
       try {
         const res = await fetch('/api/key-chat', {
@@ -160,16 +224,56 @@
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ messages: keyHistory, state: keyState })
         });
+        typing.remove();
+        if (!res.ok) throw new Error();
         const data = await res.json();
         keyState = data.state;
         keyHistory.push({ role: 'assistant', content: data.reply });
         appendKeyMsg('assistant', data.reply);
-        setKeyChatEnabled(true);
-        if (data.ready) showKeyReady();
+        renderKeyBrief();
+        if (data.ready) showKeyReady(); else setKeyChatEnabled(true);
       } catch (_) {
-        appendKeyMsg('assistant', "Something went wrong — please try again.");
+        typing.remove();
+        appendKeyError();
         setKeyChatEnabled(true);
       }
+    }
+
+    function appendKeyError() {
+      const box = document.getElementById('key-chat-messages');
+      const div = document.createElement('div');
+      div.className = 'msg error';
+      div.innerHTML = '<div class="msg-label">Key</div><div class="msg-text">Something went wrong. <button class="msg-retry-btn" onclick="retryLastKeyMessage()">Retry</button></div>';
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function retryLastKeyMessage() {
+      const box = document.getElementById('key-chat-messages');
+      const err = box.querySelector('.msg.error');
+      if (err) err.remove();
+
+      setKeyChatEnabled(false);
+      const typing = document.createElement('div');
+      typing.className = 'msg key typing-indicator';
+      typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+      box.appendChild(typing);
+      box.scrollTop = box.scrollHeight;
+
+      fetch('/api/key-chat', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ messages: keyHistory, state: keyState })
+      })
+        .then(res => { typing.remove(); if (!res.ok) throw new Error(); return res.json(); })
+        .then(data => {
+          keyState = data.state;
+          keyHistory.push({ role: 'assistant', content: data.reply });
+          appendKeyMsg('assistant', data.reply);
+          renderKeyBrief();
+          if (data.ready) showKeyReady(); else setKeyChatEnabled(true);
+        })
+        .catch(() => { typing.remove(); appendKeyError(); setKeyChatEnabled(true); });
     }
 
     function appendKeyMsg(role, text) {
@@ -191,51 +295,13 @@
     }
 
     function showKeyReady() {
-      if (document.getElementById('key-start-btn')) return;
-
-      const card = document.getElementById('key-chat-card');
-      const inputRow = document.getElementById('key-chat-input-row');
-
-      const SUMMARY_LABELS = [
-        ['propertyType','Property type'], ['isOwner','Owner-occupied'],
-        ['city','City'], ['neighborhood','Neighborhood'], ['zip','Zip'],
-        ['roomDetails','Room details'], ['furnished','Furnished'],
-        ['availability','Available'], ['rent','Monthly rent'],
-        ['utilities','Utilities'], ['minStay','Minimum stay'],
-        ['household','Household'], ['parking','Parking'],
-        ['houseRules','House rules'], ['lifestyle','Lifestyle fit'],
-        ['photosStatus','Photos'], ['email','Email'],
-      ];
-
-      const rowsHtml = SUMMARY_LABELS
-        .filter(([key]) => (keyState[key] || '').trim() !== '')
-        .map(([key, label]) =>
-          `<div class="chat-summary-row"><span class="chat-summary-label">${label}</span><span class="chat-summary-value">${keyState[key]}</span></div>`)
-        .join('');
-
-      const summary = document.createElement('div');
-      summary.className = 'chat-summary-card';
-      summary.innerHTML = `<div class="chat-summary-title">Listing brief — here's what Key has</div><div class="chat-summary-rows">${rowsHtml}</div>`;
-
-      const hint = document.createElement('p');
-      hint.className = 'chat-summary-hint';
-      hint.textContent = 'Looks right? Hit the button below to start pre-screening.';
-
-      const btn = document.createElement('button');
-      btn.className = 'chat-start-btn';
-      btn.id = 'key-start-btn';
-      btn.textContent = 'Start pre-screening →';
-      btn.addEventListener('click', submitKeyListing);
-
-      card.insertBefore(summary, inputRow);
-      card.insertBefore(hint, inputRow);
-      card.insertBefore(btn, inputRow);
+      renderKeyBrief();
+      setKeyChatEnabled(true);
     }
 
     async function submitKeyListing() {
-      const btn = document.getElementById('key-start-btn');
-      btn.textContent = 'Submitting...';
-      btn.disabled = true;
+      const btn = document.getElementById('key-brief-submit') || document.getElementById('key-start-btn');
+      if (btn) { btn.textContent = 'Submitting…'; btn.disabled = true; }
 
       try {
         await fetch(SCRIPT_URL, {
@@ -293,6 +359,7 @@
           item.className = 'key-photo-item';
           item.textContent = '✓ ' + file.name;
           list.appendChild(item);
+          renderKeyBrief();
         } else if (!CLOUDINARY_CLOUD_NAME) {
           // Config not yet set — acknowledge the file locally so UX isn't broken
           const item = document.createElement('div');
