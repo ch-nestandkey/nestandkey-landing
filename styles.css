@@ -286,6 +286,7 @@ section.section-multi .hero-block { min-height: 65vh; padding-top: 96px; padding
 
 /* Key listing intake */
 .key-intake-wrap { display: grid; grid-template-columns: 1fr 280px; gap: 24px; align-items: start; max-width: 1080px; margin: 0 auto; }
+.key-intake-wrap .chat-card { margin-top: 0; }
 .key-photo-widget { background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 24px; box-shadow: 0 14px 36px rgba(30,58,47,0.06); }
 .key-photo-title { font-size: 13px; font-weight: 700; color: #1E3A2F; margin-bottom: 6px; }
 .key-photo-sub { font-size: 12px; color: #8BAF8E; line-height: 1.55; margin-bottom: 16px; }
