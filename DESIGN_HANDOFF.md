@@ -306,9 +306,10 @@ Browser (chat card)
     ← { reply, state, ready }
   → append reply to chat UI, merge state
 
-[when user clicks "Start my search →"]
+[when user clicks "Submit my search →"]
   → POST to Google Apps Script (no-cors)
     → Google Sheets "Searches" tab — one row per completed brief
+    → Nest & Key team reviews and initiates outreach manually
 ```
 
 **Google Sheet ID:** `1SgFQ_14-HpSgzukQGiFH1A2vn7s7H2jIg9ko6wkBm2U`  
@@ -458,7 +459,7 @@ The summary is the most important message in the conversation. It signals comple
 
 The summary does **not** say the scan is starting. That comes only after explicit confirmation.
 
-After summary, the "Start my search →" button appears above the input row. The input stays enabled — the user can still type corrections.
+After summary, the "Submit my search →" button appears above the input row. The input stays enabled — the user can still type corrections.
 
 ### 4.9 Confirmation and closing
 
@@ -467,10 +468,17 @@ After summary, the "Start my search →" button appears above the input row. The
 Nest's closing message after confirmation:
 
 ```
-✓   "Perfect — starting your scan now. Results will land in your inbox soon."
+✓   "Perfect — submit your search brief using the button below and we'll take it from there."
 ```
 
-Then the "Start my search →" button submits and the card transitions to the confirmation state.
+Then the "Submit my search →" button submits and the card transitions to the confirmation state:
+
+```
+✓ Submitted — our team will review your search and reach out to [email] shortly.
+Nest & Key will take it from here.
+```
+
+**IMPORTANT — human review layer:** All submissions (tenants, landlords, home buyers) are reviewed by the Nest & Key team before any matching or pre-screening begins. The AI collects the brief; humans approve and initiate the next step. Button and confirmation copy must never imply that the AI starts work automatically. Use "Submit" (not "Start"), and confirmation copy must say the team will reach out — never "your scan is underway" or "pre-screening renters now."
 
 ### 4.10 Correction handling
 

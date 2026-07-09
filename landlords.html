@@ -150,6 +150,7 @@
     ];
 
     let keyPhotoUrls = [];
+    let keyListingSubmitted = false;
 
     appendKeyMsg('assistant', keyHistory[0].content);
 
@@ -190,7 +191,7 @@
           const btn = document.createElement('button');
           btn.id = 'key-brief-submit';
           btn.className = 'key-brief-status ready';
-          btn.textContent = 'Start pre-screening →';
+          btn.textContent = 'Submit my listing →';
           btn.addEventListener('click', submitKeyListing);
           statusEl.replaceWith(btn);
         }
@@ -311,6 +312,8 @@
     }
 
     async function submitKeyListing() {
+      if (keyListingSubmitted) return;
+      keyListingSubmitted = true;
       const btn = document.getElementById('key-brief-submit') || document.getElementById('key-start-btn');
       if (btn) { btn.textContent = 'Submitting…'; btn.disabled = true; }
 
@@ -335,7 +338,7 @@
         : '';
 
       document.getElementById('key-chat-card').innerHTML =
-        `<div class="chat-confirm">✓ Your listing is set — Key is pre-screening renters now, and candidates who fit will land in <strong>${keyState.email}</strong> shortly. You always make the final call on who you meet.${pendingNote}</div>`;
+        `<div class="chat-confirm">✓ Submitted — our team will review your listing and reach out to <strong>${keyState.email}</strong> shortly. You always make the final call on who you meet.${pendingNote}</div>`;
     }
 
     async function uploadKeyPhoto(file) {

@@ -309,7 +309,7 @@
       const btn = document.createElement('button');
       btn.className = 'chat-start-btn';
       btn.id = 'chat-start-btn';
-      btn.textContent = 'Start my search →';
+      btn.textContent = 'Submit my search →';
       btn.onclick = submitSearch;
 
       card.insertBefore(summary, inputRow);
@@ -332,7 +332,7 @@
       } catch (_) {}
 
       document.getElementById('chat-card').innerHTML =
-        `<div class="chat-confirm">✓ Your search is set — your free first scan is underway,<br>results will land in <strong>${chatState.email}</strong> shortly.<br>We'll take it from here by email.</div>`;
+        `<div class="chat-confirm">✓ Submitted — our team will review your search and reach out to <strong>${chatState.email}</strong> shortly.<br>Nest &amp; Key will take it from here.</div>`;
     }
 
     function appendMsg(role, text) {
