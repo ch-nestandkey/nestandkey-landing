@@ -20,17 +20,15 @@ function initChatKeyboardFix(inputId, messagesId, inputRowId) {
 
   let keyboardOpen = false;
 
+  let resizeTimer;
   function adjust() {
     if (!keyboardOpen) return;
     const vv = window.visualViewport;
     const visibleBottom = vv.offsetTop + vv.height;
 
-    // Scroll page so input row bottom sits flush with keyboard top
-    const rowBottom = inputRow.getBoundingClientRect().bottom + window.scrollY;
-    const gap = rowBottom - visibleBottom;
-    if (gap > 0) window.scrollBy({ top: gap, behavior: 'instant' });
-
-    // Shrink messages pane to fill exactly the space above the input row
+    // Only shrink the messages pane — let iOS scroll the input into view natively.
+    // Calling window.scrollBy() here causes a feedback loop when the address bar
+    // collapses during scroll (which also fires a resize event).
     const messagesTop = messages.getBoundingClientRect().top;
     const inputRowH = inputRow.offsetHeight;
     const available = visibleBottom - messagesTop - inputRowH;
@@ -40,9 +38,10 @@ function initChatKeyboardFix(inputId, messagesId, inputRowId) {
     }
   }
 
-  // resize fires when the keyboard opens/closes — scroll intentionally omitted
-  // to avoid a scrollBy → scroll event → scrollBy feedback loop
-  window.visualViewport.addEventListener('resize', adjust);
+  window.visualViewport.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(adjust, 100);
+  });
 
   input.addEventListener('focus', () => {
     keyboardOpen = true;
