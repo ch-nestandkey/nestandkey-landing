@@ -841,3 +841,184 @@ Explored in the design prototype (`AI Home Search - For Tenants.dc.html`); **not
 | R2 | Soft, skippable **lifestyle / vibe prompt** offered after room needs. Resolves the Open lifestyle-prompt item. | Prototype persona | `NEST_PERSONA` in `api/chat.js` — add the soft-prompt instruction. |
 | R3 | **Split "lifestyle" and "requirements" into two fields.** Lifestyle = soft preferences; requirements = hard conditions. A single combined field read as a confusing double-negative (e.g. "Dealbreakers: No smoking" — smoker or non-smoker?). | Prototype persona + STATE + summary | `api/chat.js`: add a `requirements` field to the STATE schema alongside `lifestyle`. |
 | R4 | **Requirements phrased affirmatively.** Nest normalizes every hard-no into a positive condition the home must meet — never a bare "no X". e.g. "no smoking" → "Smoke-free home"; "no ground floor" → "Above ground floor"; "must allow pets" → "Pet-friendly". Removes the double-negative ambiguity in R3. | Prototype persona | `NEST_PERSONA` in `api/chat.js` — add the affirmative-phrasing instruction for the `requirements` field. |
+
+---
+
+## Part 11 — Key Debrief Card Redesign (Landlords Page)
+
+**Task for Design:** Redesign the `.key-brief-panel` — the card that sits to the right of the Key chat on `landlords.html`. The JS rendering logic is already live and working; this is a visual/UX redesign only.
+
+---
+
+### 11.1 Layout context
+
+```
+.key-intake-wrap {
+  display: grid;
+  grid-template-columns: 1fr 280px;   ← chat card | debrief panel
+  gap: 24px;
+  align-items: start;
+  max-width: 1080px;
+}
+/* Mobile (≤768px): grid-template-columns: 1fr  → panel stacks below chat */
+```
+
+The panel is currently **280px wide** at desktop. Design can adjust this but should stay in the 260–340px range to avoid crowding the chat card.
+
+---
+
+### 11.2 HTML structure (current)
+
+```html
+<div class="key-brief-panel" id="key-brief-panel">
+
+  <!-- Header -->
+  <div>
+    <div class="key-brief-title">Your listing brief</div>
+    <div class="key-brief-sub">Fills in as you chat with Key.</div>
+  </div>
+
+  <!-- Photo uploader (always visible) -->
+  <div class="key-photo-drop">
+    <input type="file" id="key-photo-input" ... style="display:none" />
+    <button class="key-photo-btn">Add photos</button>
+    <div class="key-photo-hint">JPG, PNG, HEIC · up to 10 photos</div>
+  </div>
+  <div id="key-photo-list"></div>   <!-- populated by JS when photos added -->
+  <button class="key-photo-later" id="key-photo-later">I'll add photos later</button>
+
+  <!-- Live fields — JS re-renders #key-brief-fields innerHTML on every AI reply -->
+  <div class="key-brief-fields" id="key-brief-fields">
+    <!-- empty state placeholder (removed once first field fills) -->
+    <div class="key-brief-empty">Keep chatting — your brief will appear here.</div>
+  </div>
+
+  <!-- Trust line -->
+  <div class="key-brief-footer">You always make the final call on who you meet.</div>
+
+  <!-- Status → becomes submit button when all required fields + valid email are filled -->
+  <div class="key-brief-status" id="key-brief-status">Keep chatting to finish</div>
+  <!-- ↑ JS replaces this div with a <button class="key-brief-status ready"> when ready -->
+
+</div>
+```
+
+---
+
+### 11.3 JS-generated field rows (what renderKeyBrief() writes)
+
+`renderKeyBrief()` in `landlords.html` rewrites `#key-brief-fields` innerHTML on every API reply. The generated HTML for each filled field:
+
+```html
+<div class="key-brief-row">
+  <span class="key-brief-check">✓</span>
+  <div class="key-brief-row-text">
+    <span class="key-brief-label">CITY</span>        <!-- uppercase, 10px, muted green -->
+    <span class="key-brief-value">San Francisco</span>  <!-- 12.5px, dark -->
+  </div>
+</div>
+```
+
+Only **filled** fields render — empty fields are invisible. The order follows `KEY_BRIEF_FIELDS` (see §11.4).
+
+---
+
+### 11.4 The 17 fields (KEY_BRIEF_FIELDS)
+
+| Key | Label | Required |
+|-----|-------|----------|
+| `propertyType` | Property type | ✅ |
+| `isOwner` | Owner-occupied | ✅ |
+| `city` | City | ✅ |
+| `neighborhood` | Neighborhood | ✅ |
+| `zip` | Zip | — |
+| `roomDetails` | Room details | ✅ |
+| `furnished` | Furnished | ✅ |
+| `availability` | Available from | ✅ |
+| `rent` | Monthly rent | ✅ |
+| `utilities` | Utilities | — |
+| `minStay` | Min stay | ✅ |
+| `household` | Household | — |
+| `parking` | Parking | — |
+| `houseRules` | House rules | — |
+| `lifestyle` | Lifestyle fit | — |
+| `photosStatus` | Photos | — |
+| `email` | Email | ✅ |
+
+**Required fields** (9): propertyType, isOwner, city, neighborhood, roomDetails, furnished, availability, rent, minStay, email. All 9 must be non-empty AND email must pass regex before the submit button appears.
+
+---
+
+### 11.5 Status → submit button flip
+
+When all required fields are filled and email is valid, `renderKeyBrief()` replaces the status `<div>` with a `<button>`:
+
+```js
+const btn = document.createElement('button');
+btn.id = 'key-brief-submit';
+btn.className = 'key-brief-status ready';   // ← same class + 'ready' modifier
+btn.textContent = 'Submit my listing →';
+btn.addEventListener('click', submitKeyListing);
+statusEl.replaceWith(btn);
+```
+
+Design **must keep** both the `id="key-brief-status"` on the placeholder div and the `button.key-brief-status.ready` class pattern — the JS targets these directly.
+
+---
+
+### 11.6 Current CSS (to redesign)
+
+```css
+.key-brief-panel { background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 24px; box-shadow: 0 14px 36px rgba(30,58,47,0.06); display: flex; flex-direction: column; gap: 14px; }
+.key-brief-title { font-size: 13px; font-weight: 700; color: #1E3A2F; }
+.key-brief-sub { font-size: 12px; color: #8BAF8E; line-height: 1.5; margin-top: 2px; }
+.key-brief-fields { display: flex; flex-direction: column; gap: 8px; }
+.key-brief-empty { font-size: 12px; color: #B0C4B3; font-style: italic; }
+.key-brief-row { display: flex; align-items: flex-start; gap: 7px; }
+.key-brief-check { font-size: 11px; color: #2D5A3D; flex-shrink: 0; margin-top: 2px; }
+.key-brief-row-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.key-brief-label { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: #8BAF8E; }
+.key-brief-value { font-size: 12.5px; color: #1E3A2F; font-weight: 500; line-height: 1.4; word-break: break-word; }
+.key-brief-footer { font-size: 11px; color: #B0C4B3; line-height: 1.5; }
+.key-brief-status { font-size: 13px; color: #B0C4B3; text-align: center; padding: 10px; border-radius: 8px; background: #F4F7F4; border: none; width: 100%; }
+button.key-brief-status.ready { background: #2D5A3D; color: #F4F7F4; font-weight: 600; cursor: pointer; box-shadow: 0 4px 14px rgba(45,90,61,0.18); transition: transform 0.15s, box-shadow 0.15s; }
+button.key-brief-status.ready:hover { background: #3D7A52; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45,90,61,0.28); }
+.key-photo-drop { border: 1.5px dashed rgba(80,130,80,0.35); border-radius: 10px; padding: 20px 16px; text-align: center; }
+.key-photo-btn { padding: 9px 18px; border-radius: 7px; background: #2D5A3D; color: #F4F7F4; border: none; font-size: 13px; font-weight: 600; cursor: pointer; min-height: 44px; }
+.key-photo-hint { font-size: 11px; color: #B0C4B3; margin-top: 8px; }
+.key-photo-item { font-size: 12px; color: #4A6B52; padding: 4px 0; }
+.key-photo-later { background: none; border: none; color: #8BAF8E; font-size: 12px; cursor: pointer; padding: 0; text-decoration: underline; display: block; }
+```
+
+All rules live in `styles.css` lines 309–332.
+
+---
+
+### 11.7 What Design can and cannot change
+
+**Free to redesign:**
+- All visual CSS for `.key-brief-panel`, `.key-brief-title`, `.key-brief-sub`, `.key-brief-row`, `.key-brief-label`, `.key-brief-value`, `.key-brief-footer`, `.key-brief-empty`, `.key-brief-check`
+- The photo uploader area (`.key-photo-drop`, `.key-photo-btn`, `.key-photo-hint`, `.key-photo-later`) — HTML structure included, since no JS targets inner layout
+- Panel width in `.key-intake-wrap` grid
+- Adding animation to field rows (CSS transitions on `.key-brief-row` are safe)
+- Redesigning the empty-state appearance
+
+**Must not change:**
+- `id="key-brief-fields"` — `renderKeyBrief()` writes innerHTML here
+- `id="key-brief-status"` — JS replaces this element when ready
+- `id="key-brief-submit"` — JS checks for this id to avoid double-replacing
+- `id="key-brief-panel"` — referenced elsewhere
+- Class names `key-brief-row`, `key-brief-row-text`, `key-brief-check`, `key-brief-label`, `key-brief-value` — all generated by `renderKeyBrief()`; CSS can be redesigned but the class names must stay
+- `button.key-brief-status.ready` — the JS sets this class; CSS must target it
+- `id="key-photo-input"`, `id="key-photo-list"`, `id="key-photo-later"` — referenced by JS event listeners
+
+---
+
+### 11.8 Design questions to answer
+
+1. **Progress indicator** — should the panel show how many of the 9 required fields are filled (e.g. "5 of 9")? Currently no progress is shown.
+2. **Field animation** — should rows fade/slide in as they appear? Currently they swap instantly.
+3. **Photo uploader placement** — currently at the top of the panel (before fields). Should it move below fields so the listing details feel primary?
+4. **Empty-state richness** — currently just italic grey text. Could show greyed-out field skeletons to signal what's coming.
+5. **Panel scroll** — at 17 possible fields the panel can grow long. Should the `#key-brief-fields` area become scrollable at a max-height?
+6. **Mobile treatment** — panel stacks below chat on ≤768px. Currently no visual separator. Should there be a divider or a collapsed state?
