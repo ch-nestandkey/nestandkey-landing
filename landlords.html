@@ -310,13 +310,13 @@
       renderKeyBrief();
       setKeyChatEnabled(true);
       const box = document.getElementById('key-chat-messages');
-      if (!document.getElementById('key-chat-submit-btn')) {
-        const cta = document.createElement('div');
-        cta.className = 'chat-ready-cta';
-        cta.innerHTML = `<button id="key-chat-submit-btn" onclick="submitKeyListing()">Submit my listing →</button>`;
-        box.appendChild(cta);
-        box.scrollTop = box.scrollHeight;
-      }
+      const existing = box.querySelector('.chat-ready-cta');
+      if (existing) existing.remove();
+      const cta = document.createElement('div');
+      cta.className = 'chat-ready-cta';
+      cta.innerHTML = `<button id="key-chat-submit-btn" onclick="submitKeyListing()">Submit my listing →</button>`;
+      box.appendChild(cta);
+      box.scrollTop = box.scrollHeight;
     }
 
     async function submitKeyListing() {
