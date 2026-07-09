@@ -333,9 +333,6 @@ button.key-brief-status.ready:hover { background: #3D7A52; transform: translateY
 .key-photo-btn:hover { background: #3D7A52; }
 .key-photo-hint { font-size: 11px; color: #8BAF8E; margin-top: 14px; }
 .key-photo-item { font-size: 12px; color: #4A6B52; padding: 4px 0; }
-.key-photo-later { background: none; border: none; color: #5E7D64; font-size: 13px; cursor: pointer; padding: 0; text-decoration: underline; display: block; text-align: center; margin-top: 12px; }
-.key-photo-later:hover { color: #4A6B52; }
-.key-photo-later:disabled { opacity: 0.5; cursor: default; }
 
 /* Responsive */
 @media (max-width: 1024px) {
