@@ -139,6 +139,10 @@ p.sub { margin-top: 24px; font-size: 18px; color: #6B8F71; max-width: 480px; lin
 .chat-send:hover { background: #3D7A52; }
 .chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
 .chat-confirm { padding: 32px 24px; font-size: 15px; color: #2D5A3D; font-weight: 500; line-height: 1.7; text-align: center; }
+.chat-ready-cta { padding: 4px 0 8px; }
+.chat-ready-cta button { display: block; width: 100%; background: #2D5A3D; color: #F4F7F4; font-weight: 600; font-size: 15px; padding: 14px; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 14px rgba(45,90,61,0.18); transition: transform 0.15s, box-shadow 0.15s; }
+.chat-ready-cta button:hover { background: #3D7A52; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45,90,61,0.28); }
+.chat-ready-cta button:disabled { opacity: 0.6; transform: none; cursor: default; }
 .chat-start-btn { width: calc(100% - 32px); margin: 0 16px 16px; padding: 14px; background: #2D5A3D; color: #F4F7F4; border: none; font-size: 15px; font-weight: 600; cursor: pointer; border-radius: 10px; box-shadow: 0 4px 14px rgba(45,90,61,0.18); transition: transform 0.15s, box-shadow 0.15s; }
 .chat-start-btn:hover { background: #3D7A52; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45,90,61,0.28); }
 .chat-start-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }

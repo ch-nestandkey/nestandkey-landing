@@ -309,6 +309,14 @@
     function showKeyReady() {
       renderKeyBrief();
       setKeyChatEnabled(true);
+      const box = document.getElementById('key-chat-messages');
+      if (!document.getElementById('key-chat-submit-btn')) {
+        const cta = document.createElement('div');
+        cta.className = 'chat-ready-cta';
+        cta.innerHTML = `<button id="key-chat-submit-btn" onclick="submitKeyListing()">Submit my listing →</button>`;
+        box.appendChild(cta);
+        box.scrollTop = box.scrollHeight;
+      }
     }
 
     async function submitKeyListing() {
@@ -316,6 +324,8 @@
       keyListingSubmitted = true;
       const btn = document.getElementById('key-brief-submit') || document.getElementById('key-start-btn');
       if (btn) { btn.textContent = 'Submitting…'; btn.disabled = true; }
+      const chatBtn = document.getElementById('key-chat-submit-btn');
+      if (chatBtn) { chatBtn.textContent = 'Submitting…'; chatBtn.disabled = true; }
 
       try {
         await fetch(SCRIPT_URL, {
