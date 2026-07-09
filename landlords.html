@@ -379,6 +379,7 @@
     document.getElementById('key-chat-input').addEventListener('keydown', function(e) {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendKeyChat(); }
     });
+    initChatKeyboardFix('key-chat-input', 'key-chat-messages', 'key-chat-input-row');
   </script>
 
 </body>

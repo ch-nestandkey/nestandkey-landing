@@ -10,6 +10,42 @@ function closeMenu() {
   document.getElementById('hamburger').classList.remove('open');
 }
 
+function initChatKeyboardFix(inputId, messagesId, inputRowId) {
+  if (!window.visualViewport) return;
+
+  const input = document.getElementById(inputId);
+  const messages = document.getElementById(messagesId);
+  const inputRow = document.getElementById(inputRowId);
+  if (!input || !messages || !inputRow) return;
+
+  function adjust() {
+    const vv = window.visualViewport;
+    const visibleBottom = vv.offsetTop + vv.height;
+
+    // Scroll page so input row bottom sits flush with keyboard top
+    const rowBottom = inputRow.getBoundingClientRect().bottom + window.scrollY;
+    const gap = rowBottom - visibleBottom;
+    if (gap > 0) window.scrollBy({ top: gap, behavior: 'instant' });
+
+    // Shrink messages pane to fill exactly the space above the input row
+    const messagesTop = messages.getBoundingClientRect().top;
+    const inputRowH = inputRow.offsetHeight;
+    const available = visibleBottom - messagesTop - inputRowH;
+    if (available > 80) {
+      messages.style.maxHeight = Math.min(available, 500) + 'px';
+      messages.scrollTop = messages.scrollHeight;
+    }
+  }
+
+  window.visualViewport.addEventListener('resize', adjust);
+  window.visualViewport.addEventListener('scroll', adjust);
+
+  input.addEventListener('focus', () => setTimeout(adjust, 350));
+  input.addEventListener('blur', () => {
+    messages.style.maxHeight = '';
+  });
+}
+
 async function handleWaitlist(e, sheetName) {
   e.preventDefault();
   const form = e.target;

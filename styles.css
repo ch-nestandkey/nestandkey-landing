@@ -340,6 +340,7 @@ button.key-brief-status.ready:hover { background: #3D7A52; transform: translateY
   .chat-card { max-width: 100%; }
   .chat-messages { min-height: 320px; max-height: 420px; }
   .key-intake-wrap { grid-template-columns: 1fr; }
+  .chat-input-row textarea { font-size: 16px; }
 }
 @media (max-width: 680px) {
   .pricing-cards { flex-direction: column; }
