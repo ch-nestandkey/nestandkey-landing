@@ -18,7 +18,10 @@ function initChatKeyboardFix(inputId, messagesId, inputRowId) {
   const inputRow = document.getElementById(inputRowId);
   if (!input || !messages || !inputRow) return;
 
+  let keyboardOpen = false;
+
   function adjust() {
+    if (!keyboardOpen) return;
     const vv = window.visualViewport;
     const visibleBottom = vv.offsetTop + vv.height;
 
@@ -37,11 +40,16 @@ function initChatKeyboardFix(inputId, messagesId, inputRowId) {
     }
   }
 
+  // resize fires when the keyboard opens/closes — scroll intentionally omitted
+  // to avoid a scrollBy → scroll event → scrollBy feedback loop
   window.visualViewport.addEventListener('resize', adjust);
-  window.visualViewport.addEventListener('scroll', adjust);
 
-  input.addEventListener('focus', () => setTimeout(adjust, 350));
+  input.addEventListener('focus', () => {
+    keyboardOpen = true;
+    setTimeout(adjust, 350);
+  });
   input.addEventListener('blur', () => {
+    keyboardOpen = false;
     messages.style.maxHeight = '';
   });
 }
