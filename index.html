@@ -203,9 +203,13 @@
         typing.remove();
         if (!res.ok) throw new Error('api error');
         const data = await res.json();
-        chatState = data.state;
+        // Protective merge: never overwrite a filled field with an empty string from the API
+        for (const [k, v] of Object.entries(data.state)) {
+          if (v !== '' && v !== null && v !== undefined) chatState[k] = v;
+        }
         chatHistory.push({ role: 'assistant', content: data.reply });
         appendMsg('nest', data.reply);
+        updateNestSummary();
 
         if (data.ready) {
           showStartButton();
@@ -217,6 +221,23 @@
         appendNestError();
         setChatEnabled(true);
       }
+    }
+
+    function updateNestSummary() {
+      const summaryEl = document.getElementById('chat-summary-card');
+      if (!summaryEl) return;
+      const fieldLabels = [
+        ['roomType', 'Room type'], ['location', 'Location'], ['budget', 'Budget'],
+        ['stay', 'Move-in & stay'], ['commute', 'Commute'], ['roomNeeds', 'Room needs'],
+        ['workStatus', 'Work / study'], ['income', 'Income'], ['credit', 'Credit'],
+        ['lifestyle', 'Lifestyle'], ['email', 'Email'],
+      ];
+      const rowsHtml = fieldLabels
+        .filter(([key]) => (chatState[key] || '').trim() !== '')
+        .map(([key, label]) => `<div class="chat-summary-row"><span class="chat-summary-label">${label}</span><span class="chat-summary-value">${chatState[key]}</span></div>`)
+        .join('');
+      const rowsEl = summaryEl.querySelector('.chat-summary-rows');
+      if (rowsEl) rowsEl.innerHTML = rowsHtml;
     }
 
     function appendNestError() {
@@ -247,9 +268,12 @@
       })
         .then(res => { typing.remove(); if (!res.ok) throw new Error(); return res.json(); })
         .then(data => {
-          chatState = data.state;
+          for (const [k, v] of Object.entries(data.state)) {
+            if (v !== '' && v !== null && v !== undefined) chatState[k] = v;
+          }
           chatHistory.push({ role: 'assistant', content: data.reply });
           appendMsg('nest', data.reply);
+          updateNestSummary();
           if (data.ready) showStartButton(); else setChatEnabled(true);
         })
         .catch(() => { typing.remove(); appendNestError(); setChatEnabled(true); });

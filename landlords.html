@@ -227,7 +227,10 @@
         typing.remove();
         if (!res.ok) throw new Error();
         const data = await res.json();
-        keyState = data.state;
+        // Protective merge: never overwrite a filled field with an empty string from the API
+        for (const [k, v] of Object.entries(data.state)) {
+          if (v !== '' && v !== null && v !== undefined) keyState[k] = v;
+        }
         keyHistory.push({ role: 'assistant', content: data.reply });
         appendKeyMsg('assistant', data.reply);
         renderKeyBrief();
@@ -267,7 +270,9 @@
       })
         .then(res => { typing.remove(); if (!res.ok) throw new Error(); return res.json(); })
         .then(data => {
-          keyState = data.state;
+          for (const [k, v] of Object.entries(data.state)) {
+            if (v !== '' && v !== null && v !== undefined) keyState[k] = v;
+          }
           keyHistory.push({ role: 'assistant', content: data.reply });
           appendKeyMsg('assistant', data.reply);
           renderKeyBrief();
