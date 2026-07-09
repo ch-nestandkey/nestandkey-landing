@@ -271,10 +271,11 @@ This MUST ask room type first, matching the persona's own instruction to collect
 
 **States:**
 - **Active** — input enabled, messages scrollable
-- **Waiting** — input disabled while Nest is responding (no typing indicator yet — open design item)
-- **Summary** — a distinct **summary card** ("Ready to search — here's what I have") lists every captured field as label/value rows (skipping any empty/optional field), followed by the "Start my search →" button and a small hint ("Not quite right? Keep typing below to adjust.") — all inserted above the input row; input stays enabled for corrections.
-- **Confirmed** — entire card replaced with confirmation message: *"✓ Your search is set — your free first scan is underway, results will land in {email} shortly. We'll take it from here by email."*
-- **Error** — "Something went wrong — please try again." appears as a Nest message; input re-enables
+- **Waiting** — input disabled while Nest is responding. A `.msg.nest.typing-indicator` bubble with animated three-dot indicator (`.typing-dots span`, `@keyframes typingBounce`) appears immediately after the user sends and is removed when the reply arrives.
+- **Summary** — a distinct **summary card** ("Ready to search — here's what I have") lists every captured field as label/value rows (skipping any empty/optional field), followed by the "Submit my search →" button and a small hint ("Not quite right? Keep typing below to adjust.") — all inserted above the input row; input stays enabled for corrections.
+- **Confirmed** — entire card replaced with: *"✓ You're in — Nest is scanning the Bay Area now. First results will land in {email} shortly."* AI-speed framing — no team mention. See §4.9 for audience tone rules.
+- **Error** — a warm-tinted bubble (`.msg.error`, `background: #FAF3E0`) appears as a Nest message with a retry link (`.msg-retry-btn`). Clicking retry re-sends the last message without re-enabling input until the retry completes. Input re-enables on success.
+- **Empty send** — textarea plays a shake animation (`@keyframes chatInputShake`, `.chat-input-row textarea.shake`) if user hits Send with empty input. No message is sent.
 
 ### 3.3 The criteria schema
 
@@ -471,12 +472,7 @@ Nest's closing message after confirmation:
 ✓   "Perfect — submit your search brief using the button below and we'll take it from there."
 ```
 
-Then the "Submit my search →" button submits and the card transitions to the confirmation state:
-
-```
-✓ Submitted — our team will review your search and reach out to [email] shortly.
-Nest & Key will take it from here.
-```
+Then the "Submit my search →" button submits and the card transitions to the confirmation state.
 
 **Human review layer:** All submissions pass through the Nest & Key team before matching or pre-screening begins. How this is communicated differs by audience:
 
@@ -545,6 +541,28 @@ User: "Actually I want an entire place, not a shared room"
 Use this three-tier structure (tag → h2.section-title → p.section-subtitle) for **every** below-fold content block on **any** page — it's the shared grammar all pages build on. Do not invent a parallel heading/sub/container with different numbers for a new feature; extend this pattern and add only what's genuinely new (e.g. price figures, badges).
 
 **Exception — Social proof accent block:** A `.content-section.centered` may intentionally omit the three-tier header and contain only a `.trust-box` instead (see "Trust box" component below). This is a distinct section *type*, not an error — it exists to add visual breathing room and drop in a reassuring stat without introducing a new heading hierarchy. Use it sparingly (once per page, between denser sections) and only when the copy is a short social-proof assertion, not a section that needs a label or subtitle to be understood. Do not convert it to the three-tier pattern.
+
+### In-chat ready CTA (Key / Landlords page)
+
+When Key declares the listing brief complete (`data.ready = true`), a submit button is injected directly into the chat messages area — so users don't need to scroll to the debrief panel to act.
+
+```html
+<div class="chat-ready-cta">
+  <button id="key-chat-submit-btn" onclick="submitKeyListing()">Submit my listing →</button>
+</div>
+```
+
+**Behavior:**
+- Appended at the bottom of `#key-chat-messages` each time `showKeyReady()` fires
+- If a user makes corrections and the AI re-confirms, the old button is removed and a fresh one is re-appended below the latest AI message — it always stays at the bottom
+- On submit: both the in-chat button (`#key-chat-submit-btn`) and the debrief panel button (`#key-brief-submit`) are disabled simultaneously and show "Submitting…"
+- Disabled state: `opacity: 0.6`, no transform, `cursor: default`
+
+**Style:** `.chat-ready-cta button` — same green as the debrief panel (`#2D5A3D` bg, `#F4F7F4` text, `600` weight, `border-radius: 10px`, `box-shadow: 0 4px 14px rgba(45,90,61,0.18)`). Full width of the chat messages container.
+
+**This pattern applies to Key (Landlords) only.** The Nest (Tenants) chat uses a different summary-card approach — see §3.2.
+
+---
 
 ### Buttons
 
@@ -623,12 +641,14 @@ All photos live in `/listing-sample-socal/photos/`.
 
 | Item | Current state | What's needed |
 |------|--------------|---------------|
-| Chat loading/typing state | Input disabled, no visual feedback | Design a typing indicator for while Nest is responding |
-| Chat error state | Plain text "Something went wrong" | Visual design for error within the chat card |
-| Mobile keyboard behavior | Auto-scroll on new message (in code) | Verify on real device — keyboard may push messages out of view |
-| Phase 2: live brief panel | Not built | Side panel showing criteria filling in real-time; 2-col desktop, stacks below chat on ≤768px. No backend change needed — reads existing chatState |
-| Log in / Sign up | Styled, non-functional | No auth system yet |
-| "Apply now" on listing | Links to `#tour` same page | Placeholder for future application flow |
+| ~~Chat typing indicator~~ | ~~Input disabled, no visual feedback~~ | **Done Jul 2026** — animated three-dot bubble in `.msg.nest.typing-indicator` |
+| ~~Chat error state~~ | ~~Plain text "Something went wrong"~~ | **Done Jul 2026** — warm-tinted `.msg.error` bubble with `.msg-retry-btn` |
+| ~~Empty-send state~~ | ~~Silent no-op~~ | **Done Jul 2026** — shake animation on textarea |
+| ~~Mobile keyboard scroll~~ | ~~May clip messages~~ | **Done Jul 2026** — `initChatKeyboardFix()` in `shared.js`; messages pane shrinks to visible height when keyboard opens |
+| Phase 2: live brief panel (Tenants) | Not built — Tenants has a static summary card only | Side panel showing criteria filling in real-time as Nest captures each field; 2-col desktop, stacks below chat on ≤768px. No backend change needed — reads existing `chatState`. Key (Landlords) already has this — use it as reference. |
+| Key chat in-chat submit CTA | **Done Jul 2026** — button re-injects at bottom of chat each time AI declares ready | Already ships; open design question: should Nest (Tenants) get the same in-chat CTA, or keep the current above-input summary card approach? |
+| Log in / Sign up | Styled, non-functional | Silent no-op on click — decide: hide, tooltip, or waitlist redirect |
+| "Apply now" on listing | Links to `#tour` same page | Label misleads — change to "Schedule a tour" to match actual destination |
 | About Us page | Empty placeholder | Founder story TBD |
 | Footer | Minimal | Will expand when more pages exist |
 
@@ -655,31 +675,25 @@ Ordered by user impact. Priority 1 items are live gaps — users hit them today.
 
 ### Priority 1 — Chat states that don't exist yet
 
-**1a. Typing indicator (while Nest is responding)**
+**1a. Typing indicator — ✅ Done Jul 2026**
 
-Currently the input freezes with no visual feedback. On a slow connection it looks broken.
+Animated three-dot bubble (`.msg.nest.typing-indicator`, `@keyframes typingBounce`) appears immediately after send, removed on reply. Ships on both Nest and Key chats.
 
-What's needed: a thinking state rendered as a Nest message bubble with an animated three-dot indicator inside. Specs: same `.msg.nest` bubble shape, `#F4F7F4` bg, appears immediately after the user sends. Removed when the reply arrives.
+**1b. Error state — ✅ Done Jul 2026**
 
-**1b. Error state**
+Warm-tinted bubble (`.msg.error`, `background: #FAF3E0`) with `.msg-retry-btn` retry link. Ships on both chats. Retry re-sends last message without clearing history.
 
-Currently renders as a plain Nest message: "Something went wrong — please try again." It reads like part of the conversation rather than a system error.
+**1c. Empty send state — ✅ Done Jul 2026**
 
-What's needed: a distinct visual treatment inside the chat card — a subtly different bubble color (stay in the green palette or use a warm neutral, not red) with a clear retry affordance. Must not break the card layout.
-
-**1c. Empty send state**
-
-If the user hits Send with an empty textarea, nothing happens silently. Needs a visual shake on the input or a brief disabled flash on the send button.
+Textarea shake animation (`@keyframes chatInputShake`) fires on empty send attempt. Ships on both chats.
 
 ---
 
 ### Priority 2 — Chat card usability
 
-**2a. Mobile keyboard and scroll**
+**2a. Mobile keyboard and scroll — ✅ Done Jul 2026**
 
-On mobile, the keyboard pushes the viewport up. New Nest messages auto-scroll in code (`box.scrollTop = box.scrollHeight`) but this may conflict with the keyboard resize event. The `max-height: 380px` messages area may clip.
-
-What's needed: test on a real iOS and Android device. Confirm that after the keyboard opens and the user sends a message, the new Nest reply is visible without manual scrolling. If not, the scroll target needs to account for keyboard height offset.
+`initChatKeyboardFix(inputId, messagesId, inputRowId)` in `shared.js` uses `visualViewport` resize events to shrink the messages pane height when the iOS keyboard opens. No `window.scrollBy()` — scroll manipulation caused feedback loops on iOS. Messages pane shrinks to available viewport height; `box.scrollTop = box.scrollHeight` scrolls new messages into view. Wired on both Nest and Key chats.
 
 **2b. Chat card height as conversation grows — Addressed Jul 3 2026**
 
@@ -754,21 +768,21 @@ The `navMap` was updated when Pricing was removed. Verify no orphaned active sta
 
 ### Summary
 
-| # | Item | Impact | Effort |
+| # | Item | Impact | Status |
 |---|------|--------|--------|
-| 1a | Typing indicator | High — live gap | Low |
-| 1b | Error state design | High — live gap | Low |
-| 1c | Empty send state | Low | Very low |
-| 2a | Mobile keyboard scroll | High on mobile | Medium |
-| 2b | Chat card height desktop | Medium | Low |
-| 2c | Start button treatment + label | Medium | Low |
-| 3a | Landlords hero height | Medium | Low |
-| 3b | About Us content | Low | Medium |
-| 3c | Footer privacy note | Medium | Very low |
-| 4 | Phase 2 live brief panel | High | High |
-| 5a | Log in / Sign up state | Medium | Low |
-| 5b | "Apply now" label on listing | Low | Very low |
-| 5c | Nav active state verification | Low | Very low |
+| 1a | Typing indicator | High | ✅ Done Jul 2026 |
+| 1b | Error state design | High | ✅ Done Jul 2026 |
+| 1c | Empty send state | Low | ✅ Done Jul 2026 |
+| 2a | Mobile keyboard scroll | High on mobile | ✅ Done Jul 2026 |
+| 2b | Chat card height desktop | Medium | ✅ Done Jul 2026 |
+| 2c | Submit button label + treatment | Medium | ✅ Done Jul 2026 — "Submit my search/listing →", border-radius 10px |
+| 3a | Landlords hero height + scroll cue | Medium | Open |
+| 3b | About Us content | Low | Open |
+| 3c | Footer privacy note | Medium | Open |
+| 4 | Phase 2 live brief panel (Tenants) | High | Open — Key (Landlords) panel is live reference |
+| 5a | Log in / Sign up silent no-op | Medium | Open |
+| 5b | "Apply now" label on listing | Low | Open |
+| 5c | Nav active state verification | Low | Open |
 
 ---
 
