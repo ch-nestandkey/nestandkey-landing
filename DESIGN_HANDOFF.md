@@ -528,7 +528,9 @@ User: "Actually I want an entire place, not a shared room"
 
 **Updated Jul 3 2026** — vertical padding and title/subtitle margins increased (was `64px 24px` / `12px` / `40px`) so below-fold sections feel as spacious as the hero rather than dense and packed. Card-level spacing increased to match: step cards `36px 28px` padding, pricing cards `28px` gap / `32px 26px` padding, calculator card `40px` padding, trust box `48px 40px` padding, why-list `22px` gap. Content and structure unchanged — spacing only.
 
-Use this for **every** below-fold content block on **any** page — it's the shared grammar Landlords and Agents both build on. Do not invent a parallel heading/sub/container with different numbers for a new feature; extend this pattern and add only what's genuinely new (e.g. price figures, badges).
+Use this three-tier structure (tag → h2.section-title → p.section-subtitle) for **every** below-fold content block on **any** page — it's the shared grammar all pages build on. Do not invent a parallel heading/sub/container with different numbers for a new feature; extend this pattern and add only what's genuinely new (e.g. price figures, badges).
+
+**Exception — Social proof accent block:** A `.content-section.centered` may intentionally omit the three-tier header and contain only a `.trust-box` instead (see "Trust box" component below). This is a distinct section *type*, not an error — it exists to add visual breathing room and drop in a reassuring stat without introducing a new heading hierarchy. Use it sparingly (once per page, between denser sections) and only when the copy is a short social-proof assertion, not a section that needs a label or subtitle to be understood. Do not convert it to the three-tier pattern.
 
 ### Buttons
 
@@ -554,6 +556,17 @@ Step number: `32px` circle, `#2D5A3D` bg, white text.
 ### Trust box
 
 `#EBF0EB` bg, `16px` radius, centered. Stat in `22px 700 #1E3A2F`, note in `15px #4A6B52`.
+
+**Usage:** Placed inside a `.content-section.centered` with no tag/title/subtitle — the trust box *is* the entire section content. Its purpose is to break up denser sections with a quiet, full-width social-proof statement. It intentionally has no heading tier; do not add one. Use once per page at most, between two heavier content blocks. Current instance: Landlords page, between "How listing with Key works" and "Ready to list your room?"
+
+```html
+<div class="content-section centered">
+  <div class="trust-box">
+    <div class="trust-stat">Already 120+ pre-screened tenants waiting</div>
+    <div class="trust-note">You always make the final call. We just narrow the list.</div>
+  </div>
+</div>
+```
 
 ### Calculator card (Agents)
 
