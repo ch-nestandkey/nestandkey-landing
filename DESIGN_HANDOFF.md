@@ -478,7 +478,13 @@ Then the "Submit my search →" button submits and the card transitions to the c
 Nest & Key will take it from here.
 ```
 
-**IMPORTANT — human review layer:** All submissions (tenants, landlords, home buyers) are reviewed by the Nest & Key team before any matching or pre-screening begins. The AI collects the brief; humans approve and initiate the next step. Button and confirmation copy must never imply that the AI starts work automatically. Use "Submit" (not "Start"), and confirmation copy must say the team will reach out — never "your scan is underway" or "pre-screening renters now."
+**Human review layer:** All submissions pass through the Nest & Key team before matching or pre-screening begins. How this is communicated differs by audience:
+
+- **Tenants** — speed and accuracy are the primary value proposition. Confirmation copy must feel immediate and AI-driven. Never mention the team or a review step. Write as if the scan starts the moment they hit Submit. Example: *"✓ You're in — Nest is scanning the Bay Area now. First results will land in [email] shortly."*
+
+- **Landlords and home buyers** — credibility and trust are the primary value proposition. Mentioning the team's involvement is appropriate and reassuring. Confirmation copy should reference human review naturally. Example: *"✓ Submitted — our team will review your listing and reach out to [email] shortly."*
+
+Button copy rule: use "Submit" (not "Start pre-screening" or "Start my scan") so it doesn't imply automated action — but confirmation copy handles the framing per audience above.
 
 ### 4.10 Correction handling
 
