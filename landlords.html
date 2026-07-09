@@ -102,22 +102,29 @@
         </div>
 
         <div class="key-brief-panel" id="key-brief-panel">
-          <div>
+          <div class="key-brief-head">
             <div class="key-brief-title">Your listing brief</div>
             <div class="key-brief-sub">Fills in as you chat with Key.</div>
           </div>
-          <div class="key-photo-drop">
-            <input type="file" id="key-photo-input" accept="image/jpeg,image/png,image/webp,image/heic" multiple style="display:none" />
-            <button class="key-photo-btn" onclick="document.getElementById('key-photo-input').click()" type="button">Add photos</button>
-            <div class="key-photo-hint">JPG, PNG, HEIC · up to 10 photos</div>
-          </div>
-          <div id="key-photo-list"></div>
-          <button class="key-photo-later" id="key-photo-later" type="button" onclick="keySetPhotoPending()">I'll add photos later</button>
+
           <div class="key-brief-fields" id="key-brief-fields">
-            <div class="key-brief-empty">Keep chatting — your brief will appear here.</div>
+            <div class="key-brief-empty">Keep chatting — your brief will appear&nbsp;here.</div>
           </div>
-          <div class="key-brief-footer">You always make the final call on who you meet.</div>
+
+          <div class="key-brief-divider"></div>
+
+          <div class="key-photo-block">
+            <div class="key-photo-drop">
+              <input type="file" id="key-photo-input" accept="image/jpeg,image/png,image/webp,image/heic" multiple style="display:none" />
+              <button class="key-photo-btn" onclick="document.getElementById('key-photo-input').click()" type="button">Add photos</button>
+              <button class="key-photo-later" id="key-photo-later" type="button" onclick="keySetPhotoPending()">I'll add photos later</button>
+              <div class="key-photo-hint">JPG, PNG, HEIC · up to 10 photos</div>
+            </div>
+            <div id="key-photo-list"></div>
+          </div>
+
           <div class="key-brief-status" id="key-brief-status">Keep chatting to finish</div>
+          <div class="key-brief-trust">You always make the final call on who you&nbsp;meet.</div>
         </div>
 
       </div>
