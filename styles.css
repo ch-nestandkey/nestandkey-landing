@@ -152,7 +152,7 @@ p.sub { margin-top: 24px; font-size: 18px; color: #6B8F71; max-width: 480px; lin
 .chat-summary-row { display: flex; gap: 10px; font-size: 12.5px; line-height: 1.4; }
 .chat-summary-label { flex-shrink: 0; width: 110px; color: #8BAF8E; font-weight: 600; }
 .chat-summary-value { color: #1E3A2F; font-weight: 500; }
-.chat-summary-hint { font-size: 11px; color: #8BAF8E; margin: 8px 16px 0; text-align: center; }
+.chat-summary-hint { font-size: 11px; color: #8BAF8E; margin: 8px 16px 14px; text-align: center; }
 
 /* Chat UX — typing indicator */
 .typing-dots { display: flex; gap: 5px; padding: 12px 16px; background: #F4F7F4; border-radius: 0 12px 12px 12px; width: fit-content; }

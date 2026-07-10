@@ -281,11 +281,6 @@
     }
 
     function showStartButton() {
-      if (document.getElementById('chat-start-btn')) return;
-
-      const card = document.getElementById('chat-card');
-      const inputRow = document.getElementById('chat-input-row');
-
       const fieldLabels = [
         ['roomType', 'Room type'], ['location', 'Location'], ['budget', 'Budget'],
         ['stay', 'Move-in & stay'], ['commute', 'Commute'], ['roomNeeds', 'Room needs'],
@@ -297,6 +292,16 @@
         .map(([key, label]) => `<div class="chat-summary-row"><span class="chat-summary-label">${label}</span><span class="chat-summary-value">${chatState[key]}</span></div>`)
         .join('');
 
+      const existingSummary = document.getElementById('chat-summary-card');
+      if (existingSummary) {
+        existingSummary.querySelector('.chat-summary-rows').innerHTML = rowsHtml;
+        setChatEnabled(true);
+        return;
+      }
+
+      const card = document.getElementById('chat-card');
+      const inputRow = document.getElementById('chat-input-row');
+
       const summary = document.createElement('div');
       summary.className = 'chat-summary-card';
       summary.id = 'chat-summary-card';
@@ -305,7 +310,7 @@
       const hint = document.createElement('p');
       hint.className = 'chat-summary-hint';
       hint.id = 'chat-summary-hint';
-      hint.textContent = "Not quite right? Keep typing below to adjust.";
+      hint.textContent = "Ready? Hit submit to lock in your search — or keep typing to adjust.";
 
       const btn = document.createElement('button');
       btn.className = 'chat-start-btn';
