@@ -118,6 +118,7 @@
               <input type="file" id="key-photo-input" accept="image/jpeg,image/png,image/webp,image/heic" multiple style="display:none" />
               <button class="key-photo-btn" onclick="document.getElementById('key-photo-input').click()" type="button">Add photos</button>
               <div class="key-photo-hint">JPG, PNG, HEIC · up to 10 photos</div>
+              <div class="key-photo-grid" id="key-photo-grid"></div>
             </div>
             <div id="key-photo-list"></div>
           </div>
@@ -379,20 +380,23 @@
     document.getElementById('key-photo-input').addEventListener('change', async function(e) {
       const files = Array.from(e.target.files).slice(0, 10 - keyPhotoUrls.length);
       const list = document.getElementById('key-photo-list');
+      const grid = document.getElementById('key-photo-grid');
       const photoBtn = document.querySelector('.key-photo-btn');
       const drop = document.querySelector('.key-photo-drop');
       let addedCount = 0;
 
       for (const file of files) {
+        const localUrl = URL.createObjectURL(file);
+        const thumb = document.createElement('img');
+        thumb.className = 'key-photo-thumb';
+        thumb.src = localUrl;
+        grid.appendChild(thumb);
+
         const url = await uploadKeyPhoto(file);
         if (url) {
           keyPhotoUrls.push(url);
           keyState.photosStatus = 'provided';
           addedCount++;
-          const item = document.createElement('div');
-          item.className = 'key-photo-item';
-          item.textContent = '✓ ' + file.name;
-          list.appendChild(item);
           renderKeyBrief();
         }
       }
