@@ -334,7 +334,9 @@ button.key-brief-status.ready:hover { background: #3D7A52; transform: translateY
 .key-photo-hint { font-size: 11px; color: #8BAF8E; margin-top: 14px; }
 .key-photo-item { font-size: 12px; color: #4A6B52; padding: 4px 0; }
 .key-photo-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-.key-photo-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(80,130,80,0.2); }
+.key-photo-wrap { position: relative; width: 60px; height: 60px; }
+.key-photo-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(80,130,80,0.2); display: block; }
+.key-photo-remove { position: absolute; top: -5px; right: -5px; width: 16px; height: 16px; border-radius: 50%; background: #1E3A2F; color: #fff; border: none; font-size: 11px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
 
 /* Responsive */
 @media (max-width: 1024px) {

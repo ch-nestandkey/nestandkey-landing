@@ -387,13 +387,39 @@
 
       for (const file of files) {
         const localUrl = URL.createObjectURL(file);
+
+        const wrap = document.createElement('div');
+        wrap.className = 'key-photo-wrap';
+
         const thumb = document.createElement('img');
         thumb.className = 'key-photo-thumb';
         thumb.src = localUrl;
-        grid.appendChild(thumb);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'key-photo-remove';
+        removeBtn.type = 'button';
+        removeBtn.textContent = '×';
+        removeBtn.addEventListener('click', () => {
+          const cloudUrl = wrap.dataset.url;
+          if (cloudUrl) keyPhotoUrls = keyPhotoUrls.filter(u => u !== cloudUrl);
+          wrap.remove();
+          if (keyPhotoUrls.length === 0) {
+            keyState.photosStatus = '';
+            photoBtn.textContent = 'Add photos';
+            drop.style.borderColor = '';
+          } else {
+            photoBtn.textContent = `${keyPhotoUrls.length} photo${keyPhotoUrls.length > 1 ? 's' : ''} added ✓`;
+          }
+          renderKeyBrief();
+        });
+
+        wrap.appendChild(thumb);
+        wrap.appendChild(removeBtn);
+        grid.appendChild(wrap);
 
         const url = await uploadKeyPhoto(file);
         if (url) {
+          wrap.dataset.url = url;
           keyPhotoUrls.push(url);
           keyState.photosStatus = 'provided';
           addedCount++;
