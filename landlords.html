@@ -117,7 +117,7 @@
             <div class="key-photo-drop">
               <input type="file" id="key-photo-input" accept="image/jpeg,image/png,image/webp,image/heic" multiple style="display:none" />
               <button class="key-photo-btn" onclick="document.getElementById('key-photo-input').click()" type="button">Add photos</button>
-              <div class="key-photo-hint">JPG, PNG, HEIC · up to 10 photos</div>
+              <div class="key-photo-hint" id="key-photo-hint">JPG, PNG, HEIC · up to 10 photos</div>
               <div class="key-photo-grid" id="key-photo-grid"></div>
             </div>
             <div id="key-photo-list"></div>
@@ -405,10 +405,10 @@
           wrap.remove();
           if (keyPhotoUrls.length === 0) {
             keyState.photosStatus = '';
-            photoBtn.textContent = 'Add photos';
+            document.getElementById('key-photo-hint').textContent = 'JPG, PNG, HEIC · up to 10 photos';
             drop.style.borderColor = '';
           } else {
-            photoBtn.textContent = `${keyPhotoUrls.length} photo${keyPhotoUrls.length > 1 ? 's' : ''} added ✓`;
+            document.getElementById('key-photo-hint').textContent = `${keyPhotoUrls.length} of 10 added ✓`;
           }
           renderKeyBrief();
         });
@@ -428,7 +428,7 @@
       }
 
       if (addedCount > 0) {
-        photoBtn.textContent = `${keyPhotoUrls.length} photo${keyPhotoUrls.length > 1 ? 's' : ''} added ✓`;
+        document.getElementById('key-photo-hint').textContent = `${keyPhotoUrls.length} of 10 added ✓`;
         drop.style.borderColor = 'rgba(45,90,61,0.5)';
         appendKeyMsg('assistant', `Got it — I've noted ${keyPhotoUrls.length} photo${keyPhotoUrls.length > 1 ? 's' : ''} for this listing. You can add more or keep chatting.`);
       }
