@@ -379,23 +379,28 @@
     document.getElementById('key-photo-input').addEventListener('change', async function(e) {
       const files = Array.from(e.target.files).slice(0, 10 - keyPhotoUrls.length);
       const list = document.getElementById('key-photo-list');
+      const photoBtn = document.querySelector('.key-photo-btn');
+      const drop = document.querySelector('.key-photo-drop');
+      let addedCount = 0;
+
       for (const file of files) {
         const url = await uploadKeyPhoto(file);
         if (url) {
           keyPhotoUrls.push(url);
           keyState.photosStatus = 'provided';
+          addedCount++;
           const item = document.createElement('div');
           item.className = 'key-photo-item';
           item.textContent = '✓ ' + file.name;
           list.appendChild(item);
           renderKeyBrief();
-        } else if (!CLOUDINARY_CLOUD_NAME) {
-          // Config not yet set — acknowledge the file locally so UX isn't broken
-          const item = document.createElement('div');
-          item.className = 'key-photo-item';
-          item.textContent = '· ' + file.name + ' (upload pending config)';
-          list.appendChild(item);
         }
+      }
+
+      if (addedCount > 0) {
+        photoBtn.textContent = `${keyPhotoUrls.length} photo${keyPhotoUrls.length > 1 ? 's' : ''} added ✓`;
+        drop.style.borderColor = 'rgba(45,90,61,0.5)';
+        appendKeyMsg('assistant', `Got it — I've noted ${keyPhotoUrls.length} photo${keyPhotoUrls.length > 1 ? 's' : ''} for this listing. You can add more or keep chatting.`);
       }
     });
 

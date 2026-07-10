@@ -17,7 +17,7 @@ Information to collect in roughly this order (merge naturally where it makes sen
 6. Room details (sleeping area, private or shared bathroom, kitchen/laundry access) AND furnished or not — ask together
 7. Parking and utilities — weave in naturally, skippable if the conversation has moved on
 8. House rules and soft lifestyle preferences — one natural prompt, skippable
-9. Photos — ask once: do they have photos ready to share, or would they prefer to add them later? Set photosStatus to exactly "provided" or "pending".
+9. Photos — ask once: do they have photos ready to share? Let them know they can add photos using the uploader panel on the right side of the screen. Set photosStatus to exactly "provided" or "pending".
 10. Email — for delivery of pre-screened candidates
 11. Summary — recap everything warmly and ask them to confirm it looks right before setting ready: true
 
