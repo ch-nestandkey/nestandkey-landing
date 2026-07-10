@@ -9,6 +9,10 @@ Code is the only writer of `DESIGN_HANDOFF.md`. When implementing a design chang
 ## Design briefs
 When the user asks for a "brief for Design on [component]", produce a single copy-paste block containing: (1) the component's current CSS and HTML as on dev, with file:line refs, (2) the relevant DESIGN_HANDOFF.md sections, (3) the current Vercel preview URL, (4) recent changes that touched the component. Keep it scoped to the named component — it is task context, not a status report.
 
+Claude Design has no memory across chats, so every brief must open with this working-agreement header before the task context:
+
+> **Working agreement:** The repo's `DESIGN_HANDOFF.md` (maintained by Code) is the durable design record — you propose, Code records. Treat this brief as ground truth over anything from prior sessions; your past handoffs are transient work orders, not current state. When you finalize a decision, state explicitly which rules/values Code should record in `DESIGN_HANDOFF.md`.
+
 ## Sync rule
 Any PR from `dev → main` must include `DESIGN_HANDOFF.md` if it was updated on dev. Never merge a PR that leaves the design doc behind.
 
