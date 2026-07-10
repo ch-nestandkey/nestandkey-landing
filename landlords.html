@@ -360,6 +360,7 @@
       box.scrollTop = box.scrollHeight;
       const inputRow = document.getElementById('key-chat-input-row');
       if (inputRow) inputRow.style.display = 'none';
+      if (btn) { btn.textContent = '✓ Submitted'; btn.style.background = '#4A6B52'; }
     }
 
     async function uploadKeyPhoto(file) {
