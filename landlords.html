@@ -350,8 +350,16 @@
         // no-cors — response unreadable; proceed to confirmation
       }
 
-      document.getElementById('key-chat-card').innerHTML =
-        `<div class="chat-confirm">✓ Submitted — our team will review your listing and reach out to <strong>${keyState.email}</strong> shortly. You always make the final call on who you meet.</div>`;
+      const box = document.getElementById('key-chat-messages');
+      const cta = box.querySelector('.chat-ready-cta');
+      if (cta) cta.remove();
+      const confirm = document.createElement('div');
+      confirm.className = 'chat-confirm';
+      confirm.innerHTML = `✓ Submitted — our team will review your listing and reach out to <strong>${keyState.email}</strong> shortly. You always make the final call on who you meet.`;
+      box.appendChild(confirm);
+      box.scrollTop = box.scrollHeight;
+      const inputRow = document.getElementById('key-chat-input-row');
+      if (inputRow) inputRow.style.display = 'none';
     }
 
     async function uploadKeyPhoto(file) {

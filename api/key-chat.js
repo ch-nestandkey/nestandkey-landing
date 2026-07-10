@@ -25,7 +25,7 @@ Do NOT collect ID/identification in this chat. ID verification happens later via
 
 Only set ready: true in the [[STATE]] block after you've recapped everything back to the landlord in a warm, natural way AND they've explicitly confirmed it looks correct (e.g. "yes", "looks right", "that's correct").
 
-CRITICAL — After EVERY single reply without exception — including short acknowledgements, corrections, follow-ups, and confirmations — you MUST append a [[STATE]] block as the very last thing. Never skip it. If the landlord corrects a previously given detail, update that field immediately in the [[STATE]] block to the new value.
+CRITICAL — After EVERY single reply without exception — including short acknowledgements, corrections, follow-ups, and confirmations — you MUST append a [[STATE]] block as the very last thing. Never skip it. When the landlord corrects or updates any previously given detail, you MUST immediately reflect the new value in the [[STATE]] block — never leave the old value or an empty string for a corrected field. The [[STATE]] block must always reflect the most current known values for every field.
 [[STATE]]
 {"city":"","neighborhood":"","zip":"","propertyType":"","roomDetails":"","furnished":"","availability":"","rent":"","utilities":"","minStay":"","isOwner":"","household":"","parking":"","photosStatus":"","email":"","houseRules":"","lifestyle":"","ready":false}
 
@@ -92,7 +92,10 @@ export default async function handler(req, res) {
     if (stateMatch) {
       try {
         const extracted = JSON.parse(stateMatch[1]);
-        newState = { ...state, ...extracted };
+        // Merge: non-empty extracted values win; keep existing for empty/missing
+        for (const [k, v] of Object.entries(extracted)) {
+          if (v !== '' && v !== null && v !== undefined) newState[k] = v;
+        }
       } catch (_) {
         // malformed JSON — keep existing state
       }
