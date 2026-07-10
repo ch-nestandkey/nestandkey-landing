@@ -69,6 +69,29 @@
     </div>
 
     <div class="content-section centered">
+      <span class="tag">How Nest Search works</span>
+      <h2 class="section-title">Three steps to your next place.</h2>
+      <p class="section-subtitle">No listings to sift, no forms to fill. Tell Nest what fits, and let the scanning happen in the background.</p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">1</span>
+          <h3>Tell Nest what fits</h3>
+          <p>A quick chat covers your budget, areas, timing and must-haves. No forms.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">2</span>
+          <h3>Nest scans the market</h3>
+          <p>Your free first scan emails a real sample of what Nest finds. Pick a plan and fresh homes you'd qualify for keep landing in your inbox.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">3</span>
+          <h3>Meet your match</h3>
+          <p>When a home clicks, we introduce you to the landlord directly.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section centered">
       <span class="tag">Simple, one-time pricing</span>
       <h2 class="section-title">Start free. Pay only once it's working.</h2>
       <p class="section-subtitle">Every search begins with a free scan and one real result email. Upgrade for 30 days of continued scans and results — one-time payment, no subscription, no auto-renewal.</p>
@@ -136,6 +159,7 @@
       <a href="mailto:hello@nestandkey.ai">Contact</a>
     </div>
     <div>© 2026 NestAndKey. All rights reserved.</div>
+    <div style="margin-top:10px;">Your data is used only to find homes you'd qualify for — never sold or shared.</div>
   </footer>
 
   <script src="/shared.js"></script>
@@ -151,12 +175,25 @@
     async function sendChat() {
       const input = document.getElementById('chat-input');
       const text = input.value.trim();
-      if (!text) return;
+      if (!text) {
+        input.classList.remove('shake');
+        void input.offsetWidth;
+        input.classList.add('shake');
+        input.addEventListener('animationend', () => input.classList.remove('shake'), { once: true });
+        return;
+      }
 
       appendMsg('user', text);
       chatHistory.push({ role: 'user', content: text });
       input.value = '';
       setChatEnabled(false);
+
+      const box = document.getElementById('chat-messages');
+      const typing = document.createElement('div');
+      typing.className = 'msg nest typing-indicator';
+      typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+      box.appendChild(typing);
+      box.scrollTop = box.scrollHeight;
 
       try {
         const res = await fetch('/api/chat', {
@@ -164,11 +201,16 @@
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ messages: chatHistory, state: chatState })
         });
+        typing.remove();
         if (!res.ok) throw new Error('api error');
         const data = await res.json();
-        chatState = data.state;
+        // Protective merge: never overwrite a filled field with an empty string from the API
+        for (const [k, v] of Object.entries(data.state)) {
+          if (v !== '' && v !== null && v !== undefined) chatState[k] = v;
+        }
         chatHistory.push({ role: 'assistant', content: data.reply });
         appendMsg('nest', data.reply);
+        updateNestSummary();
 
         if (data.ready) {
           showStartButton();
@@ -176,17 +218,69 @@
           setChatEnabled(true);
         }
       } catch (err) {
-        appendMsg('nest', 'Something went wrong — please try again.');
+        typing.remove();
+        appendNestError();
         setChatEnabled(true);
       }
     }
 
+    function updateNestSummary() {
+      const summaryEl = document.getElementById('chat-summary-card');
+      if (!summaryEl) return;
+      const fieldLabels = [
+        ['roomType', 'Room type'], ['location', 'Location'], ['budget', 'Budget'],
+        ['stay', 'Move-in & stay'], ['commute', 'Commute'], ['roomNeeds', 'Room needs'],
+        ['workStatus', 'Work / study'], ['income', 'Income'], ['credit', 'Credit'],
+        ['lifestyle', 'Lifestyle'], ['email', 'Email'],
+      ];
+      const rowsHtml = fieldLabels
+        .filter(([key]) => (chatState[key] || '').trim() !== '')
+        .map(([key, label]) => `<div class="chat-summary-row"><span class="chat-summary-label">${label}</span><span class="chat-summary-value">${chatState[key]}</span></div>`)
+        .join('');
+      const rowsEl = summaryEl.querySelector('.chat-summary-rows');
+      if (rowsEl) rowsEl.innerHTML = rowsHtml;
+    }
+
+    function appendNestError() {
+      const box = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = 'msg error';
+      div.innerHTML = '<div class="msg-label">Nest</div><div class="msg-text">Something went wrong. <button class="msg-retry-btn" onclick="retryLastMessage()">Retry</button></div>';
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function retryLastMessage() {
+      const box = document.getElementById('chat-messages');
+      const err = box.querySelector('.msg.error');
+      if (err) err.remove();
+
+      setChatEnabled(false);
+      const typing = document.createElement('div');
+      typing.className = 'msg nest typing-indicator';
+      typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+      box.appendChild(typing);
+      box.scrollTop = box.scrollHeight;
+
+      fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ messages: chatHistory, state: chatState })
+      })
+        .then(res => { typing.remove(); if (!res.ok) throw new Error(); return res.json(); })
+        .then(data => {
+          for (const [k, v] of Object.entries(data.state)) {
+            if (v !== '' && v !== null && v !== undefined) chatState[k] = v;
+          }
+          chatHistory.push({ role: 'assistant', content: data.reply });
+          appendMsg('nest', data.reply);
+          updateNestSummary();
+          if (data.ready) showStartButton(); else setChatEnabled(true);
+        })
+        .catch(() => { typing.remove(); appendNestError(); setChatEnabled(true); });
+    }
+
     function showStartButton() {
-      if (document.getElementById('chat-start-btn')) return;
-
-      const card = document.getElementById('chat-card');
-      const inputRow = document.getElementById('chat-input-row');
-
       const fieldLabels = [
         ['roomType', 'Room type'], ['location', 'Location'], ['budget', 'Budget'],
         ['stay', 'Move-in & stay'], ['commute', 'Commute'], ['roomNeeds', 'Room needs'],
@@ -198,6 +292,16 @@
         .map(([key, label]) => `<div class="chat-summary-row"><span class="chat-summary-label">${label}</span><span class="chat-summary-value">${chatState[key]}</span></div>`)
         .join('');
 
+      const existingSummary = document.getElementById('chat-summary-card');
+      if (existingSummary) {
+        existingSummary.querySelector('.chat-summary-rows').innerHTML = rowsHtml;
+        setChatEnabled(true);
+        return;
+      }
+
+      const card = document.getElementById('chat-card');
+      const inputRow = document.getElementById('chat-input-row');
+
       const summary = document.createElement('div');
       summary.className = 'chat-summary-card';
       summary.id = 'chat-summary-card';
@@ -206,12 +310,12 @@
       const hint = document.createElement('p');
       hint.className = 'chat-summary-hint';
       hint.id = 'chat-summary-hint';
-      hint.textContent = "Not quite right? Keep typing below to adjust.";
+      hint.textContent = "Ready? Hit submit to lock in your search — or keep typing to adjust.";
 
       const btn = document.createElement('button');
       btn.className = 'chat-start-btn';
       btn.id = 'chat-start-btn';
-      btn.textContent = 'Start my search →';
+      btn.textContent = 'Submit my search →';
       btn.onclick = submitSearch;
 
       card.insertBefore(summary, inputRow);
@@ -234,7 +338,7 @@
       } catch (_) {}
 
       document.getElementById('chat-card').innerHTML =
-        `<div class="chat-confirm">✓ Your search is set — your free first scan is underway,<br>results will land in <strong>${chatState.email}</strong> shortly.<br>We'll take it from here by email.</div>`;
+        `<div class="chat-confirm">✓ You're in — Nest is scanning the Bay Area now. First results will land in <strong>${chatState.email}</strong> shortly.</div>`;
     }
 
     function appendMsg(role, text) {
@@ -259,6 +363,7 @@
     document.getElementById('chat-input').addEventListener('keydown', function(e) {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
     });
+    initChatKeyboardFix('chat-input', 'chat-messages', 'chat-input-row');
   </script>
 
 </body>

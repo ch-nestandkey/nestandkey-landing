@@ -271,10 +271,11 @@ This MUST ask room type first, matching the persona's own instruction to collect
 
 **States:**
 - **Active** — input enabled, messages scrollable
-- **Waiting** — input disabled while Nest is responding (no typing indicator yet — open design item)
-- **Summary** — a distinct **summary card** ("Ready to search — here's what I have") lists every captured field as label/value rows (skipping any empty/optional field), followed by the "Start my search →" button and a small hint ("Not quite right? Keep typing below to adjust.") — all inserted above the input row; input stays enabled for corrections.
-- **Confirmed** — entire card replaced with confirmation message: *"✓ Your search is set — your free first scan is underway, results will land in {email} shortly. We'll take it from here by email."*
-- **Error** — "Something went wrong — please try again." appears as a Nest message; input re-enables
+- **Waiting** — input disabled while Nest is responding. A `.msg.nest.typing-indicator` bubble with animated three-dot indicator (`.typing-dots span`, `@keyframes typingBounce`) appears immediately after the user sends and is removed when the reply arrives.
+- **Summary** — a distinct **summary card** ("Ready to search — here's what I have") lists every captured field as label/value rows (skipping any empty/optional field), followed by the "Submit my search →" button and a small hint ("Not quite right? Keep typing below to adjust.") — all inserted above the input row; input stays enabled for corrections.
+- **Confirmed** — entire card replaced with: *"✓ You're in — Nest is scanning the Bay Area now. First results will land in {email} shortly."* AI-speed framing — no team mention. See §4.9 for audience tone rules.
+- **Error** — a warm-tinted bubble (`.msg.error`, `background: #FAF3E0`) appears as a Nest message with a retry link (`.msg-retry-btn`). Clicking retry re-sends the last message without re-enabling input until the retry completes. Input re-enables on success.
+- **Empty send** — textarea plays a shake animation (`@keyframes chatInputShake`, `.chat-input-row textarea.shake`) if user hits Send with empty input. No message is sent.
 
 ### 3.3 The criteria schema
 
@@ -306,9 +307,10 @@ Browser (chat card)
     ← { reply, state, ready }
   → append reply to chat UI, merge state
 
-[when user clicks "Start my search →"]
+[when user clicks "Submit my search →"]
   → POST to Google Apps Script (no-cors)
     → Google Sheets "Searches" tab — one row per completed brief
+    → Nest & Key team reviews and initiates outreach manually
 ```
 
 **Google Sheet ID:** `1SgFQ_14-HpSgzukQGiFH1A2vn7s7H2jIg9ko6wkBm2U`  
@@ -458,7 +460,7 @@ The summary is the most important message in the conversation. It signals comple
 
 The summary does **not** say the scan is starting. That comes only after explicit confirmation.
 
-After summary, the "Start my search →" button appears above the input row. The input stays enabled — the user can still type corrections.
+After summary, the "Submit my search →" button appears above the input row. The input stays enabled — the user can still type corrections.
 
 ### 4.9 Confirmation and closing
 
@@ -467,10 +469,18 @@ After summary, the "Start my search →" button appears above the input row. The
 Nest's closing message after confirmation:
 
 ```
-✓   "Perfect — starting your scan now. Results will land in your inbox soon."
+✓   "Perfect — submit your search brief using the button below and we'll take it from there."
 ```
 
-Then the "Start my search →" button submits and the card transitions to the confirmation state.
+Then the "Submit my search →" button submits and the card transitions to the confirmation state.
+
+**Human review layer:** All submissions pass through the Nest & Key team before matching or pre-screening begins. How this is communicated differs by audience:
+
+- **Tenants** — speed and accuracy are the primary value proposition. Confirmation copy must feel immediate and AI-driven. Never mention the team or a review step. Write as if the scan starts the moment they hit Submit. Example: *"✓ You're in — Nest is scanning the Bay Area now. First results will land in [email] shortly."*
+
+- **Landlords and home buyers** — credibility and trust are the primary value proposition. Mentioning the team's involvement is appropriate and reassuring. Confirmation copy should reference human review naturally. Example: *"✓ Submitted — our team will review your listing and reach out to [email] shortly."*
+
+Button copy rule: use "Submit" (not "Start pre-screening" or "Start my scan") so it doesn't imply automated action — but confirmation copy handles the framing per audience above.
 
 ### 4.10 Correction handling
 
@@ -528,7 +538,31 @@ User: "Actually I want an entire place, not a shared room"
 
 **Updated Jul 3 2026** — vertical padding and title/subtitle margins increased (was `64px 24px` / `12px` / `40px`) so below-fold sections feel as spacious as the hero rather than dense and packed. Card-level spacing increased to match: step cards `36px 28px` padding, pricing cards `28px` gap / `32px 26px` padding, calculator card `40px` padding, trust box `48px 40px` padding, why-list `22px` gap. Content and structure unchanged — spacing only.
 
-Use this for **every** below-fold content block on **any** page — it's the shared grammar Landlords and Agents both build on. Do not invent a parallel heading/sub/container with different numbers for a new feature; extend this pattern and add only what's genuinely new (e.g. price figures, badges).
+Use this three-tier structure (tag → h2.section-title → p.section-subtitle) for **every** below-fold content block on **any** page — it's the shared grammar all pages build on. Do not invent a parallel heading/sub/container with different numbers for a new feature; extend this pattern and add only what's genuinely new (e.g. price figures, badges).
+
+**Exception — Social proof accent block:** A `.content-section.centered` may intentionally omit the three-tier header and contain only a `.trust-box` instead (see "Trust box" component below). This is a distinct section *type*, not an error — it exists to add visual breathing room and drop in a reassuring stat without introducing a new heading hierarchy. Use it sparingly (once per page, between denser sections) and only when the copy is a short social-proof assertion, not a section that needs a label or subtitle to be understood. Do not convert it to the three-tier pattern.
+
+### In-chat ready CTA (Key / Landlords page)
+
+When Key declares the listing brief complete (`data.ready = true`), a submit button is injected directly into the chat messages area — so users don't need to scroll to the debrief panel to act.
+
+```html
+<div class="chat-ready-cta">
+  <button id="key-chat-submit-btn" onclick="submitKeyListing()">Submit my listing →</button>
+</div>
+```
+
+**Behavior:**
+- Appended at the bottom of `#key-chat-messages` each time `showKeyReady()` fires
+- If a user makes corrections and the AI re-confirms, the old button is removed and a fresh one is re-appended below the latest AI message — it always stays at the bottom
+- On submit: both the in-chat button (`#key-chat-submit-btn`) and the debrief panel button (`#key-brief-submit`) are disabled simultaneously and show "Submitting…"
+- Disabled state: `opacity: 0.6`, no transform, `cursor: default`
+
+**Style:** `.chat-ready-cta button` — same green as the debrief panel (`#2D5A3D` bg, `#F4F7F4` text, `600` weight, `border-radius: 10px`, `box-shadow: 0 4px 14px rgba(45,90,61,0.18)`). Full width of the chat messages container.
+
+**This pattern applies to Key (Landlords) only.** The Nest (Tenants) chat uses a different summary-card approach — see §3.2.
+
+---
 
 ### Buttons
 
@@ -554,6 +588,17 @@ Step number: `32px` circle, `#2D5A3D` bg, white text.
 ### Trust box
 
 `#EBF0EB` bg, `16px` radius, centered. Stat in `22px 700 #1E3A2F`, note in `15px #4A6B52`.
+
+**Usage:** Placed inside a `.content-section.centered` with no tag/title/subtitle — the trust box *is* the entire section content. Its purpose is to break up denser sections with a quiet, full-width social-proof statement. It intentionally has no heading tier; do not add one. Use once per page at most, between two heavier content blocks. Current instance: Landlords page, between "How listing with Key works" and "Ready to list your room?"
+
+```html
+<div class="content-section centered">
+  <div class="trust-box">
+    <div class="trust-stat">Already 120+ pre-screened tenants waiting</div>
+    <div class="trust-note">You always make the final call. We just narrow the list.</div>
+  </div>
+</div>
+```
 
 ### Calculator card (Agents)
 
@@ -596,12 +641,14 @@ All photos live in `/listing-sample-socal/photos/`.
 
 | Item | Current state | What's needed |
 |------|--------------|---------------|
-| Chat loading/typing state | Input disabled, no visual feedback | Design a typing indicator for while Nest is responding |
-| Chat error state | Plain text "Something went wrong" | Visual design for error within the chat card |
-| Mobile keyboard behavior | Auto-scroll on new message (in code) | Verify on real device — keyboard may push messages out of view |
-| Phase 2: live brief panel | Not built | Side panel showing criteria filling in real-time; 2-col desktop, stacks below chat on ≤768px. No backend change needed — reads existing chatState |
-| Log in / Sign up | Styled, non-functional | No auth system yet |
-| "Apply now" on listing | Links to `#tour` same page | Placeholder for future application flow |
+| ~~Chat typing indicator~~ | ~~Input disabled, no visual feedback~~ | **Done Jul 2026** — animated three-dot bubble in `.msg.nest.typing-indicator` |
+| ~~Chat error state~~ | ~~Plain text "Something went wrong"~~ | **Done Jul 2026** — warm-tinted `.msg.error` bubble with `.msg-retry-btn` |
+| ~~Empty-send state~~ | ~~Silent no-op~~ | **Done Jul 2026** — shake animation on textarea |
+| ~~Mobile keyboard scroll~~ | ~~May clip messages~~ | **Done Jul 2026** — `initChatKeyboardFix()` in `shared.js`; messages pane shrinks to visible height when keyboard opens |
+| Phase 2: live brief panel (Tenants) | Not built — Tenants has a static summary card only | Side panel showing criteria filling in real-time as Nest captures each field; 2-col desktop, stacks below chat on ≤768px. No backend change needed — reads existing `chatState`. Key (Landlords) already has this — use it as reference. |
+| Key chat in-chat submit CTA | **Done Jul 2026** — button re-injects at bottom of chat each time AI declares ready | Already ships; open design question: should Nest (Tenants) get the same in-chat CTA, or keep the current above-input summary card approach? |
+| Log in / Sign up | Styled, non-functional | Silent no-op on click — decide: hide, tooltip, or waitlist redirect |
+| "Apply now" on listing | Links to `#tour` same page | Label misleads — change to "Schedule a tour" to match actual destination |
 | About Us page | Empty placeholder | Founder story TBD |
 | Footer | Minimal | Will expand when more pages exist |
 
@@ -628,31 +675,25 @@ Ordered by user impact. Priority 1 items are live gaps — users hit them today.
 
 ### Priority 1 — Chat states that don't exist yet
 
-**1a. Typing indicator (while Nest is responding)**
+**1a. Typing indicator — ✅ Done Jul 2026**
 
-Currently the input freezes with no visual feedback. On a slow connection it looks broken.
+Animated three-dot bubble (`.msg.nest.typing-indicator`, `@keyframes typingBounce`) appears immediately after send, removed on reply. Ships on both Nest and Key chats.
 
-What's needed: a thinking state rendered as a Nest message bubble with an animated three-dot indicator inside. Specs: same `.msg.nest` bubble shape, `#F4F7F4` bg, appears immediately after the user sends. Removed when the reply arrives.
+**1b. Error state — ✅ Done Jul 2026**
 
-**1b. Error state**
+Warm-tinted bubble (`.msg.error`, `background: #FAF3E0`) with `.msg-retry-btn` retry link. Ships on both chats. Retry re-sends last message without clearing history.
 
-Currently renders as a plain Nest message: "Something went wrong — please try again." It reads like part of the conversation rather than a system error.
+**1c. Empty send state — ✅ Done Jul 2026**
 
-What's needed: a distinct visual treatment inside the chat card — a subtly different bubble color (stay in the green palette or use a warm neutral, not red) with a clear retry affordance. Must not break the card layout.
-
-**1c. Empty send state**
-
-If the user hits Send with an empty textarea, nothing happens silently. Needs a visual shake on the input or a brief disabled flash on the send button.
+Textarea shake animation (`@keyframes chatInputShake`) fires on empty send attempt. Ships on both chats.
 
 ---
 
 ### Priority 2 — Chat card usability
 
-**2a. Mobile keyboard and scroll**
+**2a. Mobile keyboard and scroll — ✅ Done Jul 2026**
 
-On mobile, the keyboard pushes the viewport up. New Nest messages auto-scroll in code (`box.scrollTop = box.scrollHeight`) but this may conflict with the keyboard resize event. The `max-height: 380px` messages area may clip.
-
-What's needed: test on a real iOS and Android device. Confirm that after the keyboard opens and the user sends a message, the new Nest reply is visible without manual scrolling. If not, the scroll target needs to account for keyboard height offset.
+`initChatKeyboardFix(inputId, messagesId, inputRowId)` in `shared.js` uses `visualViewport` resize events to shrink the messages pane height when the iOS keyboard opens. No `window.scrollBy()` — scroll manipulation caused feedback loops on iOS. Messages pane shrinks to available viewport height; `box.scrollTop = box.scrollHeight` scrolls new messages into view. Wired on both Nest and Key chats.
 
 **2b. Chat card height as conversation grows — Addressed Jul 3 2026**
 
@@ -727,21 +768,21 @@ The `navMap` was updated when Pricing was removed. Verify no orphaned active sta
 
 ### Summary
 
-| # | Item | Impact | Effort |
+| # | Item | Impact | Status |
 |---|------|--------|--------|
-| 1a | Typing indicator | High — live gap | Low |
-| 1b | Error state design | High — live gap | Low |
-| 1c | Empty send state | Low | Very low |
-| 2a | Mobile keyboard scroll | High on mobile | Medium |
-| 2b | Chat card height desktop | Medium | Low |
-| 2c | Start button treatment + label | Medium | Low |
-| 3a | Landlords hero height | Medium | Low |
-| 3b | About Us content | Low | Medium |
-| 3c | Footer privacy note | Medium | Very low |
-| 4 | Phase 2 live brief panel | High | High |
-| 5a | Log in / Sign up state | Medium | Low |
-| 5b | "Apply now" label on listing | Low | Very low |
-| 5c | Nav active state verification | Low | Very low |
+| 1a | Typing indicator | High | ✅ Done Jul 2026 |
+| 1b | Error state design | High | ✅ Done Jul 2026 |
+| 1c | Empty send state | Low | ✅ Done Jul 2026 |
+| 2a | Mobile keyboard scroll | High on mobile | ✅ Done Jul 2026 |
+| 2b | Chat card height desktop | Medium | ✅ Done Jul 2026 |
+| 2c | Submit button label + treatment | Medium | ✅ Done Jul 2026 — "Submit my search/listing →", border-radius 10px |
+| 3a | Landlords hero height + scroll cue | Medium | Open |
+| 3b | About Us content | Low | Open |
+| 3c | Footer privacy note | Medium | Open |
+| 4 | Phase 2 live brief panel (Tenants) | High | Open — Key (Landlords) panel is live reference |
+| 5a | Log in / Sign up silent no-op | Medium | Open |
+| 5b | "Apply now" label on listing | Low | Open |
+| 5c | Nav active state verification | Low | Open |
 
 ---
 
@@ -800,3 +841,184 @@ Explored in the design prototype (`AI Home Search - For Tenants.dc.html`); **not
 | R2 | Soft, skippable **lifestyle / vibe prompt** offered after room needs. Resolves the Open lifestyle-prompt item. | Prototype persona | `NEST_PERSONA` in `api/chat.js` — add the soft-prompt instruction. |
 | R3 | **Split "lifestyle" and "requirements" into two fields.** Lifestyle = soft preferences; requirements = hard conditions. A single combined field read as a confusing double-negative (e.g. "Dealbreakers: No smoking" — smoker or non-smoker?). | Prototype persona + STATE + summary | `api/chat.js`: add a `requirements` field to the STATE schema alongside `lifestyle`. |
 | R4 | **Requirements phrased affirmatively.** Nest normalizes every hard-no into a positive condition the home must meet — never a bare "no X". e.g. "no smoking" → "Smoke-free home"; "no ground floor" → "Above ground floor"; "must allow pets" → "Pet-friendly". Removes the double-negative ambiguity in R3. | Prototype persona | `NEST_PERSONA` in `api/chat.js` — add the affirmative-phrasing instruction for the `requirements` field. |
+
+---
+
+## Part 11 — Key Debrief Card Redesign (Landlords Page)
+
+**Task for Design:** Redesign the `.key-brief-panel` — the card that sits to the right of the Key chat on `landlords.html`. The JS rendering logic is already live and working; this is a visual/UX redesign only.
+
+---
+
+### 11.1 Layout context
+
+```
+.key-intake-wrap {
+  display: grid;
+  grid-template-columns: 1fr 280px;   ← chat card | debrief panel
+  gap: 24px;
+  align-items: start;
+  max-width: 1080px;
+}
+/* Mobile (≤768px): grid-template-columns: 1fr  → panel stacks below chat */
+```
+
+The panel is currently **280px wide** at desktop. Design can adjust this but should stay in the 260–340px range to avoid crowding the chat card.
+
+---
+
+### 11.2 HTML structure (current)
+
+```html
+<div class="key-brief-panel" id="key-brief-panel">
+
+  <!-- Header -->
+  <div>
+    <div class="key-brief-title">Your listing brief</div>
+    <div class="key-brief-sub">Fills in as you chat with Key.</div>
+  </div>
+
+  <!-- Photo uploader (always visible) -->
+  <div class="key-photo-drop">
+    <input type="file" id="key-photo-input" ... style="display:none" />
+    <button class="key-photo-btn">Add photos</button>
+    <div class="key-photo-hint">JPG, PNG, HEIC · up to 10 photos</div>
+  </div>
+  <div id="key-photo-list"></div>   <!-- populated by JS when photos added -->
+  <button class="key-photo-later" id="key-photo-later">I'll add photos later</button>
+
+  <!-- Live fields — JS re-renders #key-brief-fields innerHTML on every AI reply -->
+  <div class="key-brief-fields" id="key-brief-fields">
+    <!-- empty state placeholder (removed once first field fills) -->
+    <div class="key-brief-empty">Keep chatting — your brief will appear here.</div>
+  </div>
+
+  <!-- Trust line -->
+  <div class="key-brief-footer">You always make the final call on who you meet.</div>
+
+  <!-- Status → becomes submit button when all required fields + valid email are filled -->
+  <div class="key-brief-status" id="key-brief-status">Keep chatting to finish</div>
+  <!-- ↑ JS replaces this div with a <button class="key-brief-status ready"> when ready -->
+
+</div>
+```
+
+---
+
+### 11.3 JS-generated field rows (what renderKeyBrief() writes)
+
+`renderKeyBrief()` in `landlords.html` rewrites `#key-brief-fields` innerHTML on every API reply. The generated HTML for each filled field:
+
+```html
+<div class="key-brief-row">
+  <span class="key-brief-check">✓</span>
+  <div class="key-brief-row-text">
+    <span class="key-brief-label">CITY</span>        <!-- uppercase, 10px, muted green -->
+    <span class="key-brief-value">San Francisco</span>  <!-- 12.5px, dark -->
+  </div>
+</div>
+```
+
+Only **filled** fields render — empty fields are invisible. The order follows `KEY_BRIEF_FIELDS` (see §11.4).
+
+---
+
+### 11.4 The 17 fields (KEY_BRIEF_FIELDS)
+
+| Key | Label | Required |
+|-----|-------|----------|
+| `propertyType` | Property type | ✅ |
+| `isOwner` | Owner-occupied | ✅ |
+| `city` | City | ✅ |
+| `neighborhood` | Neighborhood | ✅ |
+| `zip` | Zip | — |
+| `roomDetails` | Room details | ✅ |
+| `furnished` | Furnished | ✅ |
+| `availability` | Available from | ✅ |
+| `rent` | Monthly rent | ✅ |
+| `utilities` | Utilities | — |
+| `minStay` | Min stay | ✅ |
+| `household` | Household | — |
+| `parking` | Parking | — |
+| `houseRules` | House rules | — |
+| `lifestyle` | Lifestyle fit | — |
+| `photosStatus` | Photos | — |
+| `email` | Email | ✅ |
+
+**Required fields** (9): propertyType, isOwner, city, neighborhood, roomDetails, furnished, availability, rent, minStay, email. All 9 must be non-empty AND email must pass regex before the submit button appears.
+
+---
+
+### 11.5 Status → submit button flip
+
+When all required fields are filled and email is valid, `renderKeyBrief()` replaces the status `<div>` with a `<button>`:
+
+```js
+const btn = document.createElement('button');
+btn.id = 'key-brief-submit';
+btn.className = 'key-brief-status ready';   // ← same class + 'ready' modifier
+btn.textContent = 'Submit my listing →';
+btn.addEventListener('click', submitKeyListing);
+statusEl.replaceWith(btn);
+```
+
+Design **must keep** both the `id="key-brief-status"` on the placeholder div and the `button.key-brief-status.ready` class pattern — the JS targets these directly.
+
+---
+
+### 11.6 Current CSS (to redesign)
+
+```css
+.key-brief-panel { background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 24px; box-shadow: 0 14px 36px rgba(30,58,47,0.06); display: flex; flex-direction: column; gap: 14px; }
+.key-brief-title { font-size: 13px; font-weight: 700; color: #1E3A2F; }
+.key-brief-sub { font-size: 12px; color: #8BAF8E; line-height: 1.5; margin-top: 2px; }
+.key-brief-fields { display: flex; flex-direction: column; gap: 8px; }
+.key-brief-empty { font-size: 12px; color: #B0C4B3; font-style: italic; }
+.key-brief-row { display: flex; align-items: flex-start; gap: 7px; }
+.key-brief-check { font-size: 11px; color: #2D5A3D; flex-shrink: 0; margin-top: 2px; }
+.key-brief-row-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.key-brief-label { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: #8BAF8E; }
+.key-brief-value { font-size: 12.5px; color: #1E3A2F; font-weight: 500; line-height: 1.4; word-break: break-word; }
+.key-brief-footer { font-size: 11px; color: #B0C4B3; line-height: 1.5; }
+.key-brief-status { font-size: 13px; color: #B0C4B3; text-align: center; padding: 10px; border-radius: 8px; background: #F4F7F4; border: none; width: 100%; }
+button.key-brief-status.ready { background: #2D5A3D; color: #F4F7F4; font-weight: 600; cursor: pointer; box-shadow: 0 4px 14px rgba(45,90,61,0.18); transition: transform 0.15s, box-shadow 0.15s; }
+button.key-brief-status.ready:hover { background: #3D7A52; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45,90,61,0.28); }
+.key-photo-drop { border: 1.5px dashed rgba(80,130,80,0.35); border-radius: 10px; padding: 20px 16px; text-align: center; }
+.key-photo-btn { padding: 9px 18px; border-radius: 7px; background: #2D5A3D; color: #F4F7F4; border: none; font-size: 13px; font-weight: 600; cursor: pointer; min-height: 44px; }
+.key-photo-hint { font-size: 11px; color: #B0C4B3; margin-top: 8px; }
+.key-photo-item { font-size: 12px; color: #4A6B52; padding: 4px 0; }
+.key-photo-later { background: none; border: none; color: #8BAF8E; font-size: 12px; cursor: pointer; padding: 0; text-decoration: underline; display: block; }
+```
+
+All rules live in `styles.css` lines 309–332.
+
+---
+
+### 11.7 What Design can and cannot change
+
+**Free to redesign:**
+- All visual CSS for `.key-brief-panel`, `.key-brief-title`, `.key-brief-sub`, `.key-brief-row`, `.key-brief-label`, `.key-brief-value`, `.key-brief-footer`, `.key-brief-empty`, `.key-brief-check`
+- The photo uploader area (`.key-photo-drop`, `.key-photo-btn`, `.key-photo-hint`, `.key-photo-later`) — HTML structure included, since no JS targets inner layout
+- Panel width in `.key-intake-wrap` grid
+- Adding animation to field rows (CSS transitions on `.key-brief-row` are safe)
+- Redesigning the empty-state appearance
+
+**Must not change:**
+- `id="key-brief-fields"` — `renderKeyBrief()` writes innerHTML here
+- `id="key-brief-status"` — JS replaces this element when ready
+- `id="key-brief-submit"` — JS checks for this id to avoid double-replacing
+- `id="key-brief-panel"` — referenced elsewhere
+- Class names `key-brief-row`, `key-brief-row-text`, `key-brief-check`, `key-brief-label`, `key-brief-value` — all generated by `renderKeyBrief()`; CSS can be redesigned but the class names must stay
+- `button.key-brief-status.ready` — the JS sets this class; CSS must target it
+- `id="key-photo-input"`, `id="key-photo-list"`, `id="key-photo-later"` — referenced by JS event listeners
+
+---
+
+### 11.8 Design questions to answer
+
+1. **Progress indicator** — should the panel show how many of the 9 required fields are filled (e.g. "5 of 9")? Currently no progress is shown.
+2. **Field animation** — should rows fade/slide in as they appear? Currently they swap instantly.
+3. **Photo uploader placement** — currently at the top of the panel (before fields). Should it move below fields so the listing details feel primary?
+4. **Empty-state richness** — currently just italic grey text. Could show greyed-out field skeletons to signal what's coming.
+5. **Panel scroll** — at 17 possible fields the panel can grow long. Should the `#key-brief-fields` area become scrollable at a max-height?
+6. **Mobile treatment** — panel stacks below chat on ≤768px. Currently no visual separator. Should there be a divider or a collapsed state?
