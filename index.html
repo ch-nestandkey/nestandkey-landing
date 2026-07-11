@@ -338,7 +338,11 @@
       } catch (_) {}
 
       document.getElementById('chat-card').innerHTML =
-        `<div class="chat-confirm">✓ You're in — Nest is scanning the Bay Area now. First results will land in <strong>${chatState.email}</strong> shortly.</div>`;
+        `<div class="confirm confirm--panel">
+          <span class="confirm__medallion">✓</span>
+          <div class="confirm__title">You're in</div>
+          <p class="confirm__body">Nest is scanning the Bay Area now. First results will land in <strong>${chatState.email}</strong> shortly.</p>
+        </div>`;
     }
 
     function appendMsg(role, text) {

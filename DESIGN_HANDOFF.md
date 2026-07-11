@@ -273,7 +273,7 @@ This MUST ask room type first, matching the persona's own instruction to collect
 - **Active** — input enabled, messages scrollable
 - **Waiting** — input disabled while Nest is responding. A `.msg.nest.typing-indicator` bubble with animated three-dot indicator (`.typing-dots span`, `@keyframes typingBounce`) appears immediately after the user sends and is removed when the reply arrives.
 - **Summary** — a distinct **summary card** ("Ready to search — here's what I have") lists every captured field as label/value rows (skipping any empty/optional field), followed by the "Submit my search →" button and a small hint ("Not quite right? Keep typing below to adjust.") — all inserted above the input row; input stays enabled for corrections.
-- **Confirmed** — entire card replaced with: *"✓ You're in — Nest is scanning the Bay Area now. First results will land in {email} shortly."* AI-speed framing — no team mention. See §4.9 for audience tone rules.
+- **Confirmed** — entire card replaced with the shared `.confirm` component (see "Confirmation component" in Part 5): medallion + title *"You're in"* + body *"Nest is scanning the Bay Area now. First results will land in {email} shortly."* AI-speed framing — no team mention, no meta line. See §4.9 for audience tone rules.
 - **Error** — a warm-tinted bubble (`.msg.error`, `background: #FAF3E0`) appears as a Nest message with a retry link (`.msg-retry-btn`). Clicking retry re-sends the last message without re-enabling input until the retry completes. Input re-enables on success.
 - **Empty send** — textarea plays a shake animation (`@keyframes chatInputShake`, `.chat-input-row textarea.shake`) if user hits Send with empty input. No message is sent.
 
@@ -476,9 +476,9 @@ Then the "Submit my search →" button submits and the card transitions to the c
 
 **Human review layer:** All submissions pass through the Nest & Key team before matching or pre-screening begins. How this is communicated differs by audience:
 
-- **Tenants** — speed and accuracy are the primary value proposition. Confirmation copy must feel immediate and AI-driven. Never mention the team or a review step. Write as if the scan starts the moment they hit Submit. Example: *"✓ You're in — Nest is scanning the Bay Area now. First results will land in [email] shortly."*
+- **Tenants** — speed and accuracy are the primary value proposition. Confirmation copy must feel immediate and AI-driven. Never mention the team or a review step. Write as if the scan starts the moment they hit Submit. Example (title + body): **You're in** — Nest is scanning the Bay Area now. First results will land in [email] shortly.
 
-- **Landlords and home buyers** — credibility and trust are the primary value proposition. Mentioning the team's involvement is appropriate and reassuring. Confirmation copy should reference human review naturally. Example: *"✓ Submitted — our team will review your listing and reach out to [email] shortly."*
+- **Landlords and home buyers** — credibility and trust are the primary value proposition. Mentioning the team's involvement is appropriate and reassuring. Confirmation copy should reference human review naturally. Example (title + body + meta): **Listing submitted** — Our team will review your listing and reach out to [email] shortly. *(meta: You always make the final call on who you meet.)*
 
 Button copy rule: use "Submit" (not "Start pre-screening" or "Start my scan") so it doesn't imply automated action — but confirmation copy handles the framing per audience above.
 
@@ -561,6 +561,38 @@ When Key declares the listing brief complete (`data.ready = true`), a submit but
 **Style:** `.chat-ready-cta button` — same green as the debrief panel (`#2D5A3D` bg, `#F4F7F4` text, `600` weight, `border-radius: 10px`, `box-shadow: 0 4px 14px rgba(45,90,61,0.18)`). Full width of the chat messages container.
 
 **This pattern applies to Key (Landlords) only.** The Nest (Tenants) chat uses a different summary-card approach — see §3.2.
+
+---
+
+### Confirmation component (`.confirm`) — D2
+
+One shared success component (added Jul 11 2026) replacing four previously text-only success states (`.chat-confirm`, `.modal-success`). Tokens lifted from `.chat-summary-card` — no new colors, system font throughout.
+
+```html
+<div class="confirm confirm--panel">
+  <span class="confirm__medallion">✓</span>
+  <div class="confirm__title">Title</div>
+  <p class="confirm__body">Body copy.</p>
+  <p class="confirm__meta">Optional meta line (landlord only).</p>
+</div>
+```
+
+**Variants:**
+- `.confirm--panel` — card takeover, centered, used on all four surfaces (default)
+- `.confirm--compact` — inline left-aligned variant with left border accent; shipped in CSS but currently unused (candidate for the contact modal if the panel reads too tall)
+
+**Usages and copy (audience-split per §4.9):**
+
+| Surface | File | Title | Body | Meta |
+|---|---|---|---|---|
+| Tenant chat | `index.html` | You're in | Nest is scanning the Bay Area now. First results will land in {email} shortly. | — |
+| Landlord Key chat | `landlords.html` | Listing submitted | Our team will review your listing and reach out to {email} shortly. | You always make the final call on who you meet. |
+| Contact form | `listing-sample-socal/index.html` | Message sent | The homeowners will reach out to you by email soon. | — |
+| Apply modal | `listing-sample-socal/index.html` | You're in | The homeowners will reach out to you to schedule a tour. | — |
+
+Copy rules: verb-led headline, no `✓ Submitted`-style prefixes, no exclamation points (§4.2). "Match/matching/matches" is reserved for the landlord↔tenant contact-exchange moment only — never used for confirmation copy.
+
+CSS lives in `styles.css` and duplicated in the inline `<style>` of `listing-sample-socal/index.html` (two stylesheets, not yet consolidated).
 
 ---
 

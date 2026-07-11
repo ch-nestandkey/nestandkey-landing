@@ -62,7 +62,17 @@
     .modal-submit { width: 100%; padding: 13px; margin-top: 6px; background: #2D5A3D; color: #F4F7F4; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
     .modal-submit:hover { background: #3D7A52; }
     .modal-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-    .modal-success { padding: 32px 24px; text-align: center; font-size: 15px; color: #2D5A3D; font-weight: 500; line-height: 1.6; }
+    /* Confirmation — shared success component (D2) */
+    .confirm { background: #EBF0EB; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; }
+    .confirm__medallion { width: 52px; height: 52px; border-radius: 50%; background: #2D5A3D; color: #fff; font-size: 24px; flex-shrink: 0; box-shadow: 0 0 0 6px rgba(45,90,61,0.10); display: flex; align-items: center; justify-content: center; }
+    .confirm__title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; color: #1E3A2F; }
+    .confirm__body { font-size: 15px; color: #4A6B52; line-height: 1.65; max-width: 320px; }
+    .confirm__meta { font-size: 12px; color: #8BAF8E; line-height: 1.5; width: 100%; margin-top: 2px; padding-top: 12px; border-top: 1px solid rgba(80,110,80,0.12); }
+    .confirm--panel { padding: 40px 32px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .confirm--compact { border-left: 3px solid #2D5A3D; padding: 18px 20px; text-align: left; display: flex; gap: 14px; align-items: flex-start; }
+    .confirm--compact .confirm__medallion { width: 36px; height: 36px; font-size: 18px; box-shadow: none; }
+    .confirm--compact .confirm__title { font-size: 16px; letter-spacing: -0.3px; }
+    .confirm--compact .confirm__body { font-size: 14px; }
 
     /* Chat popover (Schedule a tour) */
     .chat-popover .chat-header { display: flex; align-items: center; gap: 10px; padding: 16px 44px 14px 20px; border-bottom: 1px solid rgba(80,110,80,0.1); }
@@ -360,7 +370,11 @@
         });
       } catch (_) {}
       document.querySelector('#contact-modal .modal-body').innerHTML =
-        '<div class="modal-success">✓ Message sent — the homeowners will reach out to you by email soon.</div>';
+        '<div class="confirm confirm--panel">' +
+          '<span class="confirm__medallion">✓</span>' +
+          '<div class="confirm__title">Message sent</div>' +
+          '<p class="confirm__body">The homeowners will reach out to you by email soon.</p>' +
+        '</div>';
     }
 
     // Schedule a tour — scripted intake chat
@@ -492,7 +506,12 @@
         });
       } catch (_) {}
       document.querySelector('#apply-modal .modal-card').innerHTML =
-        '<button class="modal-close" onclick="closeModal(\'apply-modal\')" aria-label="Close">×</button><div class="modal-success">✓ You\'re in — the homeowners will reach out to <strong>' + escapeHtml(applyState.email || 'your email') + '</strong> shortly.</div>';
+        '<button class="modal-close" onclick="closeModal(\'apply-modal\')" aria-label="Close">×</button>' +
+        '<div class="confirm confirm--panel">' +
+          '<span class="confirm__medallion">✓</span>' +
+          '<div class="confirm__title">You\'re in</div>' +
+          '<p class="confirm__body">The homeowners will reach out to you to schedule a tour.</p>' +
+        '</div>';
     }
 
     document.getElementById('apply-chat-send').addEventListener('click', sendApplyChat);
