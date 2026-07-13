@@ -252,7 +252,7 @@ This MUST ask room type first, matching the persona's own instruction to collect
 .chat-header            — avatar + name + role, border-bottom rgba(80,110,80,0.1) (added Jul 3 2026)
   .chat-avatar          — 30px circle, #2D5A3D bg, white "N", left-aligned
   .chat-header-name     — "Nest", 14px 600 #1E3A2F
-  .chat-header-sub      — "Your home-search concierge", 12px #8BAF8E
+  .chat-header-sub      — "Your home-search assistant", 12px #8BAF8E
 .chat-messages          — scrollable, min-height 400px / max-height 500px (desktop), 320/420 mobile
   .msg.nest             — Nest messages, left-aligned, text-align left
     .msg-label          — "NEST" in 11px uppercase #2D5A3D, left-aligned above bubble
@@ -474,11 +474,11 @@ Nest's closing message after confirmation:
 
 Then the "Submit my search →" button submits and the card transitions to the confirmation state.
 
-**Human review layer:** All submissions pass through the Nest & Key team before matching or pre-screening begins. How this is communicated differs by audience:
+**Quality & onboarding review:** Nest & Key is a self-service tool — users drive their own search or listing. To keep intake quality high and help people get set up, the Nest & Key team reviews every submission (tenant *and* landlord) before scanning or pre-screening goes live. Frame this as a quick quality check that helps users get started — never as a done-for-you concierge service or a team acting on their behalf. How much it's foregrounded differs by audience:
 
-- **Tenants** — speed and accuracy are the primary value proposition. Confirmation copy must feel immediate and AI-driven. Never mention the team or a review step. Write as if the scan starts the moment they hit Submit. Example (title + body): **You're in** — Nest is scanning the Bay Area now. First results will land in [email] shortly.
+- **Tenants** — speed is the primary value. Keep confirmation immediate and AI-driven; frame the scan as already underway. Don't foreground a review step. Example (title + body): **You're in** — Nest is scanning the Bay Area now. First results will land in [email] shortly.
 
-- **Landlords and home buyers** — credibility and trust are the primary value proposition. Mentioning the team's involvement is appropriate and reassuring. Confirmation copy should reference human review naturally. Example (title + body + meta): **Listing submitted** — Our team will review your listing and reach out to [email] shortly. *(meta: You always make the final call on who you meet.)*
+- **Landlords and home buyers** — trust is the primary value. It's fine to note the quick quality check, framed as help getting set up rather than the team taking over. Keep the user in control of the outcome. Example (title + body + meta): **Listing submitted** — Our team will review your submission and reach out to [email] shortly. *(meta: You always make the final call on who you meet.)*
 
 Button copy rule: use "Submit" (not "Start pre-screening" or "Start my scan") so it doesn't imply automated action — but confirmation copy handles the framing per audience above.
 
@@ -586,7 +586,7 @@ One shared success component (added Jul 11 2026) replacing four previously text-
 | Surface | File | Title | Body | Meta |
 |---|---|---|---|---|
 | Tenant chat | `index.html` | You're in | Nest is scanning the Bay Area now. First results will land in {email} shortly. | — |
-| Landlord Key chat | `landlords.html` | Listing submitted | Our team will review your listing and reach out to {email} shortly. | You always make the final call on who you meet. |
+| Landlord Key chat | `landlords.html` | Listing submitted | Our team will review your submission and reach out to {email} shortly. | You always make the final call on who you meet. |
 | Contact form | `listing-sample-socal/index.html` | Message sent | The homeowners will reach out to you by email soon. | — |
 | Apply modal | `listing-sample-socal/index.html` | You're in | The homeowners will reach out to you to schedule a tour. | — |
 
