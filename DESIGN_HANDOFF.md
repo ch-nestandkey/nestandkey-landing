@@ -24,11 +24,14 @@
 
 ### 1.1 What the product is
 
-Nest & Key is an **AI market-scanning tool** for tech interns and working professionals in the SF Bay Area — rather than a listings board you scroll, Nest scans the market on your behalf and surfaces homes that fit. It connects three audiences:
+Nest & Key helps people find cost-efficient, quality-first housing solutions in the SF Bay Area. It connects two audiences:
 
-- **Tenants** — tech interns and young professionals looking for pre-screened rooms or entire places
-- **Landlords** — homeowners looking for compatible housemates (not just anyone)
-- **Agents** — real estate agents who want to help clients afford homes by renting a spare room
+- **Tenants** — motivated renters looking for a room or place that's genuinely comfortable, at a price that fits — not just whatever's left on a listings board
+- **Landlords** — homeowners who want to share their home with the right person, and lower what they pay in rent or mortgage by doing it
+
+Rather than a listings board you scroll, Nest (for tenants) scans the market on your behalf and surfaces homes that fit, and Key (for landlords) screens candidates against your preferences so you only meet people worth meeting. Both tools put the person driving their own search or listing in control — Nest & Key finds and screens, the user decides.
+
+**Room income calculator (`/buyers`):** a standalone tool, not a third audience. It extends the landlord story — the same "lower your rent/mortgage by sharing your home" value prop, run as numbers instead of a chat. It also supports a secondary "buying to invest" scenario (renting out a whole unit for cash flow); that scenario is real-estate-investor framing, not house-sharing, and is a documented exception to the core two-audience positioning — do not use it to justify reintroducing a third audience elsewhere on the site.
 
 The brand positioning is deliberate: this is not Craigslist. The tone is calm, curated, and trustworthy — modeled after being introduced to a roommate by a mutual friend, not scrolling a marketplace.
 
@@ -148,7 +151,7 @@ Net effect: hero keeps its current full-viewport height and content, pricing ban
 
 Single-page app — section toggling via JS. Nav always visible (`z-index: 100`). Sections are `display: none` until activated by `showSection(id)`.
 
-**Nav items:** For Tenants · For Landlords · For Agents · About Us  
+**Nav items:** For Tenants · For Landlords · Room Income Calculator · About Us — *(note: this section describes the original single-page architecture; Landlords/Room Income Calculator/About Us have since shipped as separate pages — `landlords.html`, `buyers.html`, `about.html` — not JS-toggled sections of `index.html`. This whole section (2.1) needs a rewrite to match; flagged, not done in this pass.)*  
 **Nav right:** Log in (ghost) · Sign up (filled)  
 **Mobile:** Hamburger replaces nav links at `≤1024px`. Drawer background: `#EBF0EB`.
 
@@ -474,7 +477,7 @@ Nest's closing message after confirmation:
 
 Then the "Submit my search →" button submits and the card transitions to the confirmation state.
 
-**Quality & onboarding review:** Nest & Key is a self-service tool — users drive their own search or listing. To keep intake quality high and help people get set up, the Nest & Key team reviews every submission (tenant *and* landlord) before scanning or pre-screening goes live. Frame this as a quick quality check that helps users get started — never as a done-for-you concierge service or a team acting on their behalf. How much it's foregrounded differs by audience:
+**Quality & onboarding review:** users drive their own search or listing — Nest & Key never takes over on their behalf. To keep intake quality high and help people get set up, the Nest & Key team reviews every submission (tenant *and* landlord) before scanning or pre-screening goes live. Frame this as a quick quality check that helps users get started — never as a done-for-you concierge service or a team acting on their behalf. How much it's foregrounded differs by audience:
 
 - **Tenants** — speed is the primary value. Keep confirmation immediate and AI-driven; frame the scan as already underway. Don't foreground a review step. Example (title + body): **You're in** — Nest is scanning the Bay Area now. First results will land in [email] shortly.
 
