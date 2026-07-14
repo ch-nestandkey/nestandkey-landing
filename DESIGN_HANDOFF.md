@@ -31,7 +31,7 @@ Nest & Key helps people find cost-efficient, quality-first housing solutions in 
 
 Rather than a listings board you scroll, Nest (for tenants) scans the market on your behalf and surfaces homes that fit, and Key (for landlords) screens candidates against your preferences so you only meet people worth meeting. Both tools put the person driving their own search or listing in control — Nest & Key finds and screens, the user decides.
 
-**Room income calculator (`/buyers`):** a standalone tool, not a third audience. It extends the landlord story — the same "lower your rent/mortgage by sharing your home" value prop, run as numbers instead of a chat. It also supports a secondary "buying to invest" scenario (renting out a whole unit for cash flow); that scenario is real-estate-investor framing, not house-sharing, and is a documented exception to the core two-audience positioning — do not use it to justify reintroducing a third audience elsewhere on the site.
+**Room income calculator (`/landlords#calculator`):** not a third audience or a standalone route — it's a section on the Landlords page (merged Jul 14 2026; the old standalone `/buyers` route now 301-redirects to `/landlords#calculator`, and `buyers.html` no longer exists). It extends the landlord story — the same "lower your rent/mortgage by sharing your home" value prop, run as numbers instead of a chat. It also supports a secondary "buying to invest" scenario (renting out a whole unit for cash flow). **Resolved Jul 14 2026 — this is not an exception to the two-audience positioning, kept as-is intentionally:** an unused whole house is just a larger unit of the same unused-space problem a spare room is — one property with zero people sharing it instead of one room. "Invest" is the same house-sharing logic scaled up to an entire property, not real-estate-investor framing bolted onto a house-sharing page. No calculator or copy change needed; this only resolves how Design/Code should reason about the scenario going forward.
 
 The brand positioning is deliberate: this is not Craigslist. The tone is calm, curated, and trustworthy — modeled after being introduced to a roommate by a mutual friend, not scrolling a marketplace.
 
@@ -151,7 +151,7 @@ Net effect: hero keeps its current full-viewport height and content, pricing ban
 
 Single-page app — section toggling via JS. Nav always visible (`z-index: 100`). Sections are `display: none` until activated by `showSection(id)`.
 
-**Nav items:** For Tenants · For Landlords · Room Income Calculator · About Us — *(note: this section describes the original single-page architecture; Landlords/Room Income Calculator/About Us have since shipped as separate pages — `landlords.html`, `buyers.html`, `about.html` — not JS-toggled sections of `index.html`. This whole section (2.1) needs a rewrite to match; flagged, not done in this pass.)*  
+**Nav items (as of Jul 14 2026):** For Tenants · For Landlords · About Us — three items. The Room Income Calculator nav item was removed when the calculator merged into `/landlords#calculator` (see §1.1); it is no longer a separate route. *(note: this section otherwise still describes the original single-page architecture; Landlords/About Us have since shipped as separate pages — `landlords.html`, `about.html` — not JS-toggled sections of `index.html`. This whole section (2.1) needs a rewrite to match; flagged, not done in this pass.)*  
 **Nav right:** Log in (ghost) · Sign up (filled)  
 **Mobile:** Hamburger replaces nav links at `≤1024px`. Drawer background: `#EBF0EB`.
 
@@ -180,12 +180,14 @@ Single-page app — section toggling via JS. Nav always visible (`z-index: 100`)
 - Main element: Nest AI chat card (see Part 3)
 - Below the chat: pricing band — Free / Casual / Active (see §1.6)
 
-**For Landlords**
+**For Landlords** (restructured Jul 14 2026 — Room Income Calculator merged in)
 - Tag: "Closed Beta · SF Bay Area"
-- H1: "Find someone who fits your home, not just fills your room."
-- Sub: "We pre-screen based on your preferences. You only meet people you'd actually consider."
-- Link: "See a sample listing →" → `/listing-sample-socal`
-- Below fold: How it works (3 steps) → Trust signals → Email CTA → submits to "Landlords" sheet tab
+- H1: "Share your home with the right person — and lower what you pay."
+- Sub: "Key finds and pre-screens people who actually fit, based on your preferences. You only meet people you'd actually consider, and your rent or mortgage gets lighter."
+- Hero CTA: "List your room in minutes →" (pill button, scrolls to `#intake`). The old "See a sample listing →" link is hidden (`display:none`), not deleted — kept for a possible future re-purposing, per handoff.
+- Below fold, in order: **Room income calculator** (`id="calculator"`, relocated from the old `/buyers` page, unchanged behavior) with a result-panel CTA band → How listing with Key works (3 steps) → "A market built for this" (`market-stats-panel`, relocated from `/buyers`) → Key AI listing chat intake (`id="intake"`, now on a dark-green `.section-filled` band)
+- The standalone `trust-box` that used to sit between the 3-step and the chat intake was **removed** — its stat now lives in the market-stats-panel instead (trust-box is "once per page," see Part 5)
+- Single canonical intake at `#intake`; the hero CTA and the calculator's result-band CTA are both entry points that scroll to it — do not add a second intake form
 
 **For Agents**
 - Tag: "For Real Estate Agents"
@@ -624,7 +626,7 @@ Step number: `32px` circle, `#2D5A3D` bg, white text.
 
 `#EBF0EB` bg, `16px` radius, centered. Stat in `22px 700 #1E3A2F`, note in `15px #4A6B52`.
 
-**Usage:** Placed inside a `.content-section.centered` with no tag/title/subtitle — the trust box *is* the entire section content. Its purpose is to break up denser sections with a quiet, full-width social-proof statement. It intentionally has no heading tier; do not add one. Use once per page at most, between two heavier content blocks. Current instance: Landlords page, between "How listing with Key works" and "Ready to list your room?"
+**Usage:** Placed inside a `.content-section.centered` with no tag/title/subtitle — the trust box *is* the entire section content. Its purpose is to break up denser sections with a quiet, full-width social-proof statement. It intentionally has no heading tier; do not add one. Use once per page at most, between two heavier content blocks. **No current instance** — the Landlords page's trust-box (between "How listing with Key works" and "Ready to list your room?") was removed Jul 14 2026 when the Room Income Calculator merged in; its stat now lives in the `market-stats-panel` instead (see "Calculator card" below), which honors the same "once per page" rule.
 
 ```html
 <div class="content-section centered">
@@ -635,11 +637,32 @@ Step number: `32px` circle, `#2D5A3D` bg, white text.
 </div>
 ```
 
-### Calculator card (Agents)
+### Filled (dark) section, pill CTA, and calculator CTA band — new Jul 14 2026
+
+Introduced with the Landlords/Room Income Calculator merge. First and currently only instance: the Landlords page's intake band (`id="intake"`) and its two CTAs.
+
+```css
+.section-filled { background: #1E3A2F; border-top: none; border-radius: 24px; padding-left: 48px; padding-right: 48px; }
+.section-filled .tag { color: #8BAF8E; }
+.section-filled .section-title { color: #fff; }
+.section-filled .section-subtitle { color: #8BAF8E; }
+
+.btn-pill { background: #2D5A3D; color: #F4F7F4; font-size: 15px; font-weight: 600; padding: 14px 30px; border-radius: 999px; box-shadow: 0 6px 20px rgba(45,90,61,0.25); }
+.calc-cta-band { max-width: 760px; margin: 16px auto 0; background: #2D5A3D; border-radius: 18px; padding: 32px 40px; text-align: center; }
+.calc-cta-band .btn-pill { background: #fff; color: #2D5A3D; }
+```
+
+- **`.section-filled`** — apply alongside `.content-section.centered` to render a dark-green filled block with light text, instead of the default white/bordered content-section. Generalizes the dark-inversion treatment already used on the Active pricing card (§1.6) to a full section. **No new palette values** — on-dark text uses `#fff` (headings) and the existing `#8BAF8E` (tag/subtitle color elsewhere in the palette), not the `#C8E0CC` mint that appeared in an earlier design mockup; do not add `#C8E0CC` to the palette.
+- **`.btn-pill`** — a pill-shaped (`border-radius: 999px`) primary CTA, distinct from the standard `.btn.btn-primary` (`8px` radius). Used for the two highest-intent moments on Landlords (hero CTA, calculator result CTA) to visually mark them as the primary conversion path — not a general-purpose button replacement.
+- **`.calc-cta-band`** — a self-contained dark-green CTA card, used directly after `.bcalc-card` (inside `#calculator`, not inside the card itself) to present "list this room" as the natural next step once the user has run their numbers.
+- Conversion pattern: single canonical intake at `#intake`; the hero CTA and the calculator's CTA band both smooth-scroll there rather than opening a second form.
+
+### Calculator card (`.bcalc-card`, Landlords `#calculator`)
 
 White bg, `rgba(80,130,80,0.15)` border, `16px` radius.  
 2-col input grid → 1-col mobile. Last result row highlighted: `color: #2D5A3D, font-size: 22px`.  
-Footnote: "Estimates assume a 30-year fixed mortgage, principal and interest only."
+Footnote: "Estimates assume a 30-year fixed mortgage, principal and interest only."  
+*(Heading corrected Jul 14 2026 — this was mislabeled "Agents"; the calculator has always lived under the Landlords/Home-Buyers audience, and is now a section on `/landlords`, not a separate page.)*
 
 ### Tag pills (listing page)
 
