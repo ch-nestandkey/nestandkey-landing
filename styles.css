@@ -102,7 +102,7 @@ p.sub { margin-top: 24px; font-size: 18px; color: #6B8F71; max-width: 480px; lin
 .calc-cta-band .btn-pill:hover { background: #F4F7F4; }
 
 /* Filled (dark) section variant — first used on Landlords' intake band */
-.section-filled { background: #1E3A2F; border-top: none; border-radius: 24px; padding-left: 48px; padding-right: 48px; }
+.content-section.section-filled { background: #1E3A2F; border-top: none; border-radius: 24px; padding-left: 48px; padding-right: 48px; margin: 32px auto; }
 .section-filled .tag { color: #8BAF8E; }
 .section-filled .section-title { color: #fff; }
 .section-filled .section-subtitle { color: #8BAF8E; }

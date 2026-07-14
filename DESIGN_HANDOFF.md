@@ -171,6 +171,16 @@ Single-page app — section toggling via JS. Nav always visible (`z-index: 100`)
 
 **Content-section grammar (reusable — canonical, not page-specific):** `.content-section` (max-width 960px, `96px 24px` padding, top-border divider) + `.section-title` (`clamp(26px, 3.5vw, 36px)`, `-1px` letter-spacing, centered) + `.section-subtitle` (`16px`, `#6B8F71`, max-width 600px, centered) is the standard unit for **any** below-fold content block, on any page — not just Landlords/Agents. New sections or features must reuse these three classes rather than inventing parallel ones with slightly different numbers (custom heading sizes, custom sub max-widths, custom border opacities). If a new block needs something these don't cover (e.g. pricing cards' price figures, tier badges), add only that delta as new, narrowly-scoped classes — never redeclare the container/heading/sub. **Counter-example to learn from:** the Tenants pricing band (§1.6) shipped with bespoke `.pricing-heading`/`.pricing-sub` classes and a `0.2`-opacity card border instead of reusing this grammar — it read as visually disconnected from Landlords/Agents as a result. Rebuild it against this rule.
 
+**Variant rule (added Jul 14 2026, after the `.section-filled` spacing bug):** any class that modifies `.content-section` (a "variant," e.g. `.section-filled`) must follow two rules, not just reuse the base grammar:
+1. **Compound the selector** — write `.content-section.variant-name`, never a bare `.variant-name`. `.content-section` itself sets `margin`, `padding`, `max-width`, and `border-top`; a bare class has equal specificity, so whichever rule sits later in `styles.css` silently wins regardless of intent. This exact bug shipped once already (Part 5, "Filled (dark) section" — `.section-filled`'s `margin` was zeroed by `.content-section`'s later `margin: 0 auto` until the selector was compounded).
+2. **If the variant overrides a property that provided visual separation (most commonly `border-top`), document and provide the replacement in the same commit.** A hairline divider only reads as a "line break" against a matching background; a filled/colored variant needs real `margin` instead, or the section will visually collide with its neighbors even though the box model looks correct on paper.
+
+**Pre-ship spacing check (added Jul 14 2026):** before shipping any new section, page, or `.content-section` variant, verify its rendered vertical rhythm against the Tenants page (the most mature reference — `/`) at the following three points, using actual `getBoundingClientRect()` gaps, not just visual skim or "it has padding so it must be fine":
+- Gap between this section and the one immediately above it
+- Gap between this section and the one immediately below it (or the footer, if it's the last section)
+- Whether that gap is genuinely the same background color on both sides — a filled/colored section's own padding does not count as a gap against its neighbors, only real `margin` does
+This does not require pixel-identical numbers on every page, but every transition must have a clearly perceptible break — never rely on "the box model adds up" without checking the rendered result.
+
 #### Section content
 
 **For Tenants (default)**
@@ -642,7 +652,7 @@ Step number: `32px` circle, `#2D5A3D` bg, white text.
 Introduced with the Landlords/Room Income Calculator merge. First and currently only instance: the Landlords page's intake band (`id="intake"`) and its two CTAs.
 
 ```css
-.section-filled { background: #1E3A2F; border-top: none; border-radius: 24px; padding-left: 48px; padding-right: 48px; }
+.content-section.section-filled { background: #1E3A2F; border-top: none; border-radius: 24px; padding-left: 48px; padding-right: 48px; margin: 32px auto; }
 .section-filled .tag { color: #8BAF8E; }
 .section-filled .section-title { color: #fff; }
 .section-filled .section-subtitle { color: #8BAF8E; }
@@ -653,6 +663,8 @@ Introduced with the Landlords/Room Income Calculator merge. First and currently 
 ```
 
 - **`.section-filled`** — apply alongside `.content-section.centered` to render a dark-green filled block with light text, instead of the default white/bordered content-section. Generalizes the dark-inversion treatment already used on the Active pricing card (§1.6) to a full section. **No new palette values** — on-dark text uses `#fff` (headings) and the existing `#8BAF8E` (tag/subtitle color elsewhere in the palette), not the `#C8E0CC` mint that appeared in an earlier design mockup; do not add `#C8E0CC` to the palette.
+- **Selector must be `.content-section.section-filled`, not `.section-filled` alone (fixed Jul 14 2026):** `.content-section` declares `margin: 0 auto` later in the cascade than `.section-filled` originally did; with equal specificity, source order won and silently zeroed the variant's margin. Compounding the selector makes it win regardless of where either rule sits in the file — **any variant of `.content-section` must use a compound selector like this** if it overrides a property `.content-section` itself sets (`margin`, `padding`, `border-top`, `max-width`), not a bare `.variant-name` class.
+- **Why this variant needs its own `margin` (not just relying on the canonical `border-top` divider):** the standard content-section divider is a hairline border, which is designed to read as a subtle seam between two same-background sections. It doesn't work as a divider against a *filled* section with its own background color — the color block's edge reads as the section's true visual boundary, so the section's own 96px padding is perceived as "inside the box," not as breathing room. `.section-filled` therefore disables `border-top` and adds real `margin` (`32px`) instead, so there's always genuine same-background space before and after the colored block, both against the previous section and against the footer.
 - **`.btn-pill`** — a pill-shaped (`border-radius: 999px`) primary CTA, distinct from the standard `.btn.btn-primary` (`8px` radius). Used for the two highest-intent moments on Landlords (hero CTA, calculator result CTA) to visually mark them as the primary conversion path — not a general-purpose button replacement.
 - **`.calc-cta-band`** — a self-contained dark-green CTA card, used directly after `.bcalc-card` (inside `#calculator`, not inside the card itself) to present "list this room" as the natural next step once the user has run their numbers.
 - Conversion pattern: single canonical intake at `#intake`; the hero CTA and the calculator's CTA band both smooth-scroll there rather than opening a second form.
@@ -709,6 +721,7 @@ All photos live in `/listing-sample-socal/photos/`.
 | "Apply now" on listing | Links to `#tour` same page | Label misleads — change to "Schedule a tour" to match actual destination |
 | About Us page | Empty placeholder | Founder story TBD |
 | Footer | Minimal | Will expand when more pages exist |
+| `.section-filled` missing `border-top` | Deliberately disabled (doesn't read as a gap against a filled bg) — see §2.1 Variant rule | Backlogged, Jul 14 2026: now that real `margin` exists around the box, restore `border-top` inside that margin for full consistency with every other section boundary's hairline divider. Low-risk (opacity is already very low; respects `border-radius`) — no urgency, not a visible defect. |
 
 ---
 
