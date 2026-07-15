@@ -11,7 +11,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap" rel="stylesheet">
   <style>
     /* Scoped to this page only — see DESIGN_HANDOFF.md for why this is a documented exception to the site's no-webfont rule */
-    #about h1 { font-family: 'Reenie Beanie', cursive; font-weight: 400; letter-spacing: normal; font-size: clamp(56px, 8vw, 96px); }
+    #about h1, #about .script { font-family: 'Reenie Beanie', cursive; font-weight: 400; letter-spacing: normal; }
+    #about h1 { font-size: clamp(56px, 8vw, 96px); }
+    #about .section-title.script { font-size: clamp(34px, 4.5vw, 48px); }
+    #about .trust-stat.script { font-size: 28px; }
   </style>
 </head>
 <body>
@@ -47,17 +50,17 @@
     <a href="/about" class="active">About Us</a>
   </div>
 
-  <section id="about" class="section-multi about-tint-mist">
+  <section id="about" class="section-multi">
     <div class="hero-block">
       <span class="tag">Our story</span>
       <h1>We're building the home search we wished existed.</h1>
-      <p class="sub" style="max-width:680px;">We started Nest &amp; Key after years of traveling for work across the Bay Area and Southern California — renting out our own homes while we were away, and renting rooms ourselves wherever we landed. We saw both sides of shared housing up close: the landlord's need to find someone trustworthy, and the tenant's need to find a place that actually fits. This is us building the tool we wished we'd had.</p>
+      <p class="sub" style="max-width:680px; font-size:16px;">Hi, this is Chaehyun. Nest &amp; Key began in 2026, during a stretch when we found ourselves traveling for work across the SF Bay Area and Southern California far more than we'd ever planned. Renting out a home and becoming a renter elsewhere, back and forth, meant seeing shared housing from both sides — learning how rare it is to land with people who just fit, and how much work it takes to find them in the first place. Nest &amp; Key exists to take the luck out of that equation — making the right match something you can count on, not just hope for.</p>
       <div class="about-hero-photo"><img src="/images/team-photo.jpg" alt="The Nest &amp; Key founders" /></div>
     </div>
 
     <div class="content-section centered wide">
       <span class="tag">What we believe</span>
-      <h2 class="section-title">Three ideas we won't compromise on.</h2>
+      <h2 class="section-title script">Three ideas we won't compromise on.</h2>
       <p class="section-subtitle">The product's still new. These aren't.</p>
       <div class="steps-grid">
         <div class="step-card">
@@ -77,10 +80,10 @@
 
     <div class="content-section centered">
       <span class="tag">From us</span>
-      <h2 class="section-title">Where we are, where we're headed.</h2>
+      <h2 class="section-title script">Where we are, where we're headed.</h2>
       <p class="section-subtitle">Active now in the SF Bay Area. Southern California is next, and we're scoping further from there.</p>
       <div class="trust-box">
-        <div class="trust-stat">Want to hear from us?</div>
+        <div class="trust-stat script">Want to hear from us?</div>
         <div class="trust-note">We occasionally say hi and share updates — no spam, unsubscribe anytime.</div>
       </div>
       <form class="waitlist-form" onsubmit="handleWaitlist(event, 'AboutUpdates')" style="margin-top:24px;">
