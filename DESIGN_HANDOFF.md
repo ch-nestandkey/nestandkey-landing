@@ -625,18 +625,18 @@ CSS lives in `styles.css` and duplicated in the inline `<style>` of `listing-sam
 
 ---
 
-### Nav (updated Jul 14 2026 — elevation + centering fix)
+### Nav (updated Jul 14 2026 — centering fix; shadow tried and reverted)
 
 ```
-nav { height: 64px; background: #F4F7F4; border-bottom: 1px solid rgba(80,110,80,0.15); box-shadow: 0 8px 20px -16px rgba(30,58,47,0.28); }
+nav { height: 64px; background: #F4F7F4; border-bottom: 1px solid rgba(80,110,80,0.15); }
 .nav-links { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 ```
 
-- **Shadow** — a soft downward shadow under the existing hairline border, so the bar reads as a lifted surface (same elevation vocabulary as `.pricing-card.active-card`/`.chat-card`, just much quieter) rather than a flat divider.
 - **Centering fix** — `.nav-links` was previously centered within the leftover flex space after the logo (`flex:1; justify-content:center`), so it drifted off true-center whenever logo width changed page to page. Now absolutely positioned against the whole nav bar, independent of logo width.
+- **Shadow — tried, then explicitly rejected (Jul 15 2026):** a soft downward shadow (`box-shadow: 0 8px 20px -16px rgba(30,58,47,0.28)`) shipped briefly as part of the Jul 14 pass, on the theory that it'd read as a lifted surface like `.pricing-card.active-card`/`.chat-card`. User didn't like it and asked for it removed — reverted on both the main `nav` rule and the listing page's own inline copy. The hairline border is the nav's only separation treatment again; don't reintroduce a nav shadow without checking first, this was a deliberate call, not an oversight.
 - **Height (`64px`) intentionally untouched** — several pages compute hero height as `calc(100vh - 64px)`; changing nav height would throw those off.
 - Mobile drawer (`.mobile-menu`) unchanged.
-- The listing page's own inline nav (`listing-sample-socal/index.html`) gets the same shadow, plus hover states on `.btn-login`/`.btn-signup` that were previously missing — its structural differences (sticky positioning, Login/Signup buttons instead of section links, no hamburger) remain intentional, see §2.1.
+- The listing page's own inline nav (`listing-sample-socal/index.html`) shares the centering fix's non-applicability (it doesn't use `.nav-links`, so nothing to change there) but did gain hover states on `.btn-login`/`.btn-signup` that were previously missing — its structural differences (sticky positioning, Login/Signup buttons instead of section links, no hamburger) remain intentional, see §2.1.
 - **Not done, flagged instead of silently resolved:** `Log in`/`Sign up` on the main nav are still absent — there's no account system behind them yet, so adding functional-looking buttons that no-op would reopen the exact "silent no-op" problem in Part 7. That's a product decision about auth, not a visual-maturity one.
 
 ### Footer (redesigned Jul 14 2026)
