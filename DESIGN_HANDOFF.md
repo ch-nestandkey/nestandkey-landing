@@ -215,11 +215,11 @@ This does not require pixel-identical numbers on every page, but every transitio
 - Tag: "Our story"
 - H1 (set in **Reenie Beanie**, a Google Font — see the webfont-exception note below): "We're building the home search we wished existed."
 - Sub: the founders' real story, signed by name ("Hi, this is Chaehyun...") — verbatim as given, `16px` (matches `.section-subtitle` size site-wide, smaller than the default `.sub` `18px`). Went through two rounds of Code paraphrasing it instead of using the exact words provided — both corrected; **the standing rule now is verbatim placement only for founder/biographical copy, never paraphrase or invent narrative detail to fill gaps.**
-- Hero photo: `.about-hero-photo` — a real photo of the two founders, `/images/team-photo.jpg`, `680px`-wide × `320px`-tall rounded band (a wide band, not a square — corrected after shipping too narrow at `320px` max-width), `object-position: center 48%`
+- Hero photo: `.about-hero-photo` — a real photo of the two founders, `/images/team-photo.jpg`, `680px`-wide × `360px`-tall band, square corners (`border-radius: 0`), `object-position: center 42%`. (Jul 15 2026 — supersedes the prior `320px`-tall, `20px`-radius rounded version; height and object-position were re-tuned together against the real image, so change them as a pair if this needs further adjustment.)
 - **Section tint tried, then reverted (Jul 15 2026):** a distinct `.about-tint-mist` (`#EEF3F3`) background was applied to `#about` to set the page apart, but it created a color seam: the tint stopped exactly where content ended, so the standard `24px` footer-margin gap (present on every page) reverted to the plain body background (`#F4F7F4`) — a second, barely-different shade appearing only on this page, reading as a stray gap right before the footer. Removed for coherence with Tenants/Landlords, which never introduce a second background color — `#about` is transparent again, same as every other page's outer section.
-- Below fold: "What we believe" (3 `.step-card`s, no step numbers — reuses `.content-section.wide` for a 1100px max-width so all three headers fit on one line) → "Where we are, where we're headed" (a `.trust-box` + a `.waitlist-form` newsletter signup, submitting to a new `'AboutUpdates'` sheet tab — see §3.4 Data flow)
+- Below fold: "What we believe" (3 `.step-card`s, no step numbers — reuses `.content-section.wide` for a 1100px max-width so all three headers fit on one line) → "Where we are, where we're headed" (a `.trust-box` containing the `.waitlist-form` newsletter signup — nested inside the box as of Jul 15 2026, previously a sibling below it — submitting to a `'AboutUpdates'` sheet tab — see §3.4 Data flow)
 
-**Webfont exception — Reenie Beanie (Jul 14 2026, extended Jul 15 2026):** the site's typography is a system-font stack everywhere else — this is a deliberate, scoped exception, not a drift from the rule. Loaded via a page-local `<link>` in `about.html`'s own `<head>` (Google Fonts `Reenie+Beanie`) — **not** a global `font-family` change, and not added to `tokens/typography.css` or any shared class. Applies to the hero `h1` and any element carrying the page-scoped `.script` class — currently both `.section-title`s ("Three ideas we won't compromise on.", "Where we are, where we're headed.") and the `.trust-stat` ("Want to hear from us?"). `.script` is a generic hook (`#about h1, #about .script { font-family: 'Reenie Beanie', ... }`), not tied to any one element type, so it can be added to further headings on this page without new CSS. Rationale: About Us is the one page that's inherently company-voice rather than product-voice (see brand-voice notes, Part 4), and a handwritten script mark on this page alone helps it read as distinct from the two product pages (Tenants/Landlords), which intentionally look identical in typography to reinforce they're the same tool. Same "documented exception, not a violation" pattern as Tenants' taller hero (§2.1).
+**Webfont exception — Reenie Beanie (Jul 14 2026, extended then narrowed Jul 15 2026):** the site's typography is a system-font stack everywhere else — this is a deliberate, scoped exception, not a drift from the rule. Loaded via a page-local `<link>` in `about.html`'s own `<head>` (Google Fonts `Reenie+Beanie`) — **not** a global `font-family` change, and not added to `tokens/typography.css` or any shared class. Applies to the hero `h1` and any element carrying the page-scoped `.script` class — currently both `.section-title`s ("Three ideas we won't compromise on.", "Where we are, where we're headed."). `.script` is a generic hook (`#about h1, #about .script { font-family: 'Reenie Beanie', ... }`), not tied to any one element type, so it can be added to further headings on this page without new CSS. The `.trust-stat` ("Want to hear from us?") carried `.script` briefly but had it removed Jul 15 2026 — a question read oddly in handwritten script at `28px`; it's back to system font at `19px 600` (see Trust box, Part 5). Rationale: About Us is the one page that's inherently company-voice rather than product-voice (see brand-voice notes, Part 4), and a handwritten script mark on this page alone helps it read as distinct from the two product pages (Tenants/Landlords), which intentionally look identical in typography to reinforce they're the same tool. Same "documented exception, not a violation" pattern as Tenants' taller hero (§2.1).
 
 ### 2.2 Sample listing page (`/listing-sample-socal`)
 
@@ -641,11 +641,15 @@ nav { height: 64px; background: #F4F7F4; border-bottom: 1px solid rgba(80,110,80
 - The listing page's own inline nav (`listing-sample-socal/index.html`) shares the centering fix's non-applicability (it doesn't use `.nav-links`, so nothing to change there) but did gain hover states on `.btn-login`/`.btn-signup` that were previously missing — its structural differences (sticky positioning, Login/Signup buttons instead of section links, no hamburger) remain intentional, see §2.1.
 - **Not done, flagged instead of silently resolved:** `Log in`/`Sign up` on the main nav are still absent — there's no account system behind them yet, so adding functional-looking buttons that no-op would reopen the exact "silent no-op" problem in Part 7. That's a product decision about auth, not a visual-maturity one.
 
-### Footer (redesigned Jul 14 2026)
+### Footer (redesigned Jul 14 2026; wordmark swapped to real SVG mark Jul 15 2026)
 
 ```html
 <footer>
-  <a class="footer-mark" href="/">Nest &amp; Key</a>
+  <a class="footer-mark footer-logo" href="/">
+    <svg width="120" height="34" viewBox="40 88 160 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- same paths as .nav-logo — reused verbatim, never redrawn -->
+    </svg>
+  </a>
   <div class="footer-links">
     <a href="/about">About Us</a>
     <a href="mailto:hello@nestandkey.ai">Contact</a>
@@ -657,7 +661,10 @@ nav { height: 64px; background: #F4F7F4; border-bottom: 1px solid rgba(80,110,80
 
 ```
 footer { background: #EBF0EB; border-radius: 28px 28px 0 0; padding: 56px 24px 40px; margin-top: 24px; }
-.footer-mark   { font-size: 15px; font-weight: 700; color: #2D5A3D; }
+.footer-mark   { display: inline-block; margin-bottom: 22px; }
+.footer-logo   { display: inline-flex; color: #2D5A3D; }
+.footer-logo:hover { color: #1E3A2F; }
+.footer-logo svg { width: 108px; height: 30px; }
 .footer-links  { display: flex; gap: 28px; justify-content: center; }
 .footer-links a { font-size: 14px; font-weight: 600; color: #2D5A3D; }
 .footer-divider { width: 160px; height: 1px; background: rgba(80,110,80,0.15); }
@@ -665,6 +672,8 @@ footer { background: #EBF0EB; border-radius: 28px 28px 0 0; padding: 56px 24px 4
 ```
 
 Replaces the old flat stack (nav-echo links, copyright, and privacy note all the same `13px` muted line, spaced with inline `style=` hacks) with a distinct lifted surface — `#EBF0EB`, the same trust-box/mobile-drawer tint already in the palette, not a new color — and real visual hierarchy: wordmark → link row → hairline divider → muted meta block.
+
+**Wordmark is the real logo, not text (Jul 15 2026):** `.footer-mark` used to be a text link reading "Nest & Key" in a bold serif-ish weight. It now wraps the same `.nav-logo` SVG mark used top-left on every page (`viewBox="40 88 160 55"`, `fill="currentColor"`), scaled to `108×30px` via `.footer-logo svg`. Reuse the nav SVG's paths verbatim — do not redraw or regenerate the mark. Same "don't redraw the logo" rule that applies to `.nav-logo` now applies here too. `currentColor` is set via `.footer-logo { color: #2D5A3D }` / hover `#1E3A2F`, so it inherits the same green the text version used — verify contrast against the `#EBF0EB` footer band if either color ever changes.
 
 **Per-page privacy line** (inside `.footer-meta .footer-privacy`, optional): `index.html` — "Your data is used only to find homes you'd qualify for — never sold or shared." · `landlords.html` — "Your listing details are used only to pre-screen tenants — never sold or shared." · `about.html` and the listing page — none (neither collects the kind of data the line would apply to).
 
@@ -694,15 +703,23 @@ Step number: `32px` circle, `#2D5A3D` bg, white text.
 
 ### Trust box
 
-`#EBF0EB` bg, `16px` radius, centered. Stat in `22px 700 #1E3A2F`, note in `15px #4A6B52`.
+`#EBF0EB` bg, `16px` radius, centered. Stat in `22px 700 #1E3A2F` by default, note in `15px #4A6B52`.
 
-**Usage:** Placed inside a `.content-section.centered` with no tag/title/subtitle — the trust box *is* the entire section content. Its purpose is to break up denser sections with a quiet, full-width social-proof statement. It intentionally has no heading tier; do not add one. Use once per page at most, between two heavier content blocks. **No current instance** — the Landlords page's trust-box (between "How listing with Key works" and "Ready to list your room?") was removed Jul 14 2026 when the Room Income Calculator merged in; its stat now lives in the `market-stats-panel` instead (see "Calculator card" below), which honors the same "once per page" rule.
+**Usage:** Placed inside a `.content-section.centered` with no tag/title/subtitle — the trust box *is* the entire section content. Its purpose is to break up denser sections with a quiet, full-width social-proof statement. It intentionally has no heading tier; do not add one. Use once per page at most, between two heavier content blocks.
+
+**Current instance — About Us, "Where we are, where we're headed"** (added Jul 14 2026, restructured Jul 15 2026): stat reads "Want to hear from us?" — a question, not a stat, so it dropped the page's `.script` handwritten treatment (was `28px` Reenie Beanie) in favor of system font at a smaller `19px 600` (folded directly into the shared `.trust-box .trust-stat` rule rather than a new size variant, since this is the only trust-box instance on the site — reintroduce a `.trust-box.compact`-style modifier only if a second instance needs a different size). The Landlords page's trust-box (between "How listing with Key works" and "Ready to list your room?") was removed Jul 14 2026 when the Room Income Calculator merged in; its stat now lives in the `market-stats-panel` instead (see "Calculator card" below).
+
+**Can now contain a form (Jul 15 2026):** previously text-only (stat + note). About Us's instance nests its `.waitlist-form` inside the box, directly after `.trust-note`, with `margin-top: 28px` — the form reads as part of the same quiet block rather than a separate section element below it. Treat this as the current pattern if a future trust-box needs a CTA.
 
 ```html
 <div class="content-section centered">
   <div class="trust-box">
-    <div class="trust-stat">Already 120+ pre-screened tenants waiting</div>
-    <div class="trust-note">You always make the final call. We just narrow the list.</div>
+    <div class="trust-stat">Want to hear from us?</div>
+    <div class="trust-note">We occasionally say hi and share updates — no spam, unsubscribe anytime.</div>
+    <form class="waitlist-form" style="margin-top:28px;">
+      <input type="email" name="email" placeholder="your@email.com" required />
+      <button type="submit">Subscribe</button>
+    </form>
   </div>
 </div>
 ```
