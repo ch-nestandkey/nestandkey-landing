@@ -24,15 +24,20 @@
 
 ### 1.1 What the product is
 
-Nest & Key is an **AI market-scanning tool** for tech interns and working professionals in the SF Bay Area — rather than a listings board you scroll, Nest scans the market on your behalf and surfaces homes that fit. It connects three audiences:
+Nest & Key helps people find cost-efficient, quality-first housing solutions in the SF Bay Area. It connects two audiences:
 
-- **Tenants** — tech interns and young professionals looking for pre-screened rooms or entire places
-- **Landlords** — homeowners looking for compatible housemates (not just anyone)
-- **Agents** — real estate agents who want to help clients afford homes by renting a spare room
+- **Tenants** — motivated renters looking for a room or place that's genuinely comfortable, at a price that fits — not just whatever's left on a listings board
+- **Landlords** — homeowners who want to share their home with the right person, and lower what they pay in rent or mortgage by doing it
+
+Rather than a listings board you scroll, Nest (for tenants) scans the market on your behalf and surfaces homes that fit, and Key (for landlords) screens candidates against your preferences so you only meet people worth meeting. Both tools put the person driving their own search or listing in control — Nest & Key finds and screens, the user decides.
+
+**Room income calculator (`/landlords#calculator`):** not a third audience or a standalone route — it's a section on the Landlords page (merged Jul 14 2026; the old standalone `/buyers` route now 301-redirects to `/landlords#calculator`, and `buyers.html` no longer exists). It extends the landlord story — the same "lower your rent/mortgage by sharing your home" value prop, run as numbers instead of a chat. It also supports a secondary "buying to invest" scenario (renting out a whole unit for cash flow). **Resolved Jul 14 2026 — this is not an exception to the two-audience positioning, kept as-is intentionally:** an unused whole house is just a larger unit of the same unused-space problem a spare room is — one property with zero people sharing it instead of one room. "Invest" is the same house-sharing logic scaled up to an entire property, not real-estate-investor framing bolted onto a house-sharing page. No calculator or copy change needed; this only resolves how Design/Code should reason about the scenario going forward.
 
 The brand positioning is deliberate: this is not Craigslist. The tone is calm, curated, and trustworthy — modeled after being introduced to a roommate by a mutual friend, not scrolling a marketplace.
 
 **Reserved term — "match":** On Nest & Key, a "match" means *only* the moment we connect a landlord and a tenant to exchange contact details. Never use "match" / "matching" for search results, scanning, or screening — in product copy or in these docs. For results, say "homes we find", "homes we surface", "listings", or "results".
+
+**Clarification (Jul 15 2026):** this restricts *product-UI copy describing search/screening mechanics* — it does not ban the word from narrative/company-voice writing (About Us, brand storytelling) when it's naming the aspirational outcome the rule itself protects: two compatible people actually connecting. Example judged fine on this basis: About Us's founder story — "making the right match something you can count on, not just hope for" — describes the goal, not a mislabeled product feature. If in doubt, ask whether the sentence could be confused for describing search results or screening; if not, "match" in its reserved sense is available.
 
 ### 1.2 Color tokens
 
@@ -148,7 +153,7 @@ Net effect: hero keeps its current full-viewport height and content, pricing ban
 
 Single-page app — section toggling via JS. Nav always visible (`z-index: 100`). Sections are `display: none` until activated by `showSection(id)`.
 
-**Nav items:** For Tenants · For Landlords · For Agents · About Us  
+**Nav items (as of Jul 14 2026):** For Tenants · For Landlords · About Us — three items. The Room Income Calculator nav item was removed when the calculator merged into `/landlords#calculator` (see §1.1); it is no longer a separate route. *(note: this section otherwise still describes the original single-page architecture; Landlords/About Us have since shipped as separate pages — `landlords.html`, `about.html` — not JS-toggled sections of `index.html`. This whole section (2.1) needs a rewrite to match; flagged, not done in this pass.)*  
 **Nav right:** Log in (ghost) · Sign up (filled)  
 **Mobile:** Hamburger replaces nav links at `≤1024px`. Drawer background: `#EBF0EB`.
 
@@ -156,7 +161,9 @@ Single-page app — section toggling via JS. Nav always visible (`z-index: 100`)
 
 #### Section types
 
-**Simple hero** (Tenants, About Us) — `min-height: calc(100vh - 64px)`, centered flex. Tag → H1 → sub → chat card or placeholder.
+**Simple hero** (Tenants) — `min-height: calc(100vh - 64px)`, centered flex. Tag → H1 → sub → chat card.
+
+**About Us is now `section.section-multi`, not Simple hero (Jul 14 2026):** it has real below-fold content for the first time (see §2.1 Section content), so it follows the Multi-section architecture like Landlords, sharing the standard `65vh` hero.
 
 **Multi-section** (Landlords, Agents) — `section.section-multi`: no padding, `min-height: auto`. Hero block inside is `min-height: 65vh` — intentionally leaves the next section peeking below fold to cue scrolling. Below-fold content in `.content-section` blocks: `max-width: 960px`, `padding: 64px 24px`, separated by subtle top border.
 
@@ -168,6 +175,18 @@ Single-page app — section toggling via JS. Nav always visible (`z-index: 100`)
 
 **Content-section grammar (reusable — canonical, not page-specific):** `.content-section` (max-width 960px, `96px 24px` padding, top-border divider) + `.section-title` (`clamp(26px, 3.5vw, 36px)`, `-1px` letter-spacing, centered) + `.section-subtitle` (`16px`, `#6B8F71`, max-width 600px, centered) is the standard unit for **any** below-fold content block, on any page — not just Landlords/Agents. New sections or features must reuse these three classes rather than inventing parallel ones with slightly different numbers (custom heading sizes, custom sub max-widths, custom border opacities). If a new block needs something these don't cover (e.g. pricing cards' price figures, tier badges), add only that delta as new, narrowly-scoped classes — never redeclare the container/heading/sub. **Counter-example to learn from:** the Tenants pricing band (§1.6) shipped with bespoke `.pricing-heading`/`.pricing-sub` classes and a `0.2`-opacity card border instead of reusing this grammar — it read as visually disconnected from Landlords/Agents as a result. Rebuild it against this rule.
 
+**Approved width modifier — `.content-section.wide` (Jul 14 2026):** `max-width: 1100px` instead of the default `960px`. Compound selector, per the Variant rule below — used once so far, on About Us's "What we believe" section, so its three `.step-card` headers fit on one line. This is the correct shape for a modifier that only changes one dimension: it doesn't redeclare padding, border, or the title/subtitle rules, just widens the container.
+
+**Variant rule (added Jul 14 2026, after the `.section-filled` spacing bug):** any class that modifies `.content-section` (a "variant," e.g. `.section-filled`) must follow two rules, not just reuse the base grammar:
+1. **Compound the selector** — write `.content-section.variant-name`, never a bare `.variant-name`. `.content-section` itself sets `margin`, `padding`, `max-width`, and `border-top`; a bare class has equal specificity, so whichever rule sits later in `styles.css` silently wins regardless of intent. This exact bug shipped once already (Part 5, "Filled (dark) section" — `.section-filled`'s `margin` was zeroed by `.content-section`'s later `margin: 0 auto` until the selector was compounded).
+2. **If the variant overrides a property that provided visual separation (most commonly `border-top`), document and provide the replacement in the same commit.** A hairline divider only reads as a "line break" against a matching background; a filled/colored variant needs real `margin` instead, or the section will visually collide with its neighbors even though the box model looks correct on paper.
+
+**Pre-ship spacing check (added Jul 14 2026):** before shipping any new section, page, or `.content-section` variant, verify its rendered vertical rhythm against the Tenants page (the most mature reference — `/`) at the following three points, using actual `getBoundingClientRect()` gaps, not just visual skim or "it has padding so it must be fine":
+- Gap between this section and the one immediately above it
+- Gap between this section and the one immediately below it (or the footer, if it's the last section)
+- Whether that gap is genuinely the same background color on both sides — a filled/colored section's own padding does not count as a gap against its neighbors, only real `margin` does
+This does not require pixel-identical numbers on every page, but every transition must have a clearly perceptible break — never rely on "the box model adds up" without checking the rendered result.
+
 #### Section content
 
 **For Tenants (default)**
@@ -177,12 +196,14 @@ Single-page app — section toggling via JS. Nav always visible (`z-index: 100`)
 - Main element: Nest AI chat card (see Part 3)
 - Below the chat: pricing band — Free / Casual / Active (see §1.6)
 
-**For Landlords**
+**For Landlords** (restructured Jul 14 2026 — Room Income Calculator merged in)
 - Tag: "Closed Beta · SF Bay Area"
-- H1: "Find someone who fits your home, not just fills your room."
-- Sub: "We pre-screen based on your preferences. You only meet people you'd actually consider."
-- Link: "See a sample listing →" → `/listing-sample-socal`
-- Below fold: How it works (3 steps) → Trust signals → Email CTA → submits to "Landlords" sheet tab
+- H1: "Share your home with the right person — and lower what you pay."
+- Sub: "Key finds and pre-screens people who actually fit, based on your preferences. You only meet people you'd actually consider, and your rent or mortgage gets lighter."
+- Hero CTA: "List your room in minutes →" (pill button, scrolls to `#intake`). The old "See a sample listing →" link is hidden (`display:none`), not deleted — kept for a possible future re-purposing, per handoff.
+- Below fold, in order: **Room income calculator** (`id="calculator"`, relocated from the old `/buyers` page, unchanged behavior) with a result-panel CTA band → How listing with Key works (3 steps) → "A market built for this" (`market-stats-panel`, relocated from `/buyers`) → Key AI listing chat intake (`id="intake"`, now on a dark-green `.section-filled` band)
+- The standalone `trust-box` that used to sit between the 3-step and the chat intake was **removed** — its stat now lives in the market-stats-panel instead (trust-box is "once per page," see Part 5)
+- Single canonical intake at `#intake`; the hero CTA and the calculator's result-band CTA are both entry points that scroll to it — do not add a second intake form
 
 **For Agents**
 - Tag: "For Real Estate Agents"
@@ -190,7 +211,15 @@ Single-page app — section toggling via JS. Nav always visible (`z-index: 100`)
 - Sub: "Show them how renting a spare room lowers their effective mortgage — and expands what they can buy."
 - Below fold: Affordability calculator → Why partner (4 items) → Email CTA → submits to "Agents" sheet tab
 
-**About Us** — placeholder: "About Nest & Key. We're building the easiest way to find and fill rooms."
+**About Us** (rebuilt Jul 14 2026 — closes the Part 7/Part 9 "empty placeholder" item)
+- Tag: "Our story"
+- H1 (set in **Reenie Beanie**, a Google Font — see the webfont-exception note below): "We're building the home search we wished existed."
+- Sub: the founders' real story, signed by name ("Hi, this is Chaehyun...") — verbatim as given, `16px` (matches `.section-subtitle` size site-wide, smaller than the default `.sub` `18px`). Went through two rounds of Code paraphrasing it instead of using the exact words provided — both corrected; **the standing rule now is verbatim placement only for founder/biographical copy, never paraphrase or invent narrative detail to fill gaps.**
+- Hero photo: `.about-hero-photo` — a real photo of the two founders, `/images/team-photo.jpg`, `680px`-wide × `360px`-tall band, square corners (`border-radius: 0`), `object-position: center 42%`. (Jul 15 2026 — supersedes the prior `320px`-tall, `20px`-radius rounded version; height and object-position were re-tuned together against the real image, so change them as a pair if this needs further adjustment.)
+- **Section tint tried, then reverted (Jul 15 2026):** a distinct `.about-tint-mist` (`#EEF3F3`) background was applied to `#about` to set the page apart, but it created a color seam: the tint stopped exactly where content ended, so the standard `24px` footer-margin gap (present on every page) reverted to the plain body background (`#F4F7F4`) — a second, barely-different shade appearing only on this page, reading as a stray gap right before the footer. Removed for coherence with Tenants/Landlords, which never introduce a second background color — `#about` is transparent again, same as every other page's outer section.
+- Below fold: "What we believe" (3 `.step-card`s, no step numbers — reuses `.content-section.wide` for a 1100px max-width so all three headers fit on one line) → "Where we are, where we're headed" (a `.trust-box` containing the `.waitlist-form` newsletter signup — nested inside the box as of Jul 15 2026, previously a sibling below it — submitting to a `'AboutUpdates'` sheet tab — see §3.4 Data flow)
+
+**Webfont exception — Reenie Beanie (Jul 14 2026, extended then narrowed Jul 15 2026):** the site's typography is a system-font stack everywhere else — this is a deliberate, scoped exception, not a drift from the rule. Loaded via a page-local `<link>` in `about.html`'s own `<head>` (Google Fonts `Reenie+Beanie`) — **not** a global `font-family` change, and not added to `tokens/typography.css` or any shared class. Applies to the hero `h1` and any element carrying the page-scoped `.script` class — currently both `.section-title`s ("Three ideas we won't compromise on.", "Where we are, where we're headed."). `.script` is a generic hook (`#about h1, #about .script { font-family: 'Reenie Beanie', ... }`), not tied to any one element type, so it can be added to further headings on this page without new CSS. The `.trust-stat` ("Want to hear from us?") carried `.script` briefly but had it removed Jul 15 2026 — a question read oddly in handwritten script at `28px`; it's back to system font at `19px 600` (see Trust box, Part 5). Rationale: About Us is the one page that's inherently company-voice rather than product-voice (see brand-voice notes, Part 4), and a handwritten script mark on this page alone helps it read as distinct from the two product pages (Tenants/Landlords), which intentionally look identical in typography to reinforce they're the same tool. Same "documented exception, not a violation" pattern as Tenants' taller hero (§2.1).
 
 ### 2.2 Sample listing page (`/listing-sample-socal`)
 
@@ -252,7 +281,7 @@ This MUST ask room type first, matching the persona's own instruction to collect
 .chat-header            — avatar + name + role, border-bottom rgba(80,110,80,0.1) (added Jul 3 2026)
   .chat-avatar          — 30px circle, #2D5A3D bg, white "N", left-aligned
   .chat-header-name     — "Nest", 14px 600 #1E3A2F
-  .chat-header-sub      — "Your home-search concierge", 12px #8BAF8E
+  .chat-header-sub      — "Your home-search assistant", 12px #8BAF8E
 .chat-messages          — scrollable, min-height 400px / max-height 500px (desktop), 320/420 mobile
   .msg.nest             — Nest messages, left-aligned, text-align left
     .msg-label          — "NEST" in 11px uppercase #2D5A3D, left-aligned above bubble
@@ -273,7 +302,7 @@ This MUST ask room type first, matching the persona's own instruction to collect
 - **Active** — input enabled, messages scrollable
 - **Waiting** — input disabled while Nest is responding. A `.msg.nest.typing-indicator` bubble with animated three-dot indicator (`.typing-dots span`, `@keyframes typingBounce`) appears immediately after the user sends and is removed when the reply arrives.
 - **Summary** — a distinct **summary card** ("Ready to search — here's what I have") lists every captured field as label/value rows (skipping any empty/optional field), followed by the "Submit my search →" button and a small hint ("Not quite right? Keep typing below to adjust.") — all inserted above the input row; input stays enabled for corrections.
-- **Confirmed** — entire card replaced with: *"✓ You're in — Nest is scanning the Bay Area now. First results will land in {email} shortly."* AI-speed framing — no team mention. See §4.9 for audience tone rules.
+- **Confirmed** — entire card replaced with the shared `.confirm` component (see "Confirmation component" in Part 5): medallion + title *"You're in"* + body *"Nest is scanning the Bay Area now. First results will land in {email} shortly."* AI-speed framing — no team mention, no meta line. See §4.9 for audience tone rules.
 - **Error** — a warm-tinted bubble (`.msg.error`, `background: #FAF3E0`) appears as a Nest message with a retry link (`.msg-retry-btn`). Clicking retry re-sends the last message without re-enabling input until the retry completes. Input re-enables on success.
 - **Empty send** — textarea plays a shake animation (`@keyframes chatInputShake`, `.chat-input-row textarea.shake`) if user hits Send with empty input. No message is sent.
 
@@ -315,6 +344,8 @@ Browser (chat card)
 
 **Google Sheet ID:** `1SgFQ_14-HpSgzukQGiFH1A2vn7s7H2jIg9ko6wkBm2U`  
 **Searches tab columns:** Timestamp · Email · Room Type · Location · Budget · Stay · Commute · Room Needs · Work Status · Income · Credit · Lifestyle
+
+**`AboutUpdates` tab (added Jul 14 2026):** the About Us newsletter signup (`.waitlist-form` + `handleWaitlist(event, 'AboutUpdates')`, reusing the existing generic helper in `shared.js` — no new JS was needed) posts `{ email, sheet: 'AboutUpdates' }` to the same Apps Script endpoint as every other waitlist form on the site, landing in its own `AboutUpdates` tab rather than mixing with `Searches`/`Listings`.
 
 **Privacy disclosure** (fixed copy, appears once before income/credit questions):
 > *"Income & credit are self-reported and used only to find homes you'd qualify for — never shared or used for anything else."*
@@ -474,11 +505,11 @@ Nest's closing message after confirmation:
 
 Then the "Submit my search →" button submits and the card transitions to the confirmation state.
 
-**Human review layer:** All submissions pass through the Nest & Key team before matching or pre-screening begins. How this is communicated differs by audience:
+**Quality & onboarding review:** users drive their own search or listing — Nest & Key never takes over on their behalf. To keep intake quality high and help people get set up, the Nest & Key team reviews every submission (tenant *and* landlord) before scanning or pre-screening goes live. Frame this as a quick quality check that helps users get started — never as a done-for-you concierge service or a team acting on their behalf. How much it's foregrounded differs by audience:
 
-- **Tenants** — speed and accuracy are the primary value proposition. Confirmation copy must feel immediate and AI-driven. Never mention the team or a review step. Write as if the scan starts the moment they hit Submit. Example: *"✓ You're in — Nest is scanning the Bay Area now. First results will land in [email] shortly."*
+- **Tenants** — speed is the primary value. Keep confirmation immediate and AI-driven; frame the scan as already underway. Don't foreground a review step. Example (title + body): **You're in** — Nest is scanning the Bay Area now. First results will land in [email] shortly.
 
-- **Landlords and home buyers** — credibility and trust are the primary value proposition. Mentioning the team's involvement is appropriate and reassuring. Confirmation copy should reference human review naturally. Example: *"✓ Submitted — our team will review your listing and reach out to [email] shortly."*
+- **Landlords and home buyers** — trust is the primary value. It's fine to note the quick quality check, framed as help getting set up rather than the team taking over. Keep the user in control of the outcome. Example (title + body + meta): **Listing submitted** — Our team will review your submission and reach out to [email] shortly. *(meta: You always make the final call on who you meet.)*
 
 Button copy rule: use "Submit" (not "Start pre-screening" or "Start my scan") so it doesn't imply automated action — but confirmation copy handles the framing per audience above.
 
@@ -564,6 +595,90 @@ When Key declares the listing brief complete (`data.ready = true`), a submit but
 
 ---
 
+### Confirmation component (`.confirm`) — D2
+
+One shared success component (added Jul 11 2026) replacing four previously text-only success states (`.chat-confirm`, `.modal-success`). Tokens lifted from `.chat-summary-card` — no new colors, system font throughout.
+
+```html
+<div class="confirm confirm--panel">
+  <span class="confirm__medallion">✓</span>
+  <div class="confirm__title">Title</div>
+  <p class="confirm__body">Body copy.</p>
+  <p class="confirm__meta">Optional meta line (landlord only).</p>
+</div>
+```
+
+**Variants:**
+- `.confirm--panel` — card takeover, centered, used on all four surfaces (default)
+- `.confirm--compact` — inline left-aligned variant with left border accent; shipped in CSS but currently unused (candidate for the contact modal if the panel reads too tall)
+
+**Usages and copy (audience-split per §4.9):**
+
+| Surface | File | Title | Body | Meta |
+|---|---|---|---|---|
+| Tenant chat | `index.html` | You're in | Nest is scanning the Bay Area now. First results will land in {email} shortly. | — |
+| Landlord Key chat | `landlords.html` | Listing submitted | Our team will review your submission and reach out to {email} shortly. | You always make the final call on who you meet. |
+| Contact form | `listing-sample-socal/index.html` | Message sent | The homeowners will reach out to you by email soon. | — |
+| Apply modal | `listing-sample-socal/index.html` | You're in | The homeowners will reach out to you to schedule a tour. | — |
+
+Copy rules: verb-led headline, no `✓ Submitted`-style prefixes, no exclamation points (§4.2). "Match/matching/matches" is reserved for the landlord↔tenant contact-exchange moment only — never used for confirmation copy.
+
+CSS lives in `styles.css` and duplicated in the inline `<style>` of `listing-sample-socal/index.html` (two stylesheets, not yet consolidated).
+
+---
+
+### Nav (updated Jul 14 2026 — centering fix; shadow tried and reverted)
+
+```
+nav { height: 64px; background: #F4F7F4; border-bottom: 1px solid rgba(80,110,80,0.15); }
+.nav-links { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+```
+
+- **Centering fix** — `.nav-links` was previously centered within the leftover flex space after the logo (`flex:1; justify-content:center`), so it drifted off true-center whenever logo width changed page to page. Now absolutely positioned against the whole nav bar, independent of logo width.
+- **Shadow — tried, then explicitly rejected (Jul 15 2026):** a soft downward shadow (`box-shadow: 0 8px 20px -16px rgba(30,58,47,0.28)`) shipped briefly as part of the Jul 14 pass, on the theory that it'd read as a lifted surface like `.pricing-card.active-card`/`.chat-card`. User didn't like it and asked for it removed — reverted on both the main `nav` rule and the listing page's own inline copy. The hairline border is the nav's only separation treatment again; don't reintroduce a nav shadow without checking first, this was a deliberate call, not an oversight.
+- **Height (`64px`) intentionally untouched** — several pages compute hero height as `calc(100vh - 64px)`; changing nav height would throw those off.
+- Mobile drawer (`.mobile-menu`) unchanged.
+- The listing page's own inline nav (`listing-sample-socal/index.html`) shares the centering fix's non-applicability (it doesn't use `.nav-links`, so nothing to change there) but did gain hover states on `.btn-login`/`.btn-signup` that were previously missing — its structural differences (sticky positioning, Login/Signup buttons instead of section links, no hamburger) remain intentional, see §2.1.
+- **Not done, flagged instead of silently resolved:** `Log in`/`Sign up` on the main nav are still absent — there's no account system behind them yet, so adding functional-looking buttons that no-op would reopen the exact "silent no-op" problem in Part 7. That's a product decision about auth, not a visual-maturity one.
+
+### Footer (redesigned Jul 14 2026; wordmark swapped to real SVG mark Jul 15 2026)
+
+```html
+<footer>
+  <a class="footer-mark footer-logo" href="/">
+    <svg width="120" height="34" viewBox="40 88 160 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- same paths as .nav-logo — reused verbatim, never redrawn -->
+    </svg>
+  </a>
+  <div class="footer-links">
+    <a href="/about">About Us</a>
+    <a href="mailto:hello@nestandkey.ai">Contact</a>
+  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-meta">© 2026 NestAndKey. All rights reserved.<span class="footer-privacy">{page-specific privacy line, optional}</span></div>
+</footer>
+```
+
+```
+footer { background: #EBF0EB; border-radius: 28px 28px 0 0; padding: 56px 24px 40px; margin-top: 24px; }
+.footer-mark   { display: inline-block; margin-bottom: 22px; }
+.footer-logo   { display: inline-flex; color: #2D5A3D; }
+.footer-logo:hover { color: #1E3A2F; }
+.footer-logo svg { width: 108px; height: 30px; }
+.footer-links  { display: flex; gap: 28px; justify-content: center; }
+.footer-links a { font-size: 14px; font-weight: 600; color: #2D5A3D; }
+.footer-divider { width: 160px; height: 1px; background: rgba(80,110,80,0.15); }
+.footer-meta   { font-size: 13px; color: #8BAF8E; line-height: 1.7; }
+```
+
+Replaces the old flat stack (nav-echo links, copyright, and privacy note all the same `13px` muted line, spaced with inline `style=` hacks) with a distinct lifted surface — `#EBF0EB`, the same trust-box/mobile-drawer tint already in the palette, not a new color — and real visual hierarchy: wordmark → link row → hairline divider → muted meta block.
+
+**Wordmark is the real logo, not text (Jul 15 2026):** `.footer-mark` used to be a text link reading "Nest & Key" in a bold serif-ish weight. It now wraps the same `.nav-logo` SVG mark used top-left on every page (`viewBox="40 88 160 55"`, `fill="currentColor"`), scaled to `108×30px` via `.footer-logo svg`. Reuse the nav SVG's paths verbatim — do not redraw or regenerate the mark. Same "don't redraw the logo" rule that applies to `.nav-logo` now applies here too. `currentColor` is set via `.footer-logo { color: #2D5A3D }` / hover `#1E3A2F`, so it inherits the same green the text version used — verify contrast against the `#EBF0EB` footer band if either color ever changes.
+
+**Per-page privacy line** (inside `.footer-meta .footer-privacy`, optional): `index.html` — "Your data is used only to find homes you'd qualify for — never sold or shared." · `landlords.html` — "Your listing details are used only to pre-screen tenants — never sold or shared." · `about.html` and the listing page — none (neither collects the kind of data the line would apply to).
+
+Shared across `index.html`, `landlords.html`, `about.html`, and (newly added, previously absent entirely) `listing-sample-socal/index.html` — the listing page's link row is contextual (`For Landlords` / `Contact`) rather than the main site's (`About Us` / `Contact`), matching its different audience.
+
 ### Buttons
 
 ```
@@ -573,11 +688,12 @@ Pill CTA (listing):  radius 50px, bg #1E3A2F (hero) or #2D5A3D (tour), text #F4F
 Chat start:          full-width, bg #2D5A3D, text #F4F7F4, no radius (flush to card edge)
 ```
 
-### Waitlist forms (Landlords, Agents)
+### Waitlist forms (Landlords, Agents, About Us)
 
 Inline flex row (wraps on mobile): email input + submit button.  
 Input: white bg, `rgba(80,130,80,0.35)` border, focus border `#2D5A3D`.  
-On success: form replaced with `✓ You're on the list! We'll be in touch soon.` in `#2D5A3D`.
+On success: form replaced with `✓ You're on the list! We'll be in touch soon.` in `#2D5A3D`.  
+About Us reuses this exact component for its newsletter signup (Jul 14 2026) — same markup/CSS, posts to a new `'AboutUpdates'` sheet tab (§3.4) via the existing generic `handleWaitlist()` helper — no new component or JS was needed.
 
 ### Step cards (Landlords "How it works")
 
@@ -587,24 +703,55 @@ Step number: `32px` circle, `#2D5A3D` bg, white text.
 
 ### Trust box
 
-`#EBF0EB` bg, `16px` radius, centered. Stat in `22px 700 #1E3A2F`, note in `15px #4A6B52`.
+`#EBF0EB` bg, `16px` radius, centered. Stat in `22px 700 #1E3A2F` by default, note in `15px #4A6B52`.
 
-**Usage:** Placed inside a `.content-section.centered` with no tag/title/subtitle — the trust box *is* the entire section content. Its purpose is to break up denser sections with a quiet, full-width social-proof statement. It intentionally has no heading tier; do not add one. Use once per page at most, between two heavier content blocks. Current instance: Landlords page, between "How listing with Key works" and "Ready to list your room?"
+**Usage:** Placed inside a `.content-section.centered` with no tag/title/subtitle — the trust box *is* the entire section content. Its purpose is to break up denser sections with a quiet, full-width social-proof statement. It intentionally has no heading tier; do not add one. Use once per page at most, between two heavier content blocks.
+
+**Current instance — About Us, "Where we are, where we're headed"** (added Jul 14 2026, restructured Jul 15 2026): stat reads "Want to hear from us?" — a question, not a stat, so it dropped the page's `.script` handwritten treatment (was `28px` Reenie Beanie) in favor of system font at a smaller `19px 600` (folded directly into the shared `.trust-box .trust-stat` rule rather than a new size variant, since this is the only trust-box instance on the site — reintroduce a `.trust-box.compact`-style modifier only if a second instance needs a different size). The Landlords page's trust-box (between "How listing with Key works" and "Ready to list your room?") was removed Jul 14 2026 when the Room Income Calculator merged in; its stat now lives in the `market-stats-panel` instead (see "Calculator card" below).
+
+**Can now contain a form (Jul 15 2026):** previously text-only (stat + note). About Us's instance nests its `.waitlist-form` inside the box, directly after `.trust-note`, with `margin-top: 28px` — the form reads as part of the same quiet block rather than a separate section element below it. Treat this as the current pattern if a future trust-box needs a CTA.
 
 ```html
 <div class="content-section centered">
   <div class="trust-box">
-    <div class="trust-stat">Already 120+ pre-screened tenants waiting</div>
-    <div class="trust-note">You always make the final call. We just narrow the list.</div>
+    <div class="trust-stat">Want to hear from us?</div>
+    <div class="trust-note">We occasionally say hi and share updates — no spam, unsubscribe anytime.</div>
+    <form class="waitlist-form" style="margin-top:28px;">
+      <input type="email" name="email" placeholder="your@email.com" required />
+      <button type="submit">Subscribe</button>
+    </form>
   </div>
 </div>
 ```
 
-### Calculator card (Agents)
+### Filled (dark) section, pill CTA, and calculator CTA band — new Jul 14 2026
+
+Introduced with the Landlords/Room Income Calculator merge. First and currently only instance: the Landlords page's intake band (`id="intake"`) and its two CTAs.
+
+```css
+.content-section.section-filled { background: #1E3A2F; border-top: none; border-radius: 24px; padding-left: 48px; padding-right: 48px; margin: 32px auto; }
+.section-filled .tag { color: #8BAF8E; }
+.section-filled .section-title { color: #fff; }
+.section-filled .section-subtitle { color: #8BAF8E; }
+
+.btn-pill { background: #2D5A3D; color: #F4F7F4; font-size: 15px; font-weight: 600; padding: 14px 30px; border-radius: 999px; box-shadow: 0 6px 20px rgba(45,90,61,0.25); }
+.calc-cta-band { max-width: 760px; margin: 16px auto 0; background: #2D5A3D; border-radius: 18px; padding: 32px 40px; text-align: center; }
+.calc-cta-band .btn-pill { background: #fff; color: #2D5A3D; }
+```
+
+- **`.section-filled`** — apply alongside `.content-section.centered` to render a dark-green filled block with light text, instead of the default white/bordered content-section. Generalizes the dark-inversion treatment already used on the Active pricing card (§1.6) to a full section. **No new palette values** — on-dark text uses `#fff` (headings) and the existing `#8BAF8E` (tag/subtitle color elsewhere in the palette), not the `#C8E0CC` mint that appeared in an earlier design mockup; do not add `#C8E0CC` to the palette.
+- **Selector must be `.content-section.section-filled`, not `.section-filled` alone (fixed Jul 14 2026):** `.content-section` declares `margin: 0 auto` later in the cascade than `.section-filled` originally did; with equal specificity, source order won and silently zeroed the variant's margin. Compounding the selector makes it win regardless of where either rule sits in the file — **any variant of `.content-section` must use a compound selector like this** if it overrides a property `.content-section` itself sets (`margin`, `padding`, `border-top`, `max-width`), not a bare `.variant-name` class.
+- **Why this variant needs its own `margin` (not just relying on the canonical `border-top` divider):** the standard content-section divider is a hairline border, which is designed to read as a subtle seam between two same-background sections. It doesn't work as a divider against a *filled* section with its own background color — the color block's edge reads as the section's true visual boundary, so the section's own 96px padding is perceived as "inside the box," not as breathing room. `.section-filled` therefore disables `border-top` and adds real `margin` (`32px`) instead, so there's always genuine same-background space before and after the colored block, both against the previous section and against the footer.
+- **`.btn-pill`** — a pill-shaped (`border-radius: 999px`) primary CTA, distinct from the standard `.btn.btn-primary` (`8px` radius). Used for the two highest-intent moments on Landlords (hero CTA, calculator result CTA) to visually mark them as the primary conversion path — not a general-purpose button replacement.
+- **`.calc-cta-band`** — a self-contained dark-green CTA card, used directly after `.bcalc-card` (inside `#calculator`, not inside the card itself) to present "list this room" as the natural next step once the user has run their numbers.
+- Conversion pattern: single canonical intake at `#intake`; the hero CTA and the calculator's CTA band both smooth-scroll there rather than opening a second form.
+
+### Calculator card (`.bcalc-card`, Landlords `#calculator`)
 
 White bg, `rgba(80,130,80,0.15)` border, `16px` radius.  
 2-col input grid → 1-col mobile. Last result row highlighted: `color: #2D5A3D, font-size: 22px`.  
-Footnote: "Estimates assume a 30-year fixed mortgage, principal and interest only."
+Footnote: "Estimates assume a 30-year fixed mortgage, principal and interest only."  
+*(Heading corrected Jul 14 2026 — this was mislabeled "Agents"; the calculator has always lived under the Landlords/Home-Buyers audience, and is now a section on `/landlords`, not a separate page.)*
 
 ### Tag pills (listing page)
 
@@ -647,10 +794,12 @@ All photos live in `/listing-sample-socal/photos/`.
 | ~~Mobile keyboard scroll~~ | ~~May clip messages~~ | **Done Jul 2026** — `initChatKeyboardFix()` in `shared.js`; messages pane shrinks to visible height when keyboard opens |
 | Phase 2: live brief panel (Tenants) | Not built — Tenants has a static summary card only | Side panel showing criteria filling in real-time as Nest captures each field; 2-col desktop, stacks below chat on ≤768px. No backend change needed — reads existing `chatState`. Key (Landlords) already has this — use it as reference. |
 | Key chat in-chat submit CTA | **Done Jul 2026** — button re-injects at bottom of chat each time AI declares ready | Already ships; open design question: should Nest (Tenants) get the same in-chat CTA, or keep the current above-input summary card approach? |
-| Log in / Sign up | Styled, non-functional | Silent no-op on click — decide: hide, tooltip, or waitlist redirect |
-| "Apply now" on listing | Links to `#tour` same page | Label misleads — change to "Schedule a tour" to match actual destination |
-| About Us page | Empty placeholder | Founder story TBD |
-| Footer | Minimal | Will expand when more pages exist |
+| Log in / Sign up | Styled, non-functional | Still a silent no-op on the main nav — deliberately not resolved in the Jul 14 2026 nav/footer pass (see below); listing-page `.btn-login`/`.btn-signup` gained hover states only, still no-op |
+| ~~"Apply now" on listing~~ | ~~Links to `#tour` same page~~ | **Already resolved** (undated) — button now reads "Schedule a tour", matching its destination |
+| ~~About Us page~~ | ~~Empty placeholder~~ | **Done Jul 14 2026** — real hero (founder story + photo), "What we believe" (3 cards), "Where we are, where we're headed" + newsletter signup. See §2.1 and Part 5. |
+| ~~Footer~~ | ~~Minimal~~ | **Done Jul 14 2026** — redesigned as a lifted `#EBF0EB` band with a wordmark, link row, divider, and meta line (`.footer-mark`/`.footer-links`/`.footer-divider`/`.footer-meta`), shared across `index.html`, `landlords.html`, `about.html`, and (new) `listing-sample-socal/index.html`. See Part 5. |
+| Nav elevation + centering | Flat bar, links centered via leftover flex space (drifted when logo width changed) | **Done Jul 14 2026** — soft shadow (`0 8px 20px -16px rgba(30,58,47,0.28)`) and `.nav-links` absolutely centered against the full bar, independent of logo width. See Part 5. |
+| `.section-filled` missing `border-top` | Deliberately disabled (doesn't read as a gap against a filled bg) — see §2.1 Variant rule | Backlogged, Jul 14 2026: now that real `margin` exists around the box, restore `border-top` inside that margin for full consistency with every other section boundary's hairline divider. Low-risk (opacity is already very low; respects `border-radius`) — no urgency, not a visible defect. |
 
 ---
 
