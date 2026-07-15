@@ -159,7 +159,9 @@ Single-page app — section toggling via JS. Nav always visible (`z-index: 100`)
 
 #### Section types
 
-**Simple hero** (Tenants, About Us) — `min-height: calc(100vh - 64px)`, centered flex. Tag → H1 → sub → chat card or placeholder.
+**Simple hero** (Tenants) — `min-height: calc(100vh - 64px)`, centered flex. Tag → H1 → sub → chat card.
+
+**About Us is now `section.section-multi`, not Simple hero (Jul 14 2026):** it has real below-fold content for the first time (see §2.1 Section content), so it follows the Multi-section architecture like Landlords, sharing the standard `65vh` hero.
 
 **Multi-section** (Landlords, Agents) — `section.section-multi`: no padding, `min-height: auto`. Hero block inside is `min-height: 65vh` — intentionally leaves the next section peeking below fold to cue scrolling. Below-fold content in `.content-section` blocks: `max-width: 960px`, `padding: 64px 24px`, separated by subtle top border.
 
@@ -170,6 +172,8 @@ Single-page app — section toggling via JS. Nav always visible (`z-index: 100`)
 **Tenants' hero is a documented exception, not a violation:** Tenants uses a taller `calc(100vh - 64px)` hero (full first viewport) instead of the shared `65vh`, because it hosts the primary product interaction (the Nest chat) rather than marketing copy alone — the chat needs real room to be usable. This means Tenants should be restructured to follow the Multi-section *architecture* (a `.hero-block` that does NOT vertically-center with what follows, plus `.content-section` blocks flowing normally below it — see the pricing band in §1.6) while intentionally keeping its own taller hero height. Do not force Tenants to `65vh` — that would cramp the chat. Do not, either, let its hero co-center with the pricing band below it (today's bug) — they must be independent blocks, same as every other Multi-section page.
 
 **Content-section grammar (reusable — canonical, not page-specific):** `.content-section` (max-width 960px, `96px 24px` padding, top-border divider) + `.section-title` (`clamp(26px, 3.5vw, 36px)`, `-1px` letter-spacing, centered) + `.section-subtitle` (`16px`, `#6B8F71`, max-width 600px, centered) is the standard unit for **any** below-fold content block, on any page — not just Landlords/Agents. New sections or features must reuse these three classes rather than inventing parallel ones with slightly different numbers (custom heading sizes, custom sub max-widths, custom border opacities). If a new block needs something these don't cover (e.g. pricing cards' price figures, tier badges), add only that delta as new, narrowly-scoped classes — never redeclare the container/heading/sub. **Counter-example to learn from:** the Tenants pricing band (§1.6) shipped with bespoke `.pricing-heading`/`.pricing-sub` classes and a `0.2`-opacity card border instead of reusing this grammar — it read as visually disconnected from Landlords/Agents as a result. Rebuild it against this rule.
+
+**Approved width modifier — `.content-section.wide` (Jul 14 2026):** `max-width: 1100px` instead of the default `960px`. Compound selector, per the Variant rule below — used once so far, on About Us's "What we believe" section, so its three `.step-card` headers fit on one line. This is the correct shape for a modifier that only changes one dimension: it doesn't redeclare padding, border, or the title/subtitle rules, just widens the container.
 
 **Variant rule (added Jul 14 2026, after the `.section-filled` spacing bug):** any class that modifies `.content-section` (a "variant," e.g. `.section-filled`) must follow two rules, not just reuse the base grammar:
 1. **Compound the selector** — write `.content-section.variant-name`, never a bare `.variant-name`. `.content-section` itself sets `margin`, `padding`, `max-width`, and `border-top`; a bare class has equal specificity, so whichever rule sits later in `styles.css` silently wins regardless of intent. This exact bug shipped once already (Part 5, "Filled (dark) section" — `.section-filled`'s `margin` was zeroed by `.content-section`'s later `margin: 0 auto` until the selector was compounded).
@@ -205,7 +209,15 @@ This does not require pixel-identical numbers on every page, but every transitio
 - Sub: "Show them how renting a spare room lowers their effective mortgage — and expands what they can buy."
 - Below fold: Affordability calculator → Why partner (4 items) → Email CTA → submits to "Agents" sheet tab
 
-**About Us** — placeholder: "About Nest & Key. We're building the easiest way to find and fill rooms."
+**About Us** (rebuilt Jul 14 2026 — closes the Part 7/Part 9 "empty placeholder" item)
+- Tag: "Our story"
+- H1 (set in **Reenie Beenie**, a Google Font — see the webfont-exception note below): "We're building the home search we wished existed."
+- Sub: the founders' real story (traveling for work across the Bay Area and Southern California, renting out their own homes, renting rooms themselves) — not invented copy
+- Hero photo: `.about-hero-photo` — a real photo of the two founders, `/images/team-photo.jpg`, `320px` rounded band, `object-position: center 48%`
+- `#about` section background: `.about-tint-mist` (`#EEF3F3`) — the one page on the site with a non-default section tint, since it's company-voice rather than product-voice
+- Below fold: "What we believe" (3 `.step-card`s, no step numbers — reuses `.content-section.wide` for a 1100px max-width so all three headers fit on one line) → "Where we are, where we're headed" (a `.trust-box` + a `.waitlist-form` newsletter signup, submitting to a new `'AboutUpdates'` sheet tab — see §3.4 Data flow)
+
+**Webfont exception — Reenie Beenie (Jul 14 2026):** the site's typography is a system-font stack everywhere else — this is a deliberate, scoped exception, not a drift from the rule. Loaded via a page-local `<link>` in `about.html`'s own `<head>` (Google Fonts `Reenie+Beenie`) and applied only to `#about h1` via a page-scoped `<style>` block — **not** a global `font-family` change, and not added to `tokens/typography.css` or any shared class. Rationale: About Us is the one page that's inherently company-voice rather than product-voice (see brand-voice notes, Part 4), and a handwritten script mark on this page alone helps it read as distinct from the two product pages (Tenants/Landlords), which intentionally look identical in typography to reinforce they're the same tool. Same "documented exception, not a violation" pattern as Tenants' taller hero (§2.1).
 
 ### 2.2 Sample listing page (`/listing-sample-socal`)
 
@@ -330,6 +342,8 @@ Browser (chat card)
 
 **Google Sheet ID:** `1SgFQ_14-HpSgzukQGiFH1A2vn7s7H2jIg9ko6wkBm2U`  
 **Searches tab columns:** Timestamp · Email · Room Type · Location · Budget · Stay · Commute · Room Needs · Work Status · Income · Credit · Lifestyle
+
+**`AboutUpdates` tab (added Jul 14 2026):** the About Us newsletter signup (`.waitlist-form` + `handleWaitlist(event, 'AboutUpdates')`, reusing the existing generic helper in `shared.js` — no new JS was needed) posts `{ email, sheet: 'AboutUpdates' }` to the same Apps Script endpoint as every other waitlist form on the site, landing in its own `AboutUpdates` tab rather than mixing with `Searches`/`Listings`.
 
 **Privacy disclosure** (fixed copy, appears once before income/credit questions):
 > *"Income & credit are self-reported and used only to find homes you'd qualify for — never shared or used for anything else."*
@@ -611,6 +625,49 @@ CSS lives in `styles.css` and duplicated in the inline `<style>` of `listing-sam
 
 ---
 
+### Nav (updated Jul 14 2026 — elevation + centering fix)
+
+```
+nav { height: 64px; background: #F4F7F4; border-bottom: 1px solid rgba(80,110,80,0.15); box-shadow: 0 8px 20px -16px rgba(30,58,47,0.28); }
+.nav-links { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+```
+
+- **Shadow** — a soft downward shadow under the existing hairline border, so the bar reads as a lifted surface (same elevation vocabulary as `.pricing-card.active-card`/`.chat-card`, just much quieter) rather than a flat divider.
+- **Centering fix** — `.nav-links` was previously centered within the leftover flex space after the logo (`flex:1; justify-content:center`), so it drifted off true-center whenever logo width changed page to page. Now absolutely positioned against the whole nav bar, independent of logo width.
+- **Height (`64px`) intentionally untouched** — several pages compute hero height as `calc(100vh - 64px)`; changing nav height would throw those off.
+- Mobile drawer (`.mobile-menu`) unchanged.
+- The listing page's own inline nav (`listing-sample-socal/index.html`) gets the same shadow, plus hover states on `.btn-login`/`.btn-signup` that were previously missing — its structural differences (sticky positioning, Login/Signup buttons instead of section links, no hamburger) remain intentional, see §2.1.
+- **Not done, flagged instead of silently resolved:** `Log in`/`Sign up` on the main nav are still absent — there's no account system behind them yet, so adding functional-looking buttons that no-op would reopen the exact "silent no-op" problem in Part 7. That's a product decision about auth, not a visual-maturity one.
+
+### Footer (redesigned Jul 14 2026)
+
+```html
+<footer>
+  <a class="footer-mark" href="/">Nest &amp; Key</a>
+  <div class="footer-links">
+    <a href="/about">About Us</a>
+    <a href="mailto:hello@nestandkey.ai">Contact</a>
+  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-meta">© 2026 NestAndKey. All rights reserved.<span class="footer-privacy">{page-specific privacy line, optional}</span></div>
+</footer>
+```
+
+```
+footer { background: #EBF0EB; border-radius: 28px 28px 0 0; padding: 56px 24px 40px; margin-top: 24px; }
+.footer-mark   { font-size: 15px; font-weight: 700; color: #2D5A3D; }
+.footer-links  { display: flex; gap: 28px; justify-content: center; }
+.footer-links a { font-size: 14px; font-weight: 600; color: #2D5A3D; }
+.footer-divider { width: 160px; height: 1px; background: rgba(80,110,80,0.15); }
+.footer-meta   { font-size: 13px; color: #8BAF8E; line-height: 1.7; }
+```
+
+Replaces the old flat stack (nav-echo links, copyright, and privacy note all the same `13px` muted line, spaced with inline `style=` hacks) with a distinct lifted surface — `#EBF0EB`, the same trust-box/mobile-drawer tint already in the palette, not a new color — and real visual hierarchy: wordmark → link row → hairline divider → muted meta block.
+
+**Per-page privacy line** (inside `.footer-meta .footer-privacy`, optional): `index.html` — "Your data is used only to find homes you'd qualify for — never sold or shared." · `landlords.html` — "Your listing details are used only to pre-screen tenants — never sold or shared." · `about.html` and the listing page — none (neither collects the kind of data the line would apply to).
+
+Shared across `index.html`, `landlords.html`, `about.html`, and (newly added, previously absent entirely) `listing-sample-socal/index.html` — the listing page's link row is contextual (`For Landlords` / `Contact`) rather than the main site's (`About Us` / `Contact`), matching its different audience.
+
 ### Buttons
 
 ```
@@ -620,11 +677,12 @@ Pill CTA (listing):  radius 50px, bg #1E3A2F (hero) or #2D5A3D (tour), text #F4F
 Chat start:          full-width, bg #2D5A3D, text #F4F7F4, no radius (flush to card edge)
 ```
 
-### Waitlist forms (Landlords, Agents)
+### Waitlist forms (Landlords, Agents, About Us)
 
 Inline flex row (wraps on mobile): email input + submit button.  
 Input: white bg, `rgba(80,130,80,0.35)` border, focus border `#2D5A3D`.  
-On success: form replaced with `✓ You're on the list! We'll be in touch soon.` in `#2D5A3D`.
+On success: form replaced with `✓ You're on the list! We'll be in touch soon.` in `#2D5A3D`.  
+About Us reuses this exact component for its newsletter signup (Jul 14 2026) — same markup/CSS, posts to a new `'AboutUpdates'` sheet tab (§3.4) via the existing generic `handleWaitlist()` helper — no new component or JS was needed.
 
 ### Step cards (Landlords "How it works")
 
@@ -717,10 +775,11 @@ All photos live in `/listing-sample-socal/photos/`.
 | ~~Mobile keyboard scroll~~ | ~~May clip messages~~ | **Done Jul 2026** — `initChatKeyboardFix()` in `shared.js`; messages pane shrinks to visible height when keyboard opens |
 | Phase 2: live brief panel (Tenants) | Not built — Tenants has a static summary card only | Side panel showing criteria filling in real-time as Nest captures each field; 2-col desktop, stacks below chat on ≤768px. No backend change needed — reads existing `chatState`. Key (Landlords) already has this — use it as reference. |
 | Key chat in-chat submit CTA | **Done Jul 2026** — button re-injects at bottom of chat each time AI declares ready | Already ships; open design question: should Nest (Tenants) get the same in-chat CTA, or keep the current above-input summary card approach? |
-| Log in / Sign up | Styled, non-functional | Silent no-op on click — decide: hide, tooltip, or waitlist redirect |
-| "Apply now" on listing | Links to `#tour` same page | Label misleads — change to "Schedule a tour" to match actual destination |
-| About Us page | Empty placeholder | Founder story TBD |
-| Footer | Minimal | Will expand when more pages exist |
+| Log in / Sign up | Styled, non-functional | Still a silent no-op on the main nav — deliberately not resolved in the Jul 14 2026 nav/footer pass (see below); listing-page `.btn-login`/`.btn-signup` gained hover states only, still no-op |
+| ~~"Apply now" on listing~~ | ~~Links to `#tour` same page~~ | **Already resolved** (undated) — button now reads "Schedule a tour", matching its destination |
+| ~~About Us page~~ | ~~Empty placeholder~~ | **Done Jul 14 2026** — real hero (founder story + photo), "What we believe" (3 cards), "Where we are, where we're headed" + newsletter signup. See §2.1 and Part 5. |
+| ~~Footer~~ | ~~Minimal~~ | **Done Jul 14 2026** — redesigned as a lifted `#EBF0EB` band with a wordmark, link row, divider, and meta line (`.footer-mark`/`.footer-links`/`.footer-divider`/`.footer-meta`), shared across `index.html`, `landlords.html`, `about.html`, and (new) `listing-sample-socal/index.html`. See Part 5. |
+| Nav elevation + centering | Flat bar, links centered via leftover flex space (drifted when logo width changed) | **Done Jul 14 2026** — soft shadow (`0 8px 20px -16px rgba(30,58,47,0.28)`) and `.nav-links` absolutely centered against the full bar, independent of logo width. See Part 5. |
 | `.section-filled` missing `border-top` | Deliberately disabled (doesn't read as a gap against a filled bg) — see §2.1 Variant rule | Backlogged, Jul 14 2026: now that real `margin` exists around the box, restore `border-top` inside that margin for full consistency with every other section boundary's hairline divider. Low-risk (opacity is already very low; respects `border-radius`) — no urgency, not a visible defect. |
 
 ---

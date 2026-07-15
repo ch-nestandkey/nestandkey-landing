@@ -14,13 +14,25 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 48px; height: 64px;
       border-bottom: 1px solid rgba(80,110,80,0.15);
-      background: #F4F7F4; position: sticky; top: 0; z-index: 100;
+      background: #F4F7F4; box-shadow: 0 8px 20px -16px rgba(30,58,47,0.28); position: sticky; top: 0; z-index: 100;
     }
     .nav-left { display: flex; align-items: center; gap: 12px; }
     .nav-logo { cursor: pointer; color: #1E3A2F; text-decoration: none; }
     .nav-actions { display: flex; gap: 10px; }
-    .btn-login { padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; background: transparent; color: #2D5A3D; border: 1px solid rgba(80,130,80,0.35); }
-    .btn-signup { padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; background: #2D5A3D; color: #F4F7F4; border: none; }
+    .btn-login { padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; background: transparent; color: #2D5A3D; border: 1px solid rgba(80,130,80,0.35); transition: background 0.15s; }
+    .btn-login:hover { background: rgba(80,130,80,0.08); }
+    .btn-signup { padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; background: #2D5A3D; color: #F4F7F4; border: none; transition: background 0.15s; }
+    .btn-signup:hover { background: #3D7A52; }
+
+    /* Footer — matches the main site's footer component */
+    footer { text-align: center; padding: 56px 24px 40px; margin-top: 24px; background: #EBF0EB; border-radius: 28px 28px 0 0; }
+    .footer-mark { display: inline-block; font-size: 15px; font-weight: 700; letter-spacing: 0.3px; color: #2D5A3D; text-decoration: none; margin-bottom: 22px; }
+    .footer-mark:hover { color: #1E3A2F; text-decoration: none; }
+    .footer-links { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+    .footer-links a { font-size: 14px; font-weight: 600; color: #2D5A3D; text-decoration: none; }
+    .footer-links a:hover { color: #1E3A2F; text-decoration: underline; }
+    .footer-divider { width: 160px; height: 1px; background: rgba(80,110,80,0.15); margin: 0 auto 20px; }
+    .footer-meta { font-size: 13px; color: #8BAF8E; line-height: 1.7; }
 
     /* Hero */
     .hero { text-align: center; padding: 80px 48px 48px; max-width: 860px; margin: 0 auto; }
@@ -287,6 +299,16 @@
     </div>
 
   </div>
+
+  <footer>
+    <a class="footer-mark" href="/">Nest &amp; Key</a>
+    <div class="footer-links">
+      <a href="/landlords">For Landlords</a>
+      <a href="mailto:hello@nestandkey.ai">Contact</a>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-meta">© 2026 NestAndKey. All rights reserved.</div>
+  </footer>
 
   <!-- Schedule a tour — AI intake chat popover -->
   <div class="modal-overlay" id="apply-modal">

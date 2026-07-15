@@ -15,12 +15,13 @@ nav {
   height: 64px;
   border-bottom: 1px solid rgba(80,110,80,0.15);
   background: #F4F7F4;
+  box-shadow: 0 8px 20px -16px rgba(30,58,47,0.28);
   position: relative;
   z-index: 100;
 }
 .nav-left { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .nav-logo { cursor: pointer; white-space: nowrap; color: #1E3A2F; text-decoration: none; display: block; }
-.nav-links { display: flex; gap: 36px; align-items: center; flex: 1; justify-content: center; }
+.nav-links { display: flex; gap: 36px; align-items: center; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 .nav-links a {
   font-size: 15px;
   color: #7A9E7E;
@@ -229,9 +230,29 @@ p.sub { margin-top: 24px; font-size: 18px; color: #6B8F71; max-width: 480px; lin
 .active-card .pricing-hint { color: rgba(255,255,255,0.6); }
 
 /* Footer */
-footer { text-align: center; padding: 32px; font-size: 13px; color: #8BAF8E; }
+footer {
+  text-align: center;
+  padding: 56px 24px 40px;
+  margin-top: 24px;
+  background: #EBF0EB;
+  border-radius: 28px 28px 0 0;
+}
 footer a { color: #6B8F71; text-decoration: underline; }
 footer a:hover { color: #1E3A2F; }
+.footer-mark { display: inline-block; font-size: 15px; font-weight: 700; letter-spacing: 0.3px; color: #2D5A3D; text-decoration: none; margin-bottom: 22px; }
+.footer-mark:hover { color: #1E3A2F; text-decoration: none; }
+.footer-links { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+.footer-links a { font-size: 14px; font-weight: 600; color: #2D5A3D; text-decoration: none; }
+.footer-links a:hover { color: #1E3A2F; text-decoration: underline; }
+.footer-divider { width: 160px; height: 1px; background: rgba(80,110,80,0.15); margin: 0 auto 20px; }
+.footer-meta { font-size: 13px; color: #8BAF8E; line-height: 1.7; }
+.footer-meta .footer-privacy { display: block; margin-top: 4px; }
+
+/* About Us */
+.about-tint-mist { background: #EEF3F3; }
+.about-hero-photo { width: 100%; max-width: 320px; height: 320px; border-radius: 20px; overflow: hidden; margin: 28px auto 0; box-shadow: 0 16px 40px rgba(30,58,47,0.14); }
+.about-hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 48%; display: block; }
+.content-section.wide { max-width: 1100px; }
 
 /* Multi-section pages */
 section.section-multi { justify-content: flex-start; min-height: auto; padding: 0; }

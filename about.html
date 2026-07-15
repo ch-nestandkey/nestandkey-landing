@@ -6,6 +6,13 @@
   <title>About | Nest &amp; Key</title>
   <meta name="description" content="Nest &amp; Key is building the easiest way to find a room you can afford and share a home with someone who fits, in the SF Bay Area." />
   <link rel="stylesheet" href="/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Reenie+Beenie&display=swap" rel="stylesheet">
+  <style>
+    /* Scoped to this page only — see DESIGN_HANDOFF.md for why this is a documented exception to the site's no-webfont rule */
+    #about h1 { font-family: 'Reenie Beenie', cursive; font-weight: 400; letter-spacing: normal; font-size: clamp(56px, 8vw, 96px); }
+  </style>
 </head>
 <body>
 
@@ -40,17 +47,57 @@
     <a href="/about" class="active">About Us</a>
   </div>
 
-  <section id="about">
-    <h1>About Nest &amp; Key.</h1>
-    <p class="sub">We're building the easiest way to find a room you can afford, and share a home with someone who fits. More to come.</p>
+  <section id="about" class="section-multi about-tint-mist">
+    <div class="hero-block">
+      <span class="tag">Our story</span>
+      <h1>We're building the home search we wished existed.</h1>
+      <p class="sub" style="max-width:680px;">We started Nest &amp; Key after years of traveling for work across the Bay Area and Southern California — renting out our own homes while we were away, and renting rooms ourselves wherever we landed. We saw both sides of shared housing up close: the landlord's need to find someone trustworthy, and the tenant's need to find a place that actually fits. This is us building the tool we wished we'd had.</p>
+      <div class="about-hero-photo"><img src="/images/team-photo.jpg" alt="The Nest &amp; Key founders" /></div>
+    </div>
+
+    <div class="content-section centered wide">
+      <span class="tag">What we believe</span>
+      <h2 class="section-title">Three ideas we won't compromise on.</h2>
+      <p class="section-subtitle">The product's still new. These aren't.</p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <h3>Quality over quantity</h3>
+          <p>One well-matched result beats twenty maybes. We'd rather send fewer, better options than flood your inbox.</p>
+        </div>
+        <div class="step-card">
+          <h3>Smart search, careful vetting</h3>
+          <p>Nest scans the market for tenants; Key vets who's on the other side of the door. Both should feel like someone's actually looking out for you.</p>
+        </div>
+        <div class="step-card">
+          <h3>Move forward with confidence</h3>
+          <p>No countdown timers, no fake urgency — just a straightforward search that gets you to the right place, and the right person.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section centered">
+      <span class="tag">From us</span>
+      <h2 class="section-title">Where we are, where we're headed.</h2>
+      <p class="section-subtitle">Active now in the SF Bay Area. Southern California is next, and we're scoping further from there.</p>
+      <div class="trust-box">
+        <div class="trust-stat">Want to hear from us?</div>
+        <div class="trust-note">We occasionally say hi and share updates — no spam, unsubscribe anytime.</div>
+      </div>
+      <form class="waitlist-form" onsubmit="handleWaitlist(event, 'AboutUpdates')" style="margin-top:24px;">
+        <input type="email" placeholder="your@email.com" required />
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
   </section>
 
   <footer>
-    <div style="display:flex;gap:24px;justify-content:center;margin-bottom:10px;">
+    <a class="footer-mark" href="/">Nest &amp; Key</a>
+    <div class="footer-links">
       <a href="/about" class="active">About Us</a>
       <a href="mailto:hello@nestandkey.ai">Contact</a>
     </div>
-    <div>© 2026 NestAndKey. All rights reserved.</div>
+    <div class="footer-divider"></div>
+    <div class="footer-meta">© 2026 NestAndKey. All rights reserved.</div>
   </footer>
 
   <script src="/shared.js"></script>
