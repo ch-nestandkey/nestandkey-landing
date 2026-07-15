@@ -1,0 +1,40 @@
+name: Sync dev to main
+
+on:
+  schedule:
+    - cron: '0 9 * * 1' # every Monday, 9am UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  open-sync-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if dev is ahead of main
+        id: diff
+        run: |
+          ahead=$(git rev-list --count origin/main..origin/dev)
+          echo "ahead=$ahead" >> "$GITHUB_OUTPUT"
+
+      - name: Open PR if there's anything to sync
+        if: steps.diff.outputs.ahead != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          existing=$(gh pr list --base main --head dev --state open --json number -q '.[0].number')
+          if [ -n "$existing" ]; then
+            echo "PR #$existing already open, skipping."
+            exit 0
+          fi
+          gh pr create \
+            --base main \
+            --head dev \
+            --title "Sync main with dev ($(date +%Y-%m-%d))" \
+            --body "Automated weekly sync — dev is ${{ steps.diff.outputs.ahead }} commit(s) ahead of main. Review and merge when ready."
