@@ -211,13 +211,13 @@ This does not require pixel-identical numbers on every page, but every transitio
 
 **About Us** (rebuilt Jul 14 2026 — closes the Part 7/Part 9 "empty placeholder" item)
 - Tag: "Our story"
-- H1 (set in **Reenie Beenie**, a Google Font — see the webfont-exception note below): "We're building the home search we wished existed."
+- H1 (set in **Reenie Beanie**, a Google Font — see the webfont-exception note below): "We're building the home search we wished existed."
 - Sub: the founders' real story (traveling for work across the Bay Area and Southern California, renting out their own homes, renting rooms themselves) — not invented copy
 - Hero photo: `.about-hero-photo` — a real photo of the two founders, `/images/team-photo.jpg`, `320px` rounded band, `object-position: center 48%`
 - `#about` section background: `.about-tint-mist` (`#EEF3F3`) — the one page on the site with a non-default section tint, since it's company-voice rather than product-voice
 - Below fold: "What we believe" (3 `.step-card`s, no step numbers — reuses `.content-section.wide` for a 1100px max-width so all three headers fit on one line) → "Where we are, where we're headed" (a `.trust-box` + a `.waitlist-form` newsletter signup, submitting to a new `'AboutUpdates'` sheet tab — see §3.4 Data flow)
 
-**Webfont exception — Reenie Beenie (Jul 14 2026):** the site's typography is a system-font stack everywhere else — this is a deliberate, scoped exception, not a drift from the rule. Loaded via a page-local `<link>` in `about.html`'s own `<head>` (Google Fonts `Reenie+Beenie`) and applied only to `#about h1` via a page-scoped `<style>` block — **not** a global `font-family` change, and not added to `tokens/typography.css` or any shared class. Rationale: About Us is the one page that's inherently company-voice rather than product-voice (see brand-voice notes, Part 4), and a handwritten script mark on this page alone helps it read as distinct from the two product pages (Tenants/Landlords), which intentionally look identical in typography to reinforce they're the same tool. Same "documented exception, not a violation" pattern as Tenants' taller hero (§2.1).
+**Webfont exception — Reenie Beanie (Jul 14 2026):** the site's typography is a system-font stack everywhere else — this is a deliberate, scoped exception, not a drift from the rule. Loaded via a page-local `<link>` in `about.html`'s own `<head>` (Google Fonts `Reenie+Beanie`) and applied only to `#about h1` via a page-scoped `<style>` block — **not** a global `font-family` change, and not added to `tokens/typography.css` or any shared class. Rationale: About Us is the one page that's inherently company-voice rather than product-voice (see brand-voice notes, Part 4), and a handwritten script mark on this page alone helps it read as distinct from the two product pages (Tenants/Landlords), which intentionally look identical in typography to reinforce they're the same tool. Same "documented exception, not a violation" pattern as Tenants' taller hero (§2.1).
 
 ### 2.2 Sample listing page (`/listing-sample-socal`)
 
