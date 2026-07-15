@@ -11,7 +11,7 @@ When the user asks for a "brief for Design on [component]", produce a single cop
 
 Claude Design has no memory across chats, so every brief must open with this working-agreement header before the task context:
 
-> **Working agreement:** The repo's `DESIGN_HANDOFF.md` (maintained by Code) is the durable design record — you propose, Code records. Treat this brief as ground truth over anything from prior sessions; your past handoffs are transient work orders, not current state. When you finalize a decision, state explicitly which rules/values Code should record in `DESIGN_HANDOFF.md`.
+> **Working agreement:** The repo's `DESIGN_HANDOFF.md` (maintained by Code) is the durable design record — you propose, Code records. Treat this brief as ground truth over anything from prior sessions; your past handoffs are transient work orders, not current state. When you finalize a decision, state explicitly which rules/values Code should record in `DESIGN_HANDOFF.md`. **Ask before writing or finalizing any handoff artifact** (an implementation contract, `HANDOFF_*.md`, `snippets.html`, or similar) — present the proposal in chat and wait for explicit go-ahead before creating the file.
 
 ## Sync rule
 Any PR from `dev → main` must include `DESIGN_HANDOFF.md` if it was updated on dev. Never merge a PR that leaves the design doc behind.
