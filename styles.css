@@ -164,6 +164,9 @@ p.sub { margin-top: 24px; font-size: 18px; color: #6B8F71; max-width: 480px; lin
 .confirm--compact .confirm__medallion { width: 36px; height: 36px; font-size: 18px; box-shadow: none; }
 .confirm--compact .confirm__title { font-size: 16px; letter-spacing: -0.3px; }
 .confirm--compact .confirm__body { font-size: 14px; }
+.confirm__link-row { display: flex; gap: 8px; width: 100%; max-width: 320px; }
+.confirm__link-input { flex: 1; min-width: 0; font-size: 13px; color: #2D5A3D; background: #fff; border: 1px solid rgba(80,130,80,0.25); border-radius: 9px; padding: 9px 11px; font-family: inherit; }
+.confirm__copy-btn { flex-shrink: 0; background: #2D5A3D; color: #fff; border: none; border-radius: 9px; padding: 9px 16px; font-size: 13px; font-family: inherit; cursor: pointer; }
 .chat-ready-cta { padding: 4px 0 8px; }
 .chat-ready-cta button { display: block; width: 100%; background: #2D5A3D; color: #F4F7F4; font-weight: 600; font-size: 15px; padding: 14px; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 14px rgba(45,90,61,0.18); transition: transform 0.15s, box-shadow 0.15s; }
 .chat-ready-cta button:hover { background: #3D7A52; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45,90,61,0.28); }

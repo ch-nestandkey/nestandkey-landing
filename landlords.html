@@ -474,42 +474,68 @@
 
     async function submitKeyListing() {
       if (keyListingSubmitted) return;
-      keyListingSubmitted = true;
       const btn = document.getElementById('key-brief-submit') || document.getElementById('key-start-btn');
-      if (btn) { btn.textContent = 'Submitting…'; btn.disabled = true; }
       const chatBtn = document.getElementById('key-chat-submit-btn');
+      if (btn) { btn.textContent = 'Submitting…'; btn.disabled = true; }
       if (chatBtn) { chatBtn.textContent = 'Submitting…'; chatBtn.disabled = true; }
 
+      // Backup log only -- best-effort, never blocks or gates the real submission below.
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sheet: 'Listings',
+          ...keyState,
+          photoUrls: keyPhotoUrls.join(', '),
+          timestamp: new Date().toISOString()
+        })
+      }).catch(() => {});
+
+      let applyUrl;
       try {
-        await fetch(SCRIPT_URL, {
+        const res = await fetch('/api/submit-listing', {
           method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            sheet: 'Listings',
-            ...keyState,
-            photoUrls: keyPhotoUrls.join(', '),
-            timestamp: new Date().toISOString()
-          })
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ ...keyState, photoUrls: keyPhotoUrls })
         });
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        applyUrl = data.applyUrl;
       } catch (_) {
-        // no-cors — response unreadable; proceed to confirmation
+        if (btn) { btn.textContent = 'Submit my listing →'; btn.disabled = false; }
+        if (chatBtn) { chatBtn.textContent = 'Submit my listing →'; chatBtn.disabled = false; }
+        alert('Something went wrong submitting your listing. Please try again.');
+        return;
       }
 
+      keyListingSubmitted = true;
       const box = document.getElementById('key-chat-messages');
       const cta = box.querySelector('.chat-ready-cta');
       if (cta) cta.remove();
       const confirm = document.createElement('div');
       confirm.className = 'confirm confirm--panel';
       confirm.innerHTML = `<span class="confirm__medallion">✓</span>
-        <div class="confirm__title">Listing submitted</div>
-        <p class="confirm__body">Our team will review your submission and reach out to <strong>${keyState.email}</strong> shortly.</p>
+        <div class="confirm__title">Your listing is live</div>
+        <p class="confirm__body">Share this link wherever you post your room (Craigslist, Facebook, anywhere) — prospects use it to chat with Key and reach out to you.</p>
+        <div class="confirm__link-row">
+          <input type="text" readonly value="${applyUrl}" onclick="this.select()" class="confirm__link-input" />
+          <button type="button" class="confirm__copy-btn" onclick="copyApplyLink(this, '${applyUrl}')">Copy</button>
+        </div>
         <p class="confirm__meta">You always make the final call on who you meet.</p>`;
       box.appendChild(confirm);
       box.scrollTop = box.scrollHeight;
       const inputRow = document.getElementById('key-chat-input-row');
       if (inputRow) inputRow.style.display = 'none';
       if (btn) { btn.textContent = '✓ Submitted'; btn.style.background = '#4A6B52'; }
+    }
+
+    function copyApplyLink(btn, url) {
+      navigator.clipboard.writeText(url).then(() => {
+        const original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = original; }, 1500);
+      });
     }
 
     async function uploadKeyPhoto(file) {

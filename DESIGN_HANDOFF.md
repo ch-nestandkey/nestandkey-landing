@@ -1171,3 +1171,20 @@ All rules live in `styles.css` lines 309–332.
 4. **Empty-state richness** — currently just italic grey text. Could show greyed-out field skeletons to signal what's coming.
 5. **Panel scroll** — at 17 possible fields the panel can grow long. Should the `#key-brief-fields` area become scrollable at a max-height?
 6. **Mobile treatment** — panel stacks below chat on ≤768px. Currently no visual separator. Should there be a divider or a collapsed state?
+
+---
+
+## Part 12 — Real listing submission + shareable link (confirmation panel)
+
+Key's landlord intake now creates a real listing in the `nest-key-app` product backend (Postgres, via a server-side bridge at `api/submit-listing.js`) instead of only logging to the Google Sheet. The Sheet write is kept as a best-effort backup log — it no longer gates the confirmation shown to the landlord.
+
+**New criteria collected** (added to `KEY_PERSONA`'s conversation flow and `[[STATE]]` block, optional/soft like house rules — not required to reach `ready`): `minIncome`, `minCredit`, `petsPolicy`, `smokingPolicy`, `maxOccupancy`, `otherCriteria`. These power the tenant-facing screening chat's criteria-mapped questions on the other side of the system.
+
+**Confirmation panel changed**: previously said "Our team will review your submission and reach out shortly." Now shows the landlord's actual shareable apply link (`nest-key-app`'s `apply.html?listing=<id>`) in a read-only input with a Copy button, since submission is now truly self-service — no team review step exists.
+
+**New classes** (added to the existing `.confirm--panel` pattern in `styles.css`):
+- `.confirm__link-row` — flex row wrapping the link input + copy button
+- `.confirm__link-input` — read-only text input showing the URL, selects-all on click
+- `.confirm__copy-btn` — copy-to-clipboard button, matches `nest-key-app`'s `admin.html` copy-chip pattern for consistency across the two repos
+
+**Must not change:** `SCRIPT_URL` fetch must stay `mode: 'no-cors'` and un-awaited relative to the real submission — it's fire-and-forget by design, not a gate.
