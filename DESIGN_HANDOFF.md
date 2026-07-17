@@ -809,7 +809,7 @@ All photos live in `/listing-sample-socal/photos/`.
 - Vercel auto-deploys from `main` branch on push.
 - `<base href="/listing-sample-socal/">` is required in listing page `<head>` — fixes relative paths when Vercel serves without trailing slash. Do not remove.
 - AI chat calls go to `/api/chat` — a Vercel Node.js serverless function. Requires `ANTHROPIC_API_KEY` environment variable set in Vercel project settings (Production + Preview only; sensitive variables are blocked from Development by Vercel).
-- Google Apps Script handles all form submissions via `fetch(SCRIPT_URL, { mode: 'no-cors' })`. The `sheet` field in the payload routes to the correct tab. Script URL is hardcoded in `index.html`.
+- Google Apps Script handles form submissions via `fetch(SCRIPT_URL, { mode: 'no-cors' })`. The `sheet` field in the payload routes to the correct tab. Script URL is hardcoded in `index.html`. **This is still the primary (only) submission path for Nest's tenant chat.** For Key's landlord intake specifically, this is now a best-effort backup log only — the real submission goes to the `nest-key-app` Postgres backend via `api/submit-listing.js`. See Part 12.
 - Section visibility toggled with `.active` class and `display: flex`. No router library.
 - Local dev (UI only, no AI): `python3 -m http.server 3457 --directory /path/to/nestandkey-landing` → `localhost:3457`. The `/api/chat` endpoint won't work locally without Vercel CLI.
 - Logo SVG is inline in both HTML files. Update both if the logo changes.
