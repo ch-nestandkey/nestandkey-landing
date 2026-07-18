@@ -63,11 +63,15 @@ export default async function handler(req, res) {
   }
 
   // Lightweight NK visibility into activity, not just completions -- logged on
-  // the first turn only. Awaited (not fire-and-forget) so it isn't killed by
+  // the first turn only. keyHistory starts with 1 seed assistant message
+  // client-side, so the first real request already has 2 messages (seed +
+  // the landlord's first reply) by the time it's sent -- checking <= 1 here
+  // was checking for a state that's already impossible by the first request,
+  // so it never fired. Awaited (not fire-and-forget) so it isn't killed by
   // Vercel freezing the function once the response is sent -- same lesson as
   // the un-awaited email bug found and fixed in nest-key-app. Caught
   // separately so a failure never blocks the landlord's chat.
-  if (messages.length <= 1) {
+  if (messages.length <= 2) {
     const nestKeyAppUrl = process.env.NEST_KEY_APP_URL || 'https://nest-key-app.vercel.app';
     try {
       const logRes = await fetch(`${nestKeyAppUrl}/api/log-event`, {
