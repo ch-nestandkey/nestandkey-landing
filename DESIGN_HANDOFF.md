@@ -809,7 +809,7 @@ All photos live in `/listing-sample-socal/photos/`.
 - Vercel auto-deploys from `main` branch on push.
 - `<base href="/listing-sample-socal/">` is required in listing page `<head>` — fixes relative paths when Vercel serves without trailing slash. Do not remove.
 - AI chat calls go to `/api/chat` — a Vercel Node.js serverless function. Requires `ANTHROPIC_API_KEY` environment variable set in Vercel project settings (Production + Preview only; sensitive variables are blocked from Development by Vercel).
-- Google Apps Script handles all form submissions via `fetch(SCRIPT_URL, { mode: 'no-cors' })`. The `sheet` field in the payload routes to the correct tab. Script URL is hardcoded in `index.html`.
+- Google Apps Script handles form submissions via `fetch(SCRIPT_URL, { mode: 'no-cors' })`. The `sheet` field in the payload routes to the correct tab. Script URL is hardcoded in `index.html`. **This is still the primary (only) submission path for Nest's tenant chat.** For Key's landlord intake specifically, this is now a best-effort backup log only — the real submission goes to the `nest-key-app` Postgres backend via `api/submit-listing.js`. See Part 12.
 - Section visibility toggled with `.active` class and `display: flex`. No router library.
 - Local dev (UI only, no AI): `python3 -m http.server 3457 --directory /path/to/nestandkey-landing` → `localhost:3457`. The `/api/chat` endpoint won't work locally without Vercel CLI.
 - Logo SVG is inline in both HTML files. Update both if the logo changes.
@@ -1171,3 +1171,20 @@ All rules live in `styles.css` lines 309–332.
 4. **Empty-state richness** — currently just italic grey text. Could show greyed-out field skeletons to signal what's coming.
 5. **Panel scroll** — at 17 possible fields the panel can grow long. Should the `#key-brief-fields` area become scrollable at a max-height?
 6. **Mobile treatment** — panel stacks below chat on ≤768px. Currently no visual separator. Should there be a divider or a collapsed state?
+
+---
+
+## Part 12 — Real listing submission + shareable link (confirmation panel)
+
+Key's landlord intake now creates a real listing in the `nest-key-app` product backend (Postgres, via a server-side bridge at `api/submit-listing.js`) instead of only logging to the Google Sheet. The Sheet write is kept as a best-effort backup log — it no longer gates the confirmation shown to the landlord.
+
+**New criteria collected** (added to `KEY_PERSONA`'s conversation flow and `[[STATE]]` block, optional/soft like house rules — not required to reach `ready`): `minIncome`, `minCredit`, `petsPolicy`, `smokingPolicy`, `maxOccupancy`, `otherCriteria`. These power the tenant-facing screening chat's criteria-mapped questions on the other side of the system.
+
+**Confirmation panel changed**: previously said "Our team will review your submission and reach out shortly." Now shows the landlord's actual shareable apply link (`nest-key-app`'s `apply.html?listing=<id>`) in a read-only input with a Copy button, since submission is now truly self-service — no team review step exists.
+
+**New classes** (added to the existing `.confirm--panel` pattern in `styles.css`):
+- `.confirm__link-row` — flex row wrapping the link input + copy button
+- `.confirm__link-input` — read-only text input showing the URL, selects-all on click
+- `.confirm__copy-btn` — copy-to-clipboard button, matches `nest-key-app`'s `admin.html` copy-chip pattern for consistency across the two repos
+
+**Must not change:** `SCRIPT_URL` fetch must stay `mode: 'no-cors'` and un-awaited relative to the real submission — it's fire-and-forget by design, not a gate.
