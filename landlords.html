@@ -298,8 +298,47 @@
       houseRules:'', lifestyle:''
     };
 
+    // TEMPORARY -- internal testing only, must be replaced before any real
+    // outreach. This decodes facts baked directly into the URL, with no
+    // server-side lead record, no login-protected admin tool, and no chat
+    // transcript storage -- none of which are acceptable for real landlords.
+    // The real version: a lead table + password-protected NK admin page +
+    // pre-fill sourced from a stored lead ID, not a URL blob. Use this only to
+    // validate the flow/UX yourself; do not send a ?prefill= link to a real
+    // landlord.
+    //
+    // Scenario 2 (outreach): decode a ?prefill= URL built by the internal
+    // outreach-link-generator page. Only listing facts a public ad could
+    // plausibly show -- never screening criteria or email, those are still
+    // the landlord's own to give.
+    function decodePrefill() {
+      try {
+        const raw = new URLSearchParams(window.location.search).get('prefill');
+        if (!raw) return null;
+        return JSON.parse(decodeURIComponent(escape(atob(raw))));
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function keyOpeningMessage(prefill) {
+      const generic = "Hi — I'm Key. I'll help you list your place and pre-screen renters who actually fit. First — is this a private room in a home you live in, or a separate property you're renting out?";
+      if (!prefill) return generic;
+      const place = [prefill.neighborhood, prefill.city].filter(Boolean).join(', ');
+      const rentPart = prefill.rent ? ` for $${prefill.rent}/month` : '';
+      if (!place && !rentPart) return generic;
+      return `Hi — I'm Key. I saw your room listed${place ? ' in ' + place : ''}${rentPart} and wanted to help you get it set up with Nest & Key. Let's fill in a few more details — is this a private room in a home you live in, or a separate property you're renting out?`;
+    }
+
+    const keyPrefill = decodePrefill();
+    if (keyPrefill) {
+      for (const [k, v] of Object.entries(keyPrefill)) {
+        if (v !== '' && v !== null && v !== undefined && k in keyState) keyState[k] = v;
+      }
+    }
+
     let keyHistory = [
-      { role: 'assistant', content: "Hi — I'm Key. I'll help you list your place and pre-screen renters who actually fit. First — is this a private room in a home you live in, or a separate property you're renting out?" }
+      { role: 'assistant', content: keyOpeningMessage(keyPrefill) }
     ];
 
     let keyPhotoUrls = [];
@@ -326,6 +365,8 @@
       { key: 'photosStatus', label: 'Photos', required: false },
       { key: 'email', label: 'Email', required: true },
     ];
+
+    if (keyPrefill) renderKeyBrief();
 
     function renderKeyBrief() {
       const fieldsEl = document.getElementById('key-brief-fields');

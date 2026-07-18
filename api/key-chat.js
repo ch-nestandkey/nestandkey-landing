@@ -62,6 +62,25 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'api key not configured' });
   }
 
+  // Lightweight NK visibility into activity, not just completions -- logged on
+  // the first turn only. Awaited (not fire-and-forget) so it isn't killed by
+  // Vercel freezing the function once the response is sent -- same lesson as
+  // the un-awaited email bug found and fixed in nest-key-app. Caught
+  // separately so a failure never blocks the landlord's chat.
+  if (messages.length <= 1) {
+    const nestKeyAppUrl = process.env.NEST_KEY_APP_URL || 'https://nest-key-app.vercel.app';
+    try {
+      const logRes = await fetch(`${nestKeyAppUrl}/api/log-event`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ flow: 'landlord_intake' }),
+      });
+      if (!logRes.ok) console.error('log-event responded', logRes.status);
+    } catch (err) {
+      console.error('log-event call failed:', err);
+    }
+  }
+
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
