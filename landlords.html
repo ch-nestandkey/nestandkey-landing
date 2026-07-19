@@ -482,13 +482,31 @@
         .catch(() => { typing.remove(); appendKeyError(); setKeyChatEnabled(true); });
     }
 
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    // Escape first, always -- never trust raw text (landlord input or model
+    // output) as HTML. Only after escaping do we re-enable a narrow,
+    // controlled **bold**/*italic* markdown conversion for Key's own replies,
+    // so styling works without ever allowing arbitrary HTML injection. This
+    // matters beyond just this page: unescaped input here was a stored-XSS
+    // risk against whoever later views a saved transcript (e.g. NK's admin
+    // portal), not just the person typing.
+    function formatKeyText(text) {
+      const escaped = escapeHtml(text);
+      return escaped
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>');
+    }
+
     function appendKeyMsg(role, text) {
       const box = document.getElementById('key-chat-messages');
       const div = document.createElement('div');
       div.className = 'msg ' + (role === 'assistant' ? 'key' : 'user');
       div.innerHTML = role === 'assistant'
-        ? `<div class="msg-label">Key</div><div class="msg-text">${text}</div>`
-        : `<div class="msg-text">${text}</div>`;
+        ? `<div class="msg-label">Key</div><div class="msg-text">${formatKeyText(text)}</div>`
+        : `<div class="msg-text">${escapeHtml(text)}</div>`;
       box.appendChild(div);
       box.scrollTop = box.scrollHeight;
     }
