@@ -30,7 +30,7 @@ CRITICAL — before you ever say anything like "you're all set," "good to go," o
 
 Only set ready: true in the [[STATE]] block after you've recapped everything back to the landlord in a warm, natural way AND they've explicitly confirmed it looks correct (e.g. "yes", "looks right", "that's correct"). You never submit anything yourself -- the landlord submits it themselves by clicking their own submit button, which appears once they confirm. So when asking for that confirmation, ask only whether the recap looks accurate, and say a submit button will appear for them to use -- never say "I'll submit this," "shall I submit this," or anything implying you perform the submission. Say something like "Does everything above look accurate? If so, just let me know and you'll see a submit button appear to send it in yourself."
 
-CRITICAL — After EVERY single reply without exception — including short acknowledgements, corrections, follow-ups, and confirmations — you MUST append a [[STATE]] block as the very last thing. Never skip it. When the landlord corrects or updates any previously given detail, you MUST immediately reflect the new value in the [[STATE]] block — never leave the old value or an empty string for a corrected field. The [[STATE]] block must always reflect the most current known values for every field.
+CRITICAL — After EVERY single reply without exception — including short acknowledgements, corrections, follow-ups, and confirmations — you MUST append a [[STATE]] block as the very last thing. Never skip it. When the landlord corrects or updates any previously given detail, you MUST immediately reflect the new value in the [[STATE]] block — never leave the old value or an empty string for a corrected field. The [[STATE]] block must always reflect the most current known values for every field. Once a field is correctly filled, treat it as settled — do not re-derive, re-summarize, or silently change its value on your own initiative. Only change an already-filled field if the landlord's own words in this turn actually say something different about that specific thing.
 [[STATE]]
 {"name":"","city":"","neighborhood":"","zip":"","propertyType":"","roomDetails":"","furnished":"","availability":"","rent":"","utilities":"","minStay":"","isOwner":"","household":"","parking":"","photosStatus":"","email":"","phone":"","houseRules":"","lifestyle":"","minIncome":"","minCredit":"","petsPolicy":"","smokingPolicy":"","maxOccupancy":"","otherCriteria":"","ready":false}
 
@@ -40,6 +40,21 @@ const REQUIRED = ['name', 'propertyType', 'isOwner', 'city', 'neighborhood', 'ro
 
 function isValidEmail(str) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str || '');
+}
+
+// Identity-like fields where a shorter, truncated re-statement is always a
+// mistake, never a legitimate edit (unlike free-text fields such as
+// roomDetails, which the model may legitimately re-summarize shorter). Found
+// live: "Taylor Kim" silently became "Taylor" on a later turn with no such
+// correction in the landlord's message. Same guard as nest-key-app's
+// chatHandler.js.
+const ATOMIC_IDENTITY_FIELDS = new Set(['name', 'email', 'phone']);
+
+function isSuspiciousTruncation(oldVal, newVal) {
+  if (!oldVal || !newVal) return false;
+  const oldLower = oldVal.trim().toLowerCase();
+  const newLower = newVal.trim().toLowerCase();
+  return newLower.length < oldLower.length && oldLower.includes(newLower);
 }
 
 function enforceReady(state) {
@@ -128,7 +143,11 @@ export default async function handler(req, res) {
         const extracted = JSON.parse(stateMatch[1]);
         // Merge: non-empty extracted values win; keep existing for empty/missing
         for (const [k, v] of Object.entries(extracted)) {
-          if (v !== '' && v !== null && v !== undefined) newState[k] = v;
+          if (v === '' || v === null || v === undefined) continue;
+          if (ATOMIC_IDENTITY_FIELDS.has(k) && isSuspiciousTruncation(newState[k], v)) {
+            continue; // looks like an accidental truncation, not a real correction -- keep existing
+          }
+          newState[k] = v;
         }
       } catch (_) {
         // malformed JSON — keep existing state
