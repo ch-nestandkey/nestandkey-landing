@@ -292,9 +292,9 @@
     const CLOUDINARY_UPLOAD_PRESET = 'nest-key-listings';
 
     let keyState = {
-      city:'', neighborhood:'', zip:'', propertyType:'', roomDetails:'',
+      name:'', city:'', neighborhood:'', zip:'', propertyType:'', roomDetails:'',
       furnished:'', availability:'', rent:'', utilities:'', minStay:'',
-      isOwner:'', household:'', parking:'', photosStatus:'', email:'',
+      isOwner:'', household:'', parking:'', photosStatus:'', email:'', phone:'',
       houseRules:'', lifestyle:''
     };
 
@@ -347,6 +347,7 @@
     appendKeyMsg('assistant', keyHistory[0].content);
 
     const KEY_BRIEF_FIELDS = [
+      { key: 'name', label: 'Name', required: true },
       { key: 'propertyType', label: 'Property type', required: true },
       { key: 'isOwner', label: 'Owner-occupied', required: true },
       { key: 'city', label: 'City', required: true },
@@ -364,6 +365,7 @@
       { key: 'lifestyle', label: 'Lifestyle fit', required: false },
       { key: 'photosStatus', label: 'Photos', required: false },
       { key: 'email', label: 'Email', required: true },
+      { key: 'phone', label: 'Phone', required: true },
     ];
 
     if (keyPrefill) renderKeyBrief();
@@ -376,7 +378,7 @@
       const filled = KEY_BRIEF_FIELDS.filter(f => (keyState[f.key] || '').trim() !== '');
       fieldsEl.innerHTML = filled.length === 0
         ? '<div class="key-brief-empty">Keep chatting — your brief will appear here.</div>'
-        : filled.map(f => `<div class="key-brief-row"><span class="key-brief-check">✓</span><div class="key-brief-row-text"><span class="key-brief-label">${f.label}</span><span class="key-brief-value">${f.key === 'email' ? String(keyState[f.key]).replace(/</g,'&lt;') : keyState[f.key]}</span></div></div>`).join('');
+        : filled.map(f => `<div class="key-brief-row"><span class="key-brief-check">✓</span><div class="key-brief-row-text"><span class="key-brief-label">${f.label}</span><span class="key-brief-value">${escapeHtml(keyState[f.key])}</span></div></div>`).join('');
 
       if (statusEl && !document.getElementById('key-brief-submit')) {
         const allReq = KEY_BRIEF_FIELDS.filter(f => f.required).every(f => (keyState[f.key] || '').trim() !== '');
