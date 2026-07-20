@@ -305,12 +305,14 @@
     // endpoint), and use them to build a listing-aware opener -- same role
     // the property-type question plays as an intent check for organic
     // visitors. Replaces the old ?prefill= URL-blob mechanism, which had no
-    // server-side record at all.
+    // server-side record at all. keyLeadId also gets sent along on final
+    // submission so the lead can be marked converted.
+    const keyLeadId = new URLSearchParams(window.location.search).get('lead');
+
     async function fetchLeadPrefill() {
       try {
-        const leadId = new URLSearchParams(window.location.search).get('lead');
-        if (!leadId) return null;
-        const res = await fetch(`/api/lead-info?lead=${encodeURIComponent(leadId)}`);
+        if (!keyLeadId) return null;
+        const res = await fetch(`/api/lead-info?lead=${encodeURIComponent(keyLeadId)}`);
         if (!res.ok) return null;
         return await res.json();
       } catch (_) {
@@ -556,7 +558,7 @@
         const res = await fetch('/api/submit-listing', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ ...keyState, photoUrls: keyPhotoUrls })
+          body: JSON.stringify({ ...keyState, photoUrls: keyPhotoUrls, leadId: keyLeadId || undefined })
         });
         if (!res.ok) throw new Error();
         const data = await res.json();
