@@ -540,19 +540,6 @@
       if (btn) { btn.textContent = 'Submitting…'; btn.disabled = true; }
       if (chatBtn) { chatBtn.textContent = 'Submitting…'; chatBtn.disabled = true; }
 
-      // Backup log only -- best-effort, never blocks or gates the real submission below.
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sheet: 'Listings',
-          ...keyState,
-          photoUrls: keyPhotoUrls.join(', '),
-          timestamp: new Date().toISOString()
-        })
-      }).catch(() => {});
-
       let applyUrl;
       try {
         const res = await fetch('/api/submit-listing', {
@@ -577,13 +564,21 @@
       const confirm = document.createElement('div');
       confirm.className = 'confirm confirm--panel';
       confirm.innerHTML = `<span class="confirm__medallion">✓</span>
-        <div class="confirm__title">Your listing is live</div>
-        <p class="confirm__body">Share this link wherever you post your room (Craigslist, Facebook, anywhere) — prospects use it to chat with Key and reach out to you.</p>
-        <div class="confirm__link-row">
-          <input type="text" readonly value="${applyUrl}" onclick="this.select()" class="confirm__link-input" />
-          <button type="button" class="confirm__copy-btn" onclick="copyApplyLink(this, '${applyUrl}')">Copy</button>
+        <div class="confirm__title">Key is ready to screen for you</div>
+        <div class="confirm__steps">
+          <div class="confirm__step">
+            <div class="confirm__step-label">Try now</div>
+            <p class="confirm__step-body">Check your inbox for the first email from Key. Add key@nestandkey.ai to your contacts or mark it important so it doesn't land in spam.</p>
+          </div>
+          <div class="confirm__step">
+            <div class="confirm__step-label">Copy your AI screening link</div>
+            <p class="confirm__step-body">Copy this link and paste it into your listing on Craigslist, Facebook, or anywhere else. It's Key — your own AI agent, already trained on your screening criteria.</p>
+            <div class="confirm__link-row">
+              <input type="text" readonly value="${applyUrl}" onclick="this.select()" class="confirm__link-input" />
+              <button type="button" class="confirm__copy-btn" onclick="copyApplyLink(this, '${applyUrl}')">Copy</button>
+            </div>
+          </div>
         </div>
-        <p class="confirm__meta">Prospect alerts come from Key at <strong>key@nestandkey.ai</strong> — add it to your contacts now, and check spam if you don't see one land, so you never miss someone who's a good fit.</p>
         <p class="confirm__meta">You always make the final call on who you meet.</p>`;
       box.appendChild(confirm);
       box.scrollTop = box.scrollHeight;
