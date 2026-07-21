@@ -145,6 +145,24 @@ Net effect: hero keeps its current full-viewport height and content, pricing ban
 - **No "/" in price lines.** Changed "$19.99 / 30 days" → "$19.99 for 30 days" (same for Active). A slash reads as a recurring-billing convention; these are one-time payments unlocking a fixed 30-day window, not subscriptions.
 - **One-line "who it's for" caption under every price** (`.pricing-caption`, `12.5px`, `#8BAF8E` / `rgba(255,255,255,.55)` on Active, `12px` margin-top from the price): Free — "Try it, no commitment." · Casual — "For browsing the market." · Active — "For a real move-in plan." Same slot on all three cards, no box or legend — evaluated and rejected a shared legend row above the cards and per-card boxed callouts in favor of this quieter, more consistent treatment (fewer nested containers, reads as one typographic system rather than added chrome).
 
+### 1.7 UX writing principles
+
+Added Jul 2026 to give every surface (chat personas, confirm panels, emails, forms, error states) one shared, checkable standard — rather than re-deriving "does this read well" from scratch each time, or importing Apple's or Google's *voice* wholesale (neither matches §1.1's brand tone). Apple's and Google's UX writing guidance diverge on voice but converge heavily on mechanics; these principles are the converged, structural part, applied in Nest & Key's own tone.
+
+**The checklist:**
+1. **Clear.** Plain words, no jargon, no internal/technical terms leaking into user-facing text (a landlord should never see `photosStatus` or `fitCheck` — those are STATE-block names, not copy).
+2. **Concise.** Every word earns its place. Front-load the one thing the reader actually needs right now; don't bury it in a longer sentence.
+3. **Active voice, present tense.** "Key screens every inquiry and emails you the results" — not "inquiries are screened by Key" or "results will be emailed."
+4. **Sentence case**, not Title Case, in UI text (buttons, labels, headings) — Apple and Google both converge here. Exception: this doc's own Markdown headings, which follow standard doc conventions, not UI copy rules.
+5. **Consistent terminology.** One word per concept, everywhere. Enforced word choices so far (add to this list as new ones come up, and grep the whole codebase when one changes — this exact class of drift already happened once, see below):
+   - **"Renters"**, never "prospects", in any user-facing copy (landlord confirm panel, confirmation emails, etc.). *Caught live 2026-07-21: the confirm-panel copy was fixed during the Design handoff, but the landlord confirmation email (a different repo, `nest-key-app`) still said "prospects" — same rule, missed in one place because it wasn't centralized. That gap is exactly what this checklist entry exists to prevent going forward.*
+   - **"Match" / "matching"** is reserved for the moment Key connects a landlord and tenant to exchange contact details — never used for search, scanning, or screening mechanics (see §1.1 for the full rule and its narrative-writing exception).
+6. **Tell people what to do, not just what happened.** An error or empty state should point at the next action ("Check your inbox for the first email from Key" — not "Email sent"). Never surface a raw error code or backend term.
+7. **Speak directly.** "You"/"your", addressing the reader — not passive third-person distance ("the landlord's listing" when talking *to* the landlord).
+8. **Component-specific copy rules** (e.g. the confirmation component's "verb-led headline, no exclamation points" in Part 5) are specializations of this checklist, not separate rules — when in doubt, this section is the canonical source; component sections just call out what's non-obvious for that surface.
+
+**How to apply:** run new copy (or copy under review) through this checklist before treating it as final. When a new consistent-terminology decision gets made (like "renters" or "match"), add it to the list above immediately and grep the rest of the codebase for the old term — don't rely on remembering every place it appears.
+
 ---
 
 ## Part 2 — Pages & Layout
