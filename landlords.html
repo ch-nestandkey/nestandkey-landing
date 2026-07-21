@@ -392,6 +392,7 @@
           statusEl.replaceWith(btn);
         }
       }
+      syncIntakeHeights();
     }
 
     async function sendKeyChat() {
@@ -511,6 +512,23 @@
         : `<div class="msg-text">${escapeHtml(text)}</div>`;
       box.appendChild(div);
       box.scrollTop = box.scrollHeight;
+      syncIntakeHeights();
+    }
+
+    // Keeps the chat card and listing-brief panel visually matched in height
+    // as either one's content grows (e.g. the brief filling in, or the
+    // submitted confirm panel appearing) -- CSS grid's align-items: stretch
+    // handles most cases, but this makes it explicit and reliable at the
+    // exact points content changes, rather than depending on stretch alone.
+    function syncIntakeHeights() {
+      const card = document.getElementById('key-chat-card');
+      const brief = document.getElementById('key-brief-panel');
+      if (!card || !brief) return;
+      card.style.minHeight = '';
+      brief.style.minHeight = '';
+      const max = Math.max(card.offsetHeight, brief.offsetHeight);
+      card.style.minHeight = max + 'px';
+      brief.style.minHeight = max + 'px';
     }
 
     function setKeyChatEnabled(on) {
@@ -531,6 +549,7 @@
       cta.innerHTML = `<button id="key-chat-submit-btn" onclick="submitKeyListing()">Submit my listing →</button>`;
       box.appendChild(cta);
       box.scrollTop = box.scrollHeight;
+      syncIntakeHeights();
     }
 
     async function submitKeyListing() {
@@ -564,14 +583,14 @@
       const confirm = document.createElement('div');
       confirm.className = 'confirm confirm--panel';
       confirm.innerHTML = `<span class="confirm__medallion">✓</span>
-        <div class="confirm__title">Key is ready to screen for you</div>
+        <div class="confirm__title">Your AI agent is now ready</div>
         <div class="confirm__steps">
           <div class="confirm__step">
-            <div class="confirm__step-label">Set up your AI screening now</div>
-            <p class="confirm__step-body">Key will screen every inquiry that comes in and send the results straight to your inbox. Add key@nestandkey.ai to your contacts now (or mark it important) so nothing lands in spam.</p>
+            <div class="confirm__step-label">Try now, Say hello to Key</div>
+            <p class="confirm__step-body">Key just sent you the first email. Check your inbox to ensure the email arrived your inbox well. Add key@nestandkey.ai to your contacts now (or mark it important) so nothing lands in spam.</p>
           </div>
           <div class="confirm__step">
-            <div class="confirm__step-label">Copy your AI screening link</div>
+            <div class="confirm__step-label">How to use your AI agent for screening</div>
             <p class="confirm__step-body">Copy this link and paste it into your listing on Craigslist, Facebook, or anywhere else. It's Key — your own AI agent, already trained on your screening criteria.</p>
             <div class="confirm__link-row">
               <input type="text" readonly value="${applyUrl}" onclick="this.select()" class="confirm__link-input" />
@@ -585,6 +604,7 @@
       const inputRow = document.getElementById('key-chat-input-row');
       if (inputRow) inputRow.style.display = 'none';
       if (btn) { btn.textContent = '✓ Submitted'; btn.style.background = '#4A6B52'; }
+      syncIntakeHeights();
     }
 
     function copyApplyLink(btn, url) {
