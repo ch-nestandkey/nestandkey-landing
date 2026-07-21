@@ -1,3 +1,6 @@
+const { runChatTurn } = require('../lib/chatHandler');
+const { isRateLimited, clientIp } = require('../lib/rateLimit');
+
 const KEY_PERSONA = `You are Key, a calm and professional home-listing assistant for Nest & Key — an AI screening tool that pre-screens renters against a landlord's stated preferences in the SF Bay Area. Your tone is warm, direct, and efficient — like a trusted local property contact who respects the landlord's time. Never sound transactional or robotic.
 
 Conversation style:
@@ -38,65 +41,27 @@ Fill fields as you learn them. Never show or mention the [[STATE]] block to the 
 
 const REQUIRED = ['name', 'propertyType', 'isOwner', 'city', 'neighborhood', 'roomDetails', 'furnished', 'availability', 'rent', 'minStay', 'phone'];
 
-function isValidEmail(str) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str || '');
-}
-
-// Identity-like fields where a shorter, truncated re-statement is always a
-// mistake, never a legitimate edit (unlike free-text fields such as
-// roomDetails, which the model may legitimately re-summarize shorter). Found
-// live: "Taylor Kim" silently became "Taylor" on a later turn with no such
-// correction in the landlord's message. Same guard as nest-key-app's
-// chatHandler.js.
-const ATOMIC_IDENTITY_FIELDS = new Set(['name', 'email', 'phone']);
-
-function isSuspiciousTruncation(oldVal, newVal) {
-  if (!oldVal || !newVal) return false;
-  const oldLower = oldVal.trim().toLowerCase();
-  const newLower = newVal.trim().toLowerCase();
-  return newLower.length < oldLower.length && oldLower.includes(newLower);
-}
-
-function enforceReady(state) {
-  const allFilled = REQUIRED.every(k => (state[k] || '').trim() !== '');
-  // Fields-complete is necessary but not sufficient: a landlord can supply
-  // every required field in one dense message before Key ever recaps or asks
-  // for confirmation. state.ready (set by the model only after an explicit
-  // recap + confirmation, per the persona) must also be true -- this is the
-  // same bug found and fixed in nest-key-app/lib/chatHandler.js; it was never
-  // backported here until now.
-  return allFilled && isValidEmail(state.email) && state.ready === true;
-}
-
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'method not allowed' });
   }
 
+  if (isRateLimited(`key-chat:${clientIp(req)}`)) {
+    return res.status(429).json({ error: 'too many requests, please slow down' });
+  }
+
   const { messages, state } = req.body || {};
-
-  if (!messages || !Array.isArray(messages) || !state) {
-    return res.status(400).json({ error: 'bad request' });
-  }
-
-  if (messages.length > 40) {
-    return res.status(429).json({ error: 'session too long' });
-  }
-
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return res.status(500).json({ error: 'api key not configured' });
-  }
 
   // Lightweight NK visibility into activity, not just completions -- logged on
   // the first turn only. keyHistory starts with 1 seed assistant message
   // client-side, so the first real request already has 2 messages (seed +
-  // the landlord's first reply) by the time it's sent -- checking <= 1 here
-  // was checking for a state that's already impossible by the first request,
-  // so it never fired. Awaited (not fire-and-forget) so it isn't killed by
-  // Vercel freezing the function once the response is sent -- same lesson as
-  // the un-awaited email bug found and fixed in nest-key-app. Caught
-  // separately so a failure never blocks the landlord's chat.
-  if (messages.length <= 2) {
+  // the landlord's first reply) by the time it's sent. Awaited (not
+  // fire-and-forget) so it isn't killed by Vercel freezing the function once
+  // the response is sent. Caught separately so a failure never blocks the
+  // landlord's chat. Guarded with Array.isArray since bad-request validation
+  // now lives inside runChatTurn, called after this block (same order as
+  // nest-key-app's tenant-chat.js).
+  if (Array.isArray(messages) && messages.length <= 2) {
     const nestKeyAppUrl = process.env.NEST_KEY_APP_URL || 'https://nest-key-app.vercel.app';
     try {
       const logRes = await fetch(`${nestKeyAppUrl}/api/log-event`, {
@@ -110,59 +75,10 @@ export default async function handler(req, res) {
     }
   }
 
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 500,
-        system: KEY_PERSONA,
-        messages,
-      }),
-    });
-
-    if (!response.ok) {
-      const err = await response.text();
-      console.error('Anthropic API error:', err);
-      return res.status(502).json({ error: 'upstream error' });
-    }
-
-    const data = await response.json();
-    const raw = data.content?.[0]?.text || '';
-
-    // Parse [[STATE]] block, fall back to existing state on failure
-    const stateMatch = raw.match(/\[\[STATE\]\]\s*(\{[\s\S]*?\})/);
-    let newState = { ...state };
-    if (stateMatch) {
-      try {
-        const extracted = JSON.parse(stateMatch[1]);
-        // Merge: non-empty extracted values win; keep existing for empty/missing
-        for (const [k, v] of Object.entries(extracted)) {
-          if (v === '' || v === null || v === undefined) continue;
-          if (ATOMIC_IDENTITY_FIELDS.has(k) && isSuspiciousTruncation(newState[k], v)) {
-            continue; // looks like an accidental truncation, not a real correction -- keep existing
-          }
-          newState[k] = v;
-        }
-      } catch (_) {
-        // malformed JSON — keep existing state
-      }
-    }
-
-    // Strip [[STATE]] block from the reply shown to user
-    const reply = raw.replace(/\[\[STATE\]\][\s\S]*$/, '').trim();
-
-    // Enforce ready in code — do not trust model's ready flag alone
-    const ready = enforceReady(newState);
-
-    return res.status(200).json({ reply, state: newState, ready });
-  } catch (err) {
-    console.error('key-chat handler error:', err);
-    return res.status(500).json({ error: 'internal error' });
+  const result = await runChatTurn({ persona: KEY_PERSONA, requiredFields: REQUIRED, messages, state: state || {} });
+  if (result.error) {
+    return res.status(result.statusCode).json({ error: result.error });
   }
-}
+
+  return res.status(200).json({ reply: result.reply, state: result.state, ready: result.ready });
+};
