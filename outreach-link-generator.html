@@ -44,19 +44,19 @@
     <h2>2. Review / edit before sending</h2>
 
     <label for="city">City</label>
-    <input type="text" id="city" placeholder="Oakland" />
+    <input type="text" id="city" placeholder="Not found in post -- enter manually" />
 
     <label for="neighborhood">Neighborhood</label>
-    <input type="text" id="neighborhood" placeholder="Rockridge" />
+    <input type="text" id="neighborhood" placeholder="Not found in post -- enter manually" />
 
     <label for="rent">Rent ($/mo)</label>
-    <input type="text" id="rent" placeholder="1800" />
+    <input type="text" id="rent" placeholder="Not found in post -- enter manually" />
 
     <label for="propertyType">Property type</label>
-    <input type="text" id="propertyType" placeholder="house" />
+    <input type="text" id="propertyType" placeholder="Not found in post -- enter manually" />
 
     <label for="roomDetails">Room details</label>
-    <textarea id="roomDetails" rows="2" placeholder="Private room, shared bath"></textarea>
+    <textarea id="roomDetails" rows="2" placeholder="Not found in post -- enter manually"></textarea>
 
     <button onclick="generateLink()">Generate link</button>
     <div class="error-msg" id="generateError">Something went wrong creating the lead. Check the password, then try again.</div>
@@ -140,7 +140,20 @@
 
   function copyLink() {
     const input = document.getElementById('linkOutput');
-    navigator.clipboard.writeText(input.value);
+    const btn = document.querySelector('.copy-btn');
+    const original = btn.textContent;
+
+    navigator.clipboard.writeText(input.value).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = original; }, 1500);
+    }).catch(() => {
+      // Clipboard API blocked/unavailable -- fall back to select-to-copy
+      // so NK can still copy manually (Cmd/Ctrl+C) instead of it looking
+      // like the button silently did nothing.
+      input.select();
+      btn.textContent = 'Press Cmd/Ctrl+C';
+      setTimeout(() => { btn.textContent = original; }, 2000);
+    });
   }
 </script>
 </body>
