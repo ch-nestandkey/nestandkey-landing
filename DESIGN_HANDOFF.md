@@ -632,8 +632,8 @@ CSS lives in `styles.css` and duplicated in the inline `<style>` of `listing-sam
 ```html
 <div class="confirm__steps">
   <div class="confirm__step">
-    <div class="confirm__step-label">Try now</div>
-    <p class="confirm__step-body">Check your inbox for the first email from Key. Add key@nestandkey.ai to your contacts or mark it important so it doesn't land in spam.</p>
+    <div class="confirm__step-label">Set up your AI screening now</div>
+    <p class="confirm__step-body">Key will screen every inquiry that comes in and send the results straight to your inbox. Add key@nestandkey.ai to your contacts now (or mark it important) so nothing lands in spam.</p>
   </div>
   <div class="confirm__step">
     <div class="confirm__step-label">Copy your AI screening link</div>
@@ -643,7 +643,7 @@ CSS lives in `styles.css` and duplicated in the inline `<style>` of `listing-sam
 </div>
 ```
 
-1. **"Try now"** — inbox/whitelist guidance. Time-sensitive: the sending domain has no reputation yet, so alert emails are landing in spam during testing.
+1. **"Set up your AI screening now"** (fine-tuned from initial handoff's "Try now" — same intent, more explicit about what Key actually does) — explains Key's ongoing job (screens every inquiry, emails the results) before the inbox/whitelist action, rather than just telling the landlord to check their inbox without saying why. Time-sensitive: the sending domain has no reputation yet, so alert emails are landing in spam during testing.
 2. **"Copy your AI screening link"** — the bigger task (copy-paste into their own listing elsewhere), done on the landlord's own time. Contains the `.confirm__link-row` sub-pattern (see Part 12 — that sub-pattern already existed; only its CSS values were refined here: border-radius 9→8px, link-input border opacity .25→.35 and text color changed from accent green to body-text `#4A6B52` for readability, copy-btn text now `#F4F7F4` with `font-weight: 600`).
 
 Both step labels share identical styling — no primary/secondary visual hierarchy; the two-step order communicates sequence, not importance. `.confirm--panel`'s gap increased 14px→28px and bottom padding added (32px→36px) to accommodate the two-step layout; this is a shared/global change to `.confirm--panel`, so it also slightly increases spacing on the three other surfaces using this variant (tenant chat, contact form, apply modal) — worth a visual check there next time those are touched, though the added gap is minor and non-breaking.
