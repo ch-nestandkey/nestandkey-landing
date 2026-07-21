@@ -2,47 +2,68 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Outreach link generator (internal, temporary)</title>
+<title>Outreach link generator (internal)</title>
 <style>
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F4F7F4; margin: 0; padding: 24px; color: #1E3A2F; }
-  .wrap { max-width: 480px; margin: 0 auto; }
-  .warning { background: #FAEEDA; border: 1px solid #E7C9A0; border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #854F0B; margin-bottom: 20px; line-height: 1.5; }
+  .wrap { max-width: 520px; margin: 0 auto; }
+  .note { background: #EFF4F0; border: 1px solid #DDE6DE; border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #445; margin-bottom: 20px; line-height: 1.5; }
   h1 { font-size: 18px; margin: 0 0 16px; }
+  h2 { font-size: 14px; margin: 24px 0 8px; }
   label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 4px; }
   input, textarea { width: 100%; box-sizing: border-box; border: 1px solid #DDE6DE; border-radius: 9px; padding: 9px 11px; font-family: inherit; font-size: 14px; }
-  button { margin-top: 16px; background: #2D5A3D; color: #fff; border: none; border-radius: 9px; padding: 10px 18px; font-size: 14px; cursor: pointer; }
+  button { margin-top: 12px; background: #2D5A3D; color: #fff; border: none; border-radius: 9px; padding: 10px 18px; font-size: 14px; cursor: pointer; }
+  button:disabled { opacity: 0.6; cursor: default; }
+  button.secondary { background: #EFF4F0; color: #2D5A3D; border: 1px solid #DDE6DE; }
+  .fields { display: none; margin-top: 20px; padding-top: 16px; border-top: 1px solid #DDE6DE; }
+  .fields.shown { display: block; }
   .result { margin-top: 16px; display: none; }
+  .result.shown { display: block; }
   .link-row { display: flex; gap: 8px; }
   .link-row input { flex: 1; font-size: 12px; }
-  .copy-btn { flex-shrink: 0; background: #2D5A3D; color: #fff; border: none; border-radius: 9px; padding: 9px 16px; font-size: 13px; cursor: pointer; }
+  .copy-btn { flex-shrink: 0; background: #2D5A3D; color: #fff; border: none; border-radius: 9px; padding: 9px 16px; font-size: 13px; cursor: pointer; margin-top: 0; }
+  .error-msg { color: #993C1D; font-size: 13px; margin-top: 8px; display: none; }
+  .error-msg.shown { display: block; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="warning">
-    <strong>TEMPORARY — internal testing only.</strong> This generates a link with facts baked directly into the URL, no login protection, no chat transcript storage. Do not send a generated link to a real landlord. Use only to test the flow yourself before the real lead-table + admin-portal system replaces this.
+  <div class="note">
+    <strong>Internal tool.</strong> Links generated here create a real record and are safe to send to actual landlords.
   </div>
   <h1>Outreach link generator</h1>
 
-  <label for="city">City</label>
-  <input type="text" id="city" placeholder="Oakland" />
+  <label for="secret">NK password</label>
+  <input type="password" id="secret" placeholder="Shared team password" />
 
-  <label for="neighborhood">Neighborhood</label>
-  <input type="text" id="neighborhood" placeholder="Rockridge" />
+  <h2>1. Paste the FB/Craigslist post</h2>
+  <textarea id="postText" rows="6" placeholder="Paste the raw post text here..."></textarea>
+  <button id="extractBtn" onclick="extractFacts()">Extract facts</button>
+  <div class="error-msg" id="extractError">Something went wrong extracting facts. Check the password, then try again.</div>
 
-  <label for="rent">Rent ($/mo)</label>
-  <input type="text" id="rent" placeholder="1800" />
+  <div class="fields" id="fieldsBlock">
+    <h2>2. Review / edit before sending</h2>
 
-  <label for="propertyType">Property type</label>
-  <input type="text" id="propertyType" placeholder="house" />
+    <label for="city">City</label>
+    <input type="text" id="city" placeholder="Oakland" />
 
-  <label for="roomDetails">Room details (notes from their post)</label>
-  <textarea id="roomDetails" rows="3" placeholder="Private room, shared bath"></textarea>
+    <label for="neighborhood">Neighborhood</label>
+    <input type="text" id="neighborhood" placeholder="Rockridge" />
 
-  <button onclick="generate()">Generate link</button>
+    <label for="rent">Rent ($/mo)</label>
+    <input type="text" id="rent" placeholder="1800" />
+
+    <label for="propertyType">Property type</label>
+    <input type="text" id="propertyType" placeholder="house" />
+
+    <label for="roomDetails">Room details</label>
+    <textarea id="roomDetails" rows="2" placeholder="Private room, shared bath"></textarea>
+
+    <button onclick="generateLink()">Generate link</button>
+    <div class="error-msg" id="generateError">Something went wrong creating the lead. Check the password, then try again.</div>
+  </div>
 
   <div class="result" id="result">
-    <label>Link (test with this yourself — do not send to a real landlord)</label>
+    <label>Real outreach link -- safe to send to a landlord</label>
     <div class="link-row">
       <input type="text" id="linkOutput" readonly onclick="this.select()" />
       <button class="copy-btn" onclick="copyLink()">Copy</button>
@@ -51,7 +72,47 @@
 </div>
 
 <script>
-  function generate() {
+  const secretInput = document.getElementById('secret');
+  secretInput.value = sessionStorage.getItem('nkToolSecret') || '';
+  secretInput.addEventListener('input', () => sessionStorage.setItem('nkToolSecret', secretInput.value));
+
+  function showFieldsBlock() {
+    document.getElementById('fieldsBlock').classList.add('shown');
+  }
+
+  async function extractFacts() {
+    const postText = document.getElementById('postText').value.trim();
+    if (!postText) return;
+    const btn = document.getElementById('extractBtn');
+    const errEl = document.getElementById('extractError');
+    errEl.classList.remove('shown');
+    btn.textContent = 'Extracting…';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('/api/extract-lead-facts', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'x-nk-secret': secretInput.value },
+        body: JSON.stringify({ postText }),
+      });
+      if (!res.ok) throw new Error();
+      const facts = await res.json();
+      document.getElementById('city').value = facts.city || '';
+      document.getElementById('neighborhood').value = facts.neighborhood || '';
+      document.getElementById('rent').value = facts.rent || '';
+      document.getElementById('propertyType').value = facts.propertyType || '';
+      document.getElementById('roomDetails').value = facts.roomDetails || '';
+      showFieldsBlock();
+    } catch (_) {
+      errEl.classList.add('shown');
+      showFieldsBlock(); // let NK fill fields in manually even if extraction failed
+    } finally {
+      btn.textContent = 'Extract facts';
+      btn.disabled = false;
+    }
+  }
+
+  async function generateLink() {
     const facts = {
       city: document.getElementById('city').value.trim(),
       neighborhood: document.getElementById('neighborhood').value.trim(),
@@ -59,12 +120,22 @@
       propertyType: document.getElementById('propertyType').value.trim(),
       roomDetails: document.getElementById('roomDetails').value.trim(),
     };
-    // Drop empty fields so decodePrefill's merge doesn't overwrite with blanks.
-    const filtered = Object.fromEntries(Object.entries(facts).filter(([, v]) => v !== ''));
-    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(filtered))));
-    const url = `${window.location.origin}/landlords.html?prefill=${encoded}`;
-    document.getElementById('linkOutput').value = url;
-    document.getElementById('result').style.display = 'block';
+    const errEl = document.getElementById('generateError');
+    errEl.classList.remove('shown');
+
+    try {
+      const res = await fetch('/api/generate-outreach-link', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'x-nk-secret': secretInput.value },
+        body: JSON.stringify(facts),
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      document.getElementById('linkOutput').value = data.outreachUrl;
+      document.getElementById('result').classList.add('shown');
+    } catch (_) {
+      errEl.classList.add('shown');
+    }
   }
 
   function copyLink() {

@@ -617,13 +617,36 @@ One shared success component (added Jul 11 2026) replacing four previously text-
 | Surface | File | Title | Body | Meta |
 |---|---|---|---|---|
 | Tenant chat | `index.html` | You're in | Nest is scanning the Bay Area now. First results will land in {email} shortly. | — |
-| Landlord Key chat | `landlords.html` | Listing submitted | Our team will review your submission and reach out to {email} shortly. | You always make the final call on who you meet. |
+| Landlord Key chat | `landlords.html` | Key is ready to screen for you | *Two-step variant — see below, not a single body paragraph* | You always make the final call on who you meet. |
 | Contact form | `listing-sample-socal/index.html` | Message sent | The homeowners will reach out to you by email soon. | — |
 | Apply modal | `listing-sample-socal/index.html` | You're in | The homeowners will reach out to you to schedule a tour. | — |
 
-Copy rules: verb-led headline, no `✓ Submitted`-style prefixes, no exclamation points (§4.2). "Match/matching/matches" is reserved for the landlord↔tenant contact-exchange moment only — never used for confirmation copy.
+Copy rules: verb-led headline, no `✓ Submitted`-style prefixes, no exclamation points (§4.2). "Match/matching/matches" is reserved for the landlord↔tenant contact-exchange moment only — never used for confirmation copy. These rules extend to step labels too (see below).
+
+**Word choice (added Jul 2026):** never use "prospects" in user-facing copy — use **"renters"** instead, consistent with the audience language already established in §1.1 ("motivated renters"). Applies anywhere this component (or related landlord/tenant copy) is user-visible.
 
 CSS lives in `styles.css` and duplicated in the inline `<style>` of `listing-sample-socal/index.html` (two stylesheets, not yet consolidated).
+
+**Landlord Key chat variant — two-step body (D2.1, added Jul 2026):** Design-reviewed rewrite, replacing the single body paragraph + meta line. Title corrected from "Listing submitted" (doc) / "Your listing is live" (had drifted in code) — both wrong, since submission is self-service and Key never publishes anything on the landlord's behalf; "Key is ready to screen for you" accurately frames this as handing over a link to the landlord's own AI agent. Body is now two equal-weight labeled steps, ordered by what the landlord should actually do first:
+
+```html
+<div class="confirm__steps">
+  <div class="confirm__step">
+    <div class="confirm__step-label">Set up your AI screening now</div>
+    <p class="confirm__step-body">Key will screen every inquiry that comes in and send the results straight to your inbox. Add key@nestandkey.ai to your contacts now (or mark it important) so nothing lands in spam.</p>
+  </div>
+  <div class="confirm__step">
+    <div class="confirm__step-label">Copy your AI screening link</div>
+    <p class="confirm__step-body">Copy this link and paste it into your listing on Craigslist, Facebook, or anywhere else. It's Key — your own AI agent, already trained on your screening criteria.</p>
+    <div class="confirm__link-row">...</div>
+  </div>
+</div>
+```
+
+1. **"Set up your AI screening now"** (fine-tuned from initial handoff's "Try now" — same intent, more explicit about what Key actually does) — explains Key's ongoing job (screens every inquiry, emails the results) before the inbox/whitelist action, rather than just telling the landlord to check their inbox without saying why. Time-sensitive: the sending domain has no reputation yet, so alert emails are landing in spam during testing.
+2. **"Copy your AI screening link"** — the bigger task (copy-paste into their own listing elsewhere), done on the landlord's own time. Contains the `.confirm__link-row` sub-pattern (see Part 12 — that sub-pattern already existed; only its CSS values were refined here: border-radius 9→8px, link-input border opacity .25→.35 and text color changed from accent green to body-text `#4A6B52` for readability, copy-btn text now `#F4F7F4` with `font-weight: 600`).
+
+Both step labels share identical styling — no primary/secondary visual hierarchy; the two-step order communicates sequence, not importance. `.confirm--panel`'s gap increased 14px→28px and bottom padding added (32px→36px) to accommodate the two-step layout; this is a shared/global change to `.confirm--panel`, so it also slightly increases spacing on the three other surfaces using this variant (tenant chat, contact form, apply modal) — worth a visual check there next time those are touched, though the added gap is minor and non-breaking.
 
 ---
 

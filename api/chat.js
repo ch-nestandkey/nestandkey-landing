@@ -1,3 +1,6 @@
+const { runChatTurn } = require('../lib/chatHandler');
+const { isRateLimited, clientIp } = require('../lib/rateLimit');
+
 const NEST_PERSONA = `You are Nest, a calm and curated home search assistant for Nest & Key — an AI market scanning tool that finds rooms for tech professionals and interns in the SF Bay Area. Your tone is warm, unhurried, and personal — like a trusted friend who knows the Bay Area well, not a marketplace form. Never sound transactional or robotic.
 
 Conversation style:
@@ -30,80 +33,21 @@ Fill fields as you learn them. Never show or mention the [[STATE]] block to the 
 
 const REQUIRED = ['roomType', 'location', 'budget', 'stay', 'commute', 'roomNeeds', 'workStatus', 'income', 'credit', 'email'];
 
-function isValidEmail(str) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str || '');
-}
-
-function enforceReady(state) {
-  const allFilled = REQUIRED.every(k => (state[k] || '').trim() !== '');
-  return allFilled && isValidEmail(state.email);
-}
-
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'method not allowed' });
   }
 
+  if (isRateLimited(`nest-chat:${clientIp(req)}`)) {
+    return res.status(429).json({ error: 'too many requests, please slow down' });
+  }
+
   const { messages, state } = req.body || {};
 
-  if (!messages || !Array.isArray(messages) || !state) {
-    return res.status(400).json({ error: 'bad request' });
+  const result = await runChatTurn({ persona: NEST_PERSONA, requiredFields: REQUIRED, messages, state: state || {} });
+  if (result.error) {
+    return res.status(result.statusCode).json({ error: result.error });
   }
 
-  if (messages.length > 40) {
-    return res.status(429).json({ error: 'session too long' });
-  }
-
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return res.status(500).json({ error: 'api key not configured' });
-  }
-
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 500,
-        system: NEST_PERSONA,
-        messages,
-      }),
-    });
-
-    if (!response.ok) {
-      const err = await response.text();
-      console.error('Anthropic API error:', err);
-      return res.status(502).json({ error: 'upstream error' });
-    }
-
-    const data = await response.json();
-    const raw = data.content?.[0]?.text || '';
-
-    // Parse [[STATE]] block, fall back to existing state on failure
-    const stateMatch = raw.match(/\[\[STATE\]\]\s*(\{[\s\S]*?\})/);
-    let newState = { ...state };
-    if (stateMatch) {
-      try {
-        const extracted = JSON.parse(stateMatch[1]);
-        newState = { ...state, ...extracted };
-      } catch (_) {
-        // malformed JSON — keep existing state
-      }
-    }
-
-    // Strip [[STATE]] block from the reply shown to user
-    const reply = raw.replace(/\[\[STATE\]\][\s\S]*$/, '').trim();
-
-    // Enforce ready in code — do not trust model's ready flag alone
-    const ready = enforceReady(newState);
-
-    return res.status(200).json({ reply, state: newState, ready });
-  } catch (err) {
-    console.error('chat handler error:', err);
-    return res.status(500).json({ error: 'internal error' });
-  }
-}
+  return res.status(200).json({ reply: result.reply, state: result.state, ready: result.ready });
+};
