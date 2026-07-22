@@ -33,7 +33,7 @@ Rather than a listings board you scroll, Nest (for tenants) scans the market on 
 
 **Room income calculator (`/landlords#calculator`):** not a third audience or a standalone route — it's a section on the Landlords page (merged Jul 14 2026; the old standalone `/buyers` route now 301-redirects to `/landlords#calculator`, and `buyers.html` no longer exists). It extends the landlord story — the same "lower your rent/mortgage by sharing your home" value prop, run as numbers instead of a chat. It also supports a secondary "buying to invest" scenario (renting out a whole unit for cash flow). **Resolved Jul 14 2026 — this is not an exception to the two-audience positioning, kept as-is intentionally:** an unused whole house is just a larger unit of the same unused-space problem a spare room is — one property with zero people sharing it instead of one room. "Invest" is the same house-sharing logic scaled up to an entire property, not real-estate-investor framing bolted onto a house-sharing page. No calculator or copy change needed; this only resolves how Design/Code should reason about the scenario going forward.
 
-The brand positioning is deliberate: this is not Craigslist. The tone is calm, curated, and trustworthy — modeled after being introduced to a roommate by a mutual friend, not scrolling a marketplace.
+The brand positioning is deliberate: this is not Craigslist. **Nest & Key is a self-service tool** (updated 2026-07-21, supersedes the earlier "introduced by a mutual friend" framing below): renters run their own quality-first market scan, and hands-on landlords run their own housemate/tenant screening. **The user is always the one in control, making the decisions** — Nest & Key's job is to make the repetitive parts of that work faster, easier, and more effortless, not to curate or decide on the user's behalf. The tone stays calm, curated, and trustworthy — this is not a listings board you scroll — but that tone comes from the tool being well-made and respectful of the user's time, not from a human intermediary vetting things for them.
 
 **Reserved term — "match":** On Nest & Key, a "match" means *only* the moment we connect a landlord and a tenant to exchange contact details. Never use "match" / "matching" for search results, scanning, or screening — in product copy or in these docs. For results, say "homes we find", "homes we surface", "listings", or "results".
 
@@ -374,9 +374,9 @@ Browser (chat card)
 
 ### 4.1 Who Nest is
 
-Nest is not a chatbot. The mental model is a trusted friend who knows the Bay Area rental market well — someone who would introduce you to a landlord personally, not post your profile on a listing board.
+Nest is not a chatbot, and it doesn't decide anything on the user's behalf (updated 2026-07-21, supersedes the earlier "introduce you to a landlord personally" framing below) — think of it as doing the repetitive legwork of scanning the Bay Area rental market so the user doesn't have to, while the user stays the one calling the shots on what's actually a fit. Self-service, not concierge.
 
-This shapes every word choice. Nest never sounds like a form, a customer service script, or a marketplace. Nest sounds like someone who already knows the context, has an opinion, and makes you feel like you're talking to a person.
+This shapes every word choice. Nest never sounds like a form, a customer service script, or a marketplace. Nest sounds like someone who already knows the context, has an opinion, and makes you feel like you're talking to a person — but it's still the user's own scan, running on their behalf, not a matchmaker vetting things for them.
 
 ### 4.2 Persona dimensions
 
@@ -523,11 +523,11 @@ Nest's closing message after confirmation:
 
 Then the "Submit my search →" button submits and the card transitions to the confirmation state.
 
-**Quality & onboarding review:** users drive their own search or listing — Nest & Key never takes over on their behalf. To keep intake quality high and help people get set up, the Nest & Key team reviews every submission (tenant *and* landlord) before scanning or pre-screening goes live. Frame this as a quick quality check that helps users get started — never as a done-for-you concierge service or a team acting on their behalf. How much it's foregrounded differs by audience:
+**Quality & onboarding review (updated 2026-07-21 — landlord side corrected to match Part 12; tenant side unchanged, not re-verified this pass):** users drive their own search or listing — Nest & Key never takes over on their behalf, and never decides on their behalf (see §1.1/§4.1). How submission is handled differs by audience:
 
-- **Tenants** — speed is the primary value. Keep confirmation immediate and AI-driven; frame the scan as already underway. Don't foreground a review step. Example (title + body): **You're in** — Nest is scanning the Bay Area now. First results will land in [email] shortly.
+- **Tenants** — speed is the primary value. Keep confirmation immediate and AI-driven; frame the scan as already underway. Don't foreground a review step. Example (title + body): **You're in** — Nest is scanning the Bay Area now. First results will land in [email] shortly. *(§3.4's data flow still describes the Nest & Key team reviewing submissions and initiating outreach manually on the backend — that may or may not still be current; wasn't re-checked as part of this pass, only the landlord side below was, via Part 12.)*
 
-- **Landlords and home buyers** — trust is the primary value. It's fine to note the quick quality check, framed as help getting set up rather than the team taking over. Keep the user in control of the outcome. Example (title + body + meta): **Listing submitted** — Our team will review your submission and reach out to [email] shortly. *(meta: You always make the final call on who you meet.)*
+- **Landlords** — **fully self-service, no team review step** (confirmed current, per Part 12): submitting the intake chat immediately creates the real listing and hands the landlord their own shareable screening link — no one at Nest & Key reviews or gates it first. The stale "Our team will review your submission and reach out shortly" copy this section previously described is gone; the actual current confirmation is the two-step "Key is ready to screen for you" panel documented in Part 5's D2 section — that's the copy to reference here, not a rewritten example.
 
 Button copy rule: use "Submit" (not "Start pre-screening" or "Start my scan") so it doesn't imply automated action — but confirmation copy handles the framing per audience above.
 
