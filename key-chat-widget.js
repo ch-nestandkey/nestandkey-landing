@@ -115,7 +115,7 @@ function renderKeyBrief() {
       const btn = document.createElement('button');
       btn.id = 'key-brief-submit';
       btn.className = 'key-brief-status ready';
-      btn.textContent = 'Submit my listing →';
+      btn.textContent = 'Submit my rental profile →';
       btn.addEventListener('click', submitKeyListing);
       statusEl.replaceWith(btn);
     }
@@ -250,16 +250,25 @@ function appendKeyMsg(role, text) {
 // submitted confirm panel appearing) -- CSS grid's align-items: stretch
 // handles most cases, but this makes it explicit and reliable at the
 // exact points content changes, rather than depending on stretch alone.
+// Fits the chat card (and its brief panel) to whatever room is actually
+// left in the viewport below the card's own position, rather than a fixed
+// vh percentage -- landlords.html has a full marketing hero above the card,
+// key-intake.html has only a short intro, so a flat vh value is wrong for
+// one of them regardless of which value is picked. Recomputed on every
+// call site that already exists for this function, plus on resize, so the
+// input row never ends up pushed below the fold as content above the card
+// changes or the window is resized.
 function syncIntakeHeights() {
   const card = document.getElementById('key-chat-card');
   const brief = document.getElementById('key-brief-panel');
-  if (!card || !brief) return;
-  card.style.minHeight = '';
-  brief.style.minHeight = '';
-  const max = Math.max(card.offsetHeight, brief.offsetHeight);
-  card.style.minHeight = max + 'px';
-  brief.style.minHeight = max + 'px';
+  if (!card) return;
+  card.style.height = '';
+  const top = card.getBoundingClientRect().top;
+  const available = Math.max(420, window.innerHeight - top - 40);
+  card.style.height = available + 'px';
+  if (brief) brief.style.height = available + 'px';
 }
+window.addEventListener('resize', syncIntakeHeights);
 
 function setKeyChatEnabled(on) {
   const input = document.getElementById('key-chat-input');
@@ -276,7 +285,7 @@ function showKeyReady() {
   if (existing) existing.remove();
   const cta = document.createElement('div');
   cta.className = 'chat-ready-cta';
-  cta.innerHTML = `<button id="key-chat-submit-btn" onclick="submitKeyListing()">Submit my listing →</button>`;
+  cta.innerHTML = `<button id="key-chat-submit-btn" onclick="submitKeyListing()">Submit my rental profile →</button>`;
   box.appendChild(cta);
   box.scrollTop = box.scrollHeight;
   syncIntakeHeights();
@@ -302,9 +311,9 @@ async function submitKeyListing() {
     const data = await res.json();
     applyUrl = data.applyUrl;
   } catch (_) {
-    if (btn) { btn.textContent = 'Submit my listing →'; btn.disabled = false; }
-    if (chatBtn) { chatBtn.textContent = 'Submit my listing →'; chatBtn.disabled = false; }
-    alert('Something went wrong submitting your listing. Please try again.');
+    if (btn) { btn.textContent = 'Submit my rental profile →'; btn.disabled = false; }
+    if (chatBtn) { chatBtn.textContent = 'Submit my rental profile →'; chatBtn.disabled = false; }
+    alert('Something went wrong submitting your rental profile. Please try again.');
     return;
   }
 
@@ -323,7 +332,7 @@ async function submitKeyListing() {
       </div>
       <div class="confirm__step">
         <div class="confirm__step-label">How to use your AI agent for screening</div>
-        <p class="confirm__step-body">Copy this link and paste it into your listing on Craigslist, Facebook, or anywhere else. It's Key — your own AI agent, already trained on your screening criteria.</p>
+        <p class="confirm__step-body">Copy this link and paste it into your post on Craigslist, Facebook, or anywhere else. It's Key — your own AI agent, already trained on your screening criteria.</p>
         <div class="confirm__link-row">
           <input type="text" readonly value="${applyUrl}" onclick="this.select()" class="confirm__link-input" />
           <button type="button" class="confirm__copy-btn" onclick="copyApplyLink(this, '${applyUrl}')">Copy</button>
@@ -417,7 +426,7 @@ function bindKeyChatUI() {
       if (addedCount > 0) {
         document.getElementById('key-photo-hint').textContent = `${keyPhotoUrls.length} of 10 added ✓`;
         drop.style.borderColor = 'rgba(45,90,61,0.5)';
-        appendKeyMsg('assistant', `Got it — I've noted ${keyPhotoUrls.length} photo${keyPhotoUrls.length > 1 ? 's' : ''} for this listing. You can add more or keep chatting.`);
+        appendKeyMsg('assistant', `Got it — I've noted ${keyPhotoUrls.length} photo${keyPhotoUrls.length > 1 ? 's' : ''} for this rental profile. You can add more or keep chatting.`);
       }
     });
   }

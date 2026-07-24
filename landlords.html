@@ -42,67 +42,131 @@
     #invite-gateway-backdrop {
       display: none; position: fixed; inset: 0; z-index: 999;
       background: rgba(30,58,47,0.55); overflow-y: auto;
-      padding: 40px 20px; box-sizing: border-box;
+      box-sizing: border-box;
     }
-    #invite-gateway-backdrop.visible { display: flex; align-items: flex-start; justify-content: center; }
+    #invite-gateway-backdrop.visible { display: flex; align-items: safe center; justify-content: center; padding: 40px 0; }
     .invite-gateway-modal {
       background: #fff; border-radius: 20px; box-shadow: 0 24px 60px rgba(30,58,47,0.35);
-      max-width: 860px; width: 100%; display: flex; overflow: hidden; margin: auto;
+      width: 860px; max-width: 94%; display: flex; overflow: hidden; margin: auto;
     }
     .invite-gateway-carousel, .invite-gateway-claim {
-      flex: 1; min-width: 0; padding: 36px 32px; box-sizing: border-box;
+      flex: 1; min-width: 0; padding: 48px 42px; box-sizing: border-box;
+      display: flex; flex-direction: column;
     }
     .invite-gateway-claim { background: #EDF2ED; border-left: 1px solid rgba(80,130,80,0.15); }
     .invite-gateway-carousel-label { font-size: 13px; font-weight: 700; color: #8BAF8E; margin-bottom: 22px; letter-spacing: 0.02em; }
     .invite-trust-card {
-      display: flex; align-items: flex-start; gap: 12px; margin-bottom: 22px;
+      background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 12px; padding: 14px;
+      display: flex; align-items: center; gap: 12px; margin-bottom: 28px; box-sizing: border-box;
     }
     .invite-trust-icon {
-      width: 28px; height: 28px; border-radius: 50%; background: #2D5A3D; color: #fff;
-      display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;
+      width: 40px; height: 40px; border-radius: 50%; background: #2D5A3D; color: #fff;
+      display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
     }
-    .invite-trust-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #8BAF8E; letter-spacing: 0.04em; }
-    .invite-trust-detail { font-size: 13px; font-weight: 600; color: #1E3A2F; margin-top: 2px; }
-    .invite-gateway-claim h2 { font-size: 24px; font-weight: 700; color: #1E3A2F; margin: 0 0 8px; }
-    .invite-gateway-claim .invite-sub { font-size: 15px; color: #4A6B52; margin: 0 0 18px; }
-    .invite-gateway-claim .invite-intro { font-size: 14px; color: #4A6B52; line-height: 1.55; margin: 0 0 18px; }
-    .invite-beta-badge { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #2D5A3D; border-radius: 0; margin-bottom: 18px; }
-    #invite-claim-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+    .invite-trust-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #8BAF8E; letter-spacing: 0.04em; margin-bottom: 3px; }
+    .invite-trust-detail { font-size: 13px; font-weight: 600; color: #1E3A2F; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .invite-gateway-claim h2 { font-size: 24px; font-weight: 700; color: #1E3A2F; margin: 0 0 10px; }
+    .invite-gateway-claim .invite-sub { font-size: 15px; color: #1E3A2F; line-height: 1.6; margin: 0 0 36px; }
+    .invite-gateway-claim .invite-intro { font-size: 14px; color: #4A6B52; line-height: 1.7; margin: 0 0 12px; }
+    .invite-beta-badge {
+      display: inline-flex; align-self: flex-start; align-items: center; white-space: nowrap; width: fit-content;
+      background: #EBF0EB; color: #2D5A3D; font-size: 11px; font-weight: 600; padding: 5px 10px;
+      border-radius: 0; margin-bottom: 20px;
+    }
+    #invite-claim-form { display: flex; flex-direction: column; gap: 14px; margin-top: auto; }
     #invite-claim-email {
-      padding: 12px 16px; border-radius: 10px; border: 1.5px solid #B0C4B3; font-size: 14px;
-      font-family: inherit;
+      padding: 13px 15px; border-radius: 10px; border: 1px solid rgba(80,130,80,0.3); font-size: 14.5px;
+      font-family: inherit; color: #1E3A2F; box-sizing: border-box;
     }
     #invite-claim-submit {
-      background: #2D5A3D; color: #F4F7F4; font-size: 15px; font-weight: 600; border: none;
-      padding: 13px 28px; border-radius: 999px; cursor: pointer; transition: background 0.15s;
+      background: #2D5A3D; color: #fff; font-size: 15px; font-weight: 600; border: none;
+      padding: 14px 22px; border-radius: 999px; cursor: pointer; transition: background 0.15s; font-family: inherit;
     }
     #invite-claim-submit:hover { background: #3D7A52; }
     #invite-claim-submit:disabled { opacity: 0.6; cursor: default; }
     #invite-claim-error { color: #B0522E; font-size: 13px; display: none; }
-    .invite-reassurance { font-size: 12.5px; color: #8BAF8E; margin: 0; }
+    .invite-reassurance { font-size: 12px; color: #8BAF8E; line-height: 1.5; margin: 10px 0 0; }
+    .invite-terms-placeholder { margin-top: 24px; border-top: 1px dashed rgba(80,110,80,0.2); padding-top: 20px; font-size: 11px; color: #B7CBB9; }
 
-    .invite-slide-heading { font-size: 15px; font-weight: 700; color: #1E3A2F; margin-bottom: 14px; }
-    .invite-chat-demo { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; }
-    .invite-chat-msg { font-size: 13px; line-height: 1.45; padding: 9px 13px; border-radius: 12px; max-width: 85%; }
-    .invite-chat-msg.key { background: #EBF0EB; color: #1E3A2F; align-self: flex-start; }
-    .invite-chat-msg.user { background: #2D5A3D; color: #F4F7F4; align-self: flex-end; }
-    .invite-score-demo { display: flex; flex-direction: column; gap: 10px; max-height: 320px; overflow-y: auto; }
-    .invite-score-card { border-radius: 10px; padding: 12px 14px; font-size: 12.5px; }
+    @keyframes invite-typing-bounce { 0%, 60%, 100% { transform: translateY(0); opacity: .4; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+    .invite-slide-heading { font-size: 15px; font-weight: 700; color: #6B8F71; margin-bottom: 20px; flex-shrink: 0; }
+    .invite-carousel-slide-body { flex: 1; position: relative; min-height: 220px; }
+    .invite-slide { position: absolute; inset: 0; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+    .invite-slide.active { opacity: 1; pointer-events: auto; }
+    .invite-chat-demo { display: flex; flex-direction: column; gap: 12px; flex: 1; min-height: 0; overflow-y: auto; scroll-behavior: smooth; }
+    .invite-chat-msg { font-size: 13.5px; line-height: 1.5; padding: 10px 14px; border-radius: 12px; max-width: 88%; }
+    .invite-chat-msg.key { background: #EFF4F0; color: #1E3A2F; align-self: flex-start; }
+    .invite-chat-msg.user { background: #2D5A3D; color: #fff; align-self: flex-end; }
+    .invite-typing { display: flex; gap: 4px; padding: 10px 14px; border-radius: 12px; width: fit-content; }
+    .invite-typing.key { align-self: flex-start; background: #EFF4F0; }
+    .invite-typing.user { align-self: flex-end; background: #2D5A3D; }
+    .invite-typing span { width: 6px; height: 6px; border-radius: 50%; display: inline-block; animation: invite-typing-bounce 1s infinite; }
+    .invite-typing.key span { background: #8BAF8E; }
+    .invite-typing.user span { background: rgba(255,255,255,0.85); }
+    .invite-typing span:nth-child(2) { animation-delay: .15s; }
+    .invite-typing span:nth-child(3) { animation-delay: .3s; }
+    .invite-request-tour-btn {
+      align-self: stretch; width: 100%; box-sizing: border-box; margin-top: 8px;
+      background: #2D5A3D; color: #fff; border: none; border-radius: 10px; padding: 12px 20px;
+      font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+      transition: transform 0.12s ease, background 0.15s ease;
+    }
+    .invite-request-tour-btn:hover { background: #3D7A52; }
+    .invite-tour-confirmed {
+      align-self: stretch; width: 100%; box-sizing: border-box; margin-top: 8px; text-align: center;
+      background: #EBF0EB; color: #2D5A3D; border-radius: 10px; padding: 12px 20px; font-size: 14px; font-weight: 600;
+    }
+
+    .invite-score-demo { height: 100%; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+    .invite-score-card { border-radius: 14px; padding: 20px; flex-shrink: 0; position: relative; overflow: hidden; box-sizing: border-box; }
     .invite-score-card.fit { background: #F7FAF7; border: 1px solid rgba(80,130,80,0.15); }
     .invite-score-card.not-fit { background: #FAF3E0; border: 1px solid rgba(196,144,64,0.25); }
-    .invite-score-row { display: flex; justify-content: space-between; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #1E3A2F; }
-    .invite-score-card.fit .invite-score-check { color: #0F6E56; }
-    .invite-score-card.not-fit .invite-score-check { color: #B0812E; }
-    .invite-score-check { font-size: 12px; margin-top: 2px; }
-    .invite-inbox-demo { font-size: 13px; color: #1E3A2F; line-height: 1.5; }
-    .invite-inbox-chrome { font-size: 11px; font-weight: 700; color: #8BAF8E; text-transform: uppercase; margin-bottom: 10px; }
-    .invite-inbox-from { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; font-size: 12.5px; }
-    .invite-inbox-avatar { width: 24px; height: 24px; border-radius: 50%; background: #2D5A3D; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
-    .invite-inbox-to { color: #8BAF8E; font-size: 11px; }
-    .invite-inbox-subject { font-weight: 700; margin-bottom: 10px; }
-    .invite-carousel-dots { display: flex; gap: 8px; justify-content: center; margin-top: 18px; }
-    .invite-dot { width: 7px; height: 7px; border-radius: 50%; border: none; background: #C6D6C8; cursor: pointer; padding: 0; }
-    .invite-dot.active { background: #2D5A3D; }
+    .invite-score-renter-label { font-size: 12px; font-weight: 600; color: #1E3A2F; margin-bottom: 10px; }
+    .invite-score-headline { display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px; }
+    .invite-score-num { font-size: 34px; font-weight: 700; }
+    .invite-score-card.fit .invite-score-num { color: #0F6E56; }
+    .invite-score-card.not-fit .invite-score-num { color: #B0812E; }
+    .invite-score-fitlabel { font-size: 13px; }
+    .invite-score-card.fit .invite-score-fitlabel { color: #4A6B52; }
+    .invite-score-card.not-fit .invite-score-fitlabel { color: #8B6A3D; }
+    .invite-score-checklist { display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+    .invite-score-card.fit .invite-score-checklist { color: #1E3A2F; }
+    .invite-score-card.not-fit .invite-score-checklist { color: #5C4A2A; }
+    .invite-score-fade {
+      position: absolute; left: 0; right: 0; bottom: 0; height: 36px;
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); pointer-events: none;
+    }
+    .invite-score-card.fit .invite-score-fade { background: linear-gradient(to bottom, rgba(247,250,247,0) 0%, rgba(247,250,247,0.85) 100%); }
+    .invite-score-card.not-fit .invite-score-fade { background: linear-gradient(to bottom, rgba(250,243,224,0) 0%, rgba(250,243,224,0.85) 100%); }
+
+    .invite-inbox-frame {
+      background: #fff; border: 1px solid #dadce0; border-radius: 12px; box-shadow: 0 6px 18px rgba(30,58,47,0.08);
+      overflow: hidden; font-family: Arial, Helvetica, sans-serif; flex: 1; min-height: 0; display: flex; flex-direction: column;
+    }
+    .invite-inbox-chrome-bar { display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: #f1f3f4; border-bottom: 1px solid #e0e0e0; flex-shrink: 0; }
+    .invite-inbox-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+    .invite-inbox-chrome-label { margin-left: 8px; font-size: 11px; color: #5f6368; font-weight: 600; }
+    .invite-inbox-sender-block { padding: 14px 16px 10px; border-bottom: 1px solid #e8eaed; flex-shrink: 0; }
+    .invite-inbox-sender-row { display: flex; align-items: center; gap: 10px; }
+    .invite-inbox-avatar { width: 32px; height: 32px; border-radius: 50%; background: #2D5A3D; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .invite-inbox-nameline { display: flex; align-items: baseline; gap: 6px; }
+    .invite-inbox-name { font-size: 13px; font-weight: 700; color: #202124; }
+    .invite-inbox-email { font-size: 11px; color: #5f6368; }
+    .invite-inbox-tome { font-size: 11px; color: #5f6368; margin-top: 1px; }
+    .invite-inbox-subject { margin-top: 10px; font-size: 14px; font-weight: 700; color: #202124; }
+    .invite-inbox-body { padding: 14px 16px 16px; flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+    .invite-inbox-body p { margin: 0; font-size: 13px; color: #3c4043; line-height: 1.5; }
+    .invite-inbox-card { border: 1px solid #e8eaed; border-radius: 10px; padding: 14px; background: #FAFCFA; }
+    .invite-inbox-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .invite-inbox-card-name { font-size: 13px; font-weight: 700; color: #202124; }
+    .invite-inbox-card-score { font-size: 12px; font-weight: 700; color: #0F6E56; }
+    .invite-inbox-card-checks { display: flex; flex-direction: column; gap: 5px; font-size: 12px; color: #3c4043; }
+    .invite-inbox-sig { font-size: 11.5px; color: #5f6368; padding-top: 10px; border-top: 1px solid #e8eaed; margin-top: auto; }
+    .invite-carousel-dots { display: flex; gap: 8px; justify-content: center; margin-top: 18px; flex-shrink: 0; }
+    .invite-dot { width: 20px; height: 20px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; background: transparent; cursor: pointer; }
+    .invite-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #DDE6DE; }
+    .invite-dot.active::after { background: #2D5A3D; }
 
     @media (max-width: 720px) {
       .invite-gateway-modal { flex-direction: column; }
@@ -115,60 +179,61 @@
     <div class="invite-gateway-modal">
       <div class="invite-gateway-carousel">
         <div class="invite-gateway-carousel-label">Key, in action</div>
-        <div id="invite-carousel-viewport">
+        <div class="invite-carousel-slide-body">
 
-          <div class="invite-slide" data-slide="0">
+          <div class="invite-slide active" data-slide="0">
             <div class="invite-slide-heading">Key interviews the renter</div>
-            <div class="invite-chat-demo">
-              <div class="invite-chat-msg key">Hi! Thanks for your interest — what's your move-in timeline looking like?</div>
-              <div class="invite-chat-msg user">Flexible, ideally within a month.</div>
-              <div class="invite-chat-msg key">Great — comfortable with a quiet, non-smoking household?</div>
-              <div class="invite-chat-msg user">Yes, that works for me!</div>
-              <div class="invite-chat-msg key">And is this just for you, or would anyone else be moving in?</div>
-              <div class="invite-chat-msg user">Just me — no pets either.</div>
-              <div class="invite-chat-msg key">Perfect, that all lines up well. I'll go ahead and submit your showing request to the homeowner now.</div>
-            </div>
+            <div class="invite-chat-demo" id="invite-chat-messages"></div>
           </div>
 
-          <div class="invite-slide" data-slide="1" hidden>
+          <div class="invite-slide" data-slide="1">
             <div class="invite-slide-heading">Key scores the fit</div>
-            <div class="invite-score-demo">
-              <div class="invite-score-card fit">
-                <div class="invite-score-row"><span>Jordan M.</span><span>92%</span></div>
-                <div class="invite-score-check">✓ Move-in timeline matches</div>
-                <div class="invite-score-check">✓ Non-smoking, as required</div>
-                <div class="invite-score-check">✓ Budget aligns with rent</div>
-              </div>
-              <div class="invite-score-card not-fit">
-                <div class="invite-score-row"><span>Casey T.</span><span>34%</span></div>
-                <div class="invite-score-check">✕ Move-in timeline conflicts</div>
-                <div class="invite-score-check">✕ Smoking not disclosed</div>
-                <div class="invite-score-check">✕ Budget below asking rent</div>
-              </div>
-              <div class="invite-score-card fit">
-                <div class="invite-score-row"><span>Sam K.</span><span>88%</span></div>
-                <div class="invite-score-check">✓ Move-in date matches</div>
-                <div class="invite-score-check">✓ Clean rental history</div>
-                <div class="invite-score-check">✓ Budget comfortably covers rent</div>
-              </div>
-            </div>
+            <div class="invite-score-demo" id="invite-score-demo"></div>
           </div>
 
-          <div class="invite-slide" data-slide="2" hidden>
+          <div class="invite-slide" data-slide="2">
             <div class="invite-slide-heading">You get the result, instantly</div>
-            <div class="invite-inbox-demo">
-              <div class="invite-inbox-chrome">Inbox</div>
-              <div class="invite-inbox-from"><span class="invite-inbox-avatar">K</span><div><strong>Key</strong> &lt;key@nestandkey.ai&gt;<div class="invite-inbox-to">to me</div></div></div>
-              <div class="invite-inbox-subject">A new prospect for your place</div>
+            <div class="invite-inbox-frame">
+              <div class="invite-inbox-chrome-bar">
+                <span class="invite-inbox-dot" style="background:#ec6a5e"></span>
+                <span class="invite-inbox-dot" style="background:#f4bf4f"></span>
+                <span class="invite-inbox-dot" style="background:#61c554"></span>
+                <span class="invite-inbox-chrome-label">Inbox</span>
+              </div>
+              <div class="invite-inbox-sender-block">
+                <div class="invite-inbox-sender-row">
+                  <span class="invite-inbox-avatar">K</span>
+                  <div style="min-width:0">
+                    <div class="invite-inbox-nameline">
+                      <span class="invite-inbox-name">Key</span>
+                      <span class="invite-inbox-email">&lt;key@nestandkey.ai&gt;</span>
+                    </div>
+                    <div class="invite-inbox-tome">to me</div>
+                  </div>
+                </div>
+                <div class="invite-inbox-subject">A new prospect for your place</div>
+              </div>
+              <div class="invite-inbox-body">
               <p>Hi there,</p>
               <p>Good news — I found a strong candidate for your room. Here's a quick look before you decide:</p>
-              <div class="invite-score-card fit">
-                <div class="invite-score-row"><span>Jordan M.</span><span>92%</span></div>
-                <div class="invite-score-check">✓ Move-in timeline matches</div>
-                <div class="invite-score-check">✓ Non-smoking, as required</div>
-                <div class="invite-score-check">✓ Budget aligns with rent</div>
+              <div class="invite-inbox-card">
+                <div class="invite-inbox-card-head"><span class="invite-inbox-card-name">Jordan M.</span><span class="invite-inbox-card-score">92% likely fit</span></div>
+                <div class="invite-inbox-card-checks">
+                  <div>✓ Move-in timeline matches</div>
+                  <div>✓ Non-smoking, as required</div>
+                  <div>✓ Budget aligns with rent</div>
+                </div>
               </div>
-              <p>— Key, Nest &amp; Key</p>
+              <div class="invite-inbox-card">
+                <div class="invite-inbox-card-head"><span class="invite-inbox-card-name">Sam K.</span><span class="invite-inbox-card-score">88% likely fit</span></div>
+                <div class="invite-inbox-card-checks">
+                  <div>✓ Move-in date matches</div>
+                  <div>✓ Clean rental history</div>
+                  <div>✓ Budget comfortably covers rent</div>
+                </div>
+              </div>
+              <div class="invite-inbox-sig">— Key, Nest &amp; Key</div>
+              </div>
             </div>
           </div>
 
@@ -182,21 +247,22 @@
       <div class="invite-gateway-claim">
         <div class="invite-trust-card">
           <div class="invite-trust-icon">✓</div>
-          <div>
+          <div style="min-width:0">
             <div class="invite-trust-label">Found Your Room on Facebook</div>
             <div class="invite-trust-detail" id="invite-trust-detail">Private room</div>
           </div>
         </div>
-        <span class="invite-beta-badge">Free during Closed Beta</span>
         <h2>Congrats!</h2>
         <p class="invite-sub">You're invited to join Nest &amp; Key's closed beta this month.</p>
         <p class="invite-intro">Claim your AI screening assistant and build your own personalized agent — Key asks tailored questions to learn what matters most to you, screens renters for your room, and sends the results straight to your inbox, so you only meet people worth meeting.</p>
+        <span class="invite-beta-badge">Free during Closed Beta</span>
         <form id="invite-claim-form">
           <input type="email" id="invite-claim-email" placeholder="you@email.com" required />
           <button type="submit" id="invite-claim-submit">Claim your Key →</button>
           <p id="invite-claim-error"></p>
         </form>
         <p class="invite-reassurance">Takes about 2 minutes. You're always the one who decides who moves in.</p>
+        <div class="invite-terms-placeholder">[Terms/agreement — reserved, not yet designed]</div>
       </div>
     </div>
   </div>
@@ -237,7 +303,7 @@
       <span class="tag">Closed Beta · SF Bay Area</span>
       <h1>Share your home with the right person — and lower what you pay.</h1>
       <p class="sub">Key finds and pre-screens people who actually fit, based on your preferences. You only meet people you'd actually consider, and your rent or mortgage gets lighter.</p>
-      <p class="waitlist-social" style="margin-top:24px;display:none;"><a href="/listing-sample-socal" style="color:#2D5A3D;font-weight:500;text-decoration:none;border-bottom:1px solid rgba(80,130,80,0.4);">See a sample listing →</a></p>
+      <p class="waitlist-social" style="margin-top:24px;display:none;"><a href="/listing-sample-socal" style="color:#2D5A3D;font-weight:500;text-decoration:none;border-bottom:1px solid rgba(80,130,80,0.4);">See a sample profile →</a></p>
       <div class="cta">
         <a href="#intake" onclick="document.getElementById('intake').scrollIntoView({behavior:'smooth'});" class="btn-pill">List your room in minutes →</a>
         <a href="/key-intake.html" class="btn-pill btn-pill--outline">Closed Beta (invite only) →</a>
@@ -340,9 +406,9 @@
     </div>
 
     <div class="content-section centered">
-      <span class="tag">How listing with Key works</span>
+      <span class="tag">How screening with Key works</span>
       <h2 class="section-title">Three steps to your next tenant.</h2>
-      <p class="section-subtitle">No listings to post, no interviews to schedule — Key narrows the field so you only meet people worth meeting.</p>
+      <p class="section-subtitle">You post it. Key screens it. You just meet the right person.</p>
       <div class="steps-grid">
         <div class="step-card">
           <span class="step-num">1</span>
@@ -393,7 +459,7 @@
             <span class="chat-avatar">K</span>
             <div style="display:flex; flex-direction:column;">
               <span class="chat-header-name">Key</span>
-              <span class="chat-header-sub">Your listing assistant</span>
+              <span class="chat-header-sub">Your rental profile assistant</span>
             </div>
           </div>
           <div class="chat-messages" id="key-chat-messages"></div>
@@ -405,7 +471,7 @@
 
         <div class="key-brief-panel" id="key-brief-panel">
           <div class="key-brief-head">
-            <div class="key-brief-title">Your listing brief</div>
+            <div class="key-brief-title">Your rental profile brief</div>
             <div class="key-brief-sub">Fills in as you chat with Key.</div>
           </div>
 
@@ -451,7 +517,7 @@
       <a href="mailto:hello@nestandkey.ai">Contact</a>
     </div>
     <div class="footer-divider"></div>
-    <div class="footer-meta">© 2026 NestAndKey. All rights reserved.<span class="footer-privacy">Your listing details are used only to pre-screen tenants — never sold or shared.</span></div>
+    <div class="footer-meta">© 2026 NestAndKey. All rights reserved.<span class="footer-privacy">Your rental profile details are used only to pre-screen tenants — never sold or shared.</span></div>
   </footer>
 
   <script src="/shared.js"></script>
@@ -472,16 +538,180 @@
       document.getElementById('invite-gateway-backdrop').classList.add('visible');
     }
 
+    // Carousel behavior ported line-for-line from Claude Design's canvas
+    // (Invitation Overlay.dc.html, project 4b15bf94-...) -- exact timings,
+    // exact data, exact easing. See DESIGN_HANDOFF.md Part 13. All content
+    // below is hardcoded (not user input) but built via DOM methods rather
+    // than innerHTML regardless, as a matter of habit.
+    const INVITE_CHAT_SEQ = [
+      { who: 'key', text: "Hi! Thanks for your interest — what's your move-in timeline looking like?", typeAt: 0, showAt: 700 },
+      { who: 'renter', text: "Flexible, ideally within a month.", typeAt: 1400, showAt: 2100 },
+      { who: 'key', text: "Great — comfortable with a quiet, non-smoking household?", typeAt: 2800, showAt: 3500 },
+      { who: 'renter', text: "Yes, that works for me!", typeAt: 4200, showAt: 4900 },
+      { who: 'key', text: "And is this just for you, or would anyone else be moving in?", typeAt: 5600, showAt: 6300 },
+      { who: 'renter', text: "Just me — no pets either.", typeAt: 7000, showAt: 7700 },
+      { who: 'key', text: "Perfect, that all lines up well. I'll go ahead and submit your showing request to the homeowner now.", typeAt: 8400, showAt: 9100 }
+    ];
+    const INVITE_EVAL_CARDS = [
+      { name: 'Jordan M.', score: '92%', fit: true, items: ['Move-in timeline matches', 'Non-smoking, as required', 'Budget aligns with rent'] },
+      { name: 'Casey T.', score: '34%', fit: false, items: ['Move-in timeline conflicts', 'Smoking not disclosed', 'Budget below asking rent'] },
+      { name: 'Alex R.', score: '81%', fit: true, items: ['Move-in flexible', 'Quiet, non-smoking household confirmed', 'Budget within range'] },
+      { name: 'Morgan P.', score: '22%', fit: false, items: ['No response on timeline', 'Pets not disclosed', 'Budget well below rent'] },
+      { name: 'Sam K.', score: '88%', fit: true, items: ['Move-in date matches', 'Clean rental history', 'Budget comfortably covers rent'] },
+      { name: 'Priya N.', score: '76%', fit: true, items: ['Move-in flexible within 2 weeks', 'Non-smoking confirmed', 'Budget close to asking rent'] },
+      { name: 'Devon L.', score: '19%', fit: false, items: ['Move-in date too far out', 'Household size mismatch', 'Budget far below rent'] },
+      { name: 'Taylor B.', score: '85%', fit: true, items: ['Move-in timeline matches', 'Quiet household confirmed', 'Budget aligns with rent'] }
+    ];
+
     function initInviteCarousel() {
       const slides = document.querySelectorAll('.invite-slide');
       const dots = document.querySelectorAll('.invite-dot');
-      dots.forEach(dot => {
-        dot.addEventListener('click', () => {
-          const idx = dot.dataset.dot;
-          slides.forEach(s => s.hidden = s.dataset.slide !== idx);
-          dots.forEach(d => d.classList.toggle('active', d.dataset.dot === idx));
+      const messagesEl = document.getElementById('invite-chat-messages');
+      const scoreEl = document.getElementById('invite-score-demo');
+
+      let revealedCount = 0;
+      let typingIndex = -1;
+      let showRequestButton = false;
+      let tourRequested = false;
+      let chatTimers = [];
+      let advanceTimer = null;
+      let resumeTimer = null;
+      let scoreRaf = null;
+
+      function clearChatTimers() { chatTimers.forEach(clearTimeout); chatTimers = []; }
+      function clearScoreAnim() { if (scoreRaf) cancelAnimationFrame(scoreRaf); scoreRaf = null; }
+
+      function makeEl(tag, className, text) {
+        const el = document.createElement(tag);
+        if (className) el.className = className;
+        if (text !== undefined) el.textContent = text;
+        return el;
+      }
+
+      function renderChat() {
+        messagesEl.textContent = '';
+        for (let i = 0; i < INVITE_CHAT_SEQ.length; i++) {
+          const msg = INVITE_CHAT_SEQ[i];
+          if (i < revealedCount) {
+            messagesEl.appendChild(makeEl('div', 'invite-chat-msg ' + (msg.who === 'key' ? 'key' : 'user'), msg.text));
+          } else if (i === typingIndex) {
+            const div = makeEl('div', 'invite-typing ' + (msg.who === 'key' ? 'key' : 'user'));
+            div.appendChild(document.createElement('span'));
+            div.appendChild(document.createElement('span'));
+            div.appendChild(document.createElement('span'));
+            messagesEl.appendChild(div);
+          }
+        }
+        if (showRequestButton && !tourRequested) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'invite-request-tour-btn';
+          btn.textContent = 'Request tour';
+          btn.style.transform = 'scale(1)';
+          btn.addEventListener('click', () => { tourRequested = true; renderChat(); });
+          messagesEl.appendChild(btn);
+        } else if (tourRequested) {
+          messagesEl.appendChild(makeEl('div', 'invite-tour-confirmed', 'Tour requested ✓'));
+        }
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+
+      function runChatSequence() {
+        clearChatTimers();
+        revealedCount = 0; typingIndex = -1; showRequestButton = false; tourRequested = false;
+        renderChat();
+        INVITE_CHAT_SEQ.forEach((msg, i) => {
+          chatTimers.push(setTimeout(() => { typingIndex = i; renderChat(); }, msg.typeAt));
+          chatTimers.push(setTimeout(() => {
+            revealedCount = i + 1;
+            if (typingIndex === i) typingIndex = -1;
+            renderChat();
+          }, msg.showAt));
         });
+        const lastShowAt = INVITE_CHAT_SEQ[INVITE_CHAT_SEQ.length - 1].showAt;
+        chatTimers.push(setTimeout(() => { showRequestButton = true; renderChat(); }, lastShowAt + 700));
+        chatTimers.push(setTimeout(() => {
+          const btn = messagesEl.querySelector('.invite-request-tour-btn');
+          if (btn) btn.style.transform = 'scale(0.96)';
+        }, lastShowAt + 1600));
+        chatTimers.push(setTimeout(() => { tourRequested = true; renderChat(); }, lastShowAt + 1750));
+      }
+
+      function renderScoreCards() {
+        scoreEl.textContent = '';
+        INVITE_EVAL_CARDS.forEach((card, i) => {
+          const isLast = i === INVITE_EVAL_CARDS.length - 1;
+          const wrap = makeEl('div', 'invite-score-card ' + (card.fit ? 'fit' : 'not-fit'));
+          wrap.appendChild(makeEl('div', 'invite-score-renter-label', 'Renter — ' + card.name));
+          const headline = makeEl('div', 'invite-score-headline');
+          headline.appendChild(makeEl('span', 'invite-score-num', card.score));
+          headline.appendChild(makeEl('span', 'invite-score-fitlabel', card.fit ? 'likely fit' : 'not a likely fit'));
+          wrap.appendChild(headline);
+          const checklist = makeEl('div', 'invite-score-checklist');
+          card.items.forEach(line => {
+            checklist.appendChild(makeEl('div', null, (card.fit ? '✓ ' : '✗ ') + line));
+          });
+          wrap.appendChild(checklist);
+          if (isLast) wrap.appendChild(makeEl('div', 'invite-score-fade'));
+          scoreEl.appendChild(wrap);
+        });
+      }
+
+      function animateScroll(el, targetTop, duration, power) {
+        const startTop = el.scrollTop;
+        const delta = targetTop - startTop;
+        const startTime = performance.now();
+        function step(now) {
+          const elapsed = now - startTime;
+          const t = Math.min(1, elapsed / duration);
+          const eased = Math.pow(t, power);
+          el.scrollTop = startTop + delta * eased;
+          if (t < 1) scoreRaf = requestAnimationFrame(step);
+        }
+        scoreRaf = requestAnimationFrame(step);
+      }
+
+      function runScoreSequence() {
+        clearScoreAnim();
+        scoreEl.scrollTop = 0;
+        chatTimers.push(setTimeout(() => {
+          const maxScroll = scoreEl.scrollHeight - scoreEl.clientHeight;
+          const lastEl = scoreEl.children[scoreEl.children.length - 1];
+          const halfLastCard = lastEl ? lastEl.offsetHeight / 2 : 0;
+          const stopScroll = Math.max(0, maxScroll - halfLastCard);
+          animateScroll(scoreEl, stopScroll, 4200, 3.6);
+        }, 500));
+      }
+
+      function scheduleAdvance(slideIndex) {
+        clearTimeout(advanceTimer);
+        let duration = 3000;
+        if (slideIndex === 0) duration = 14000;
+        else if (slideIndex === 1) duration = 7200;
+        advanceTimer = setTimeout(() => goToSlide((slideIndex + 1) % 3, false), duration);
+      }
+
+      function goToSlide(i, manual) {
+        clearTimeout(advanceTimer);
+        slides.forEach(s => s.classList.toggle('active', Number(s.dataset.slide) === i));
+        dots.forEach(d => d.classList.toggle('active', Number(d.dataset.dot) === i));
+        if (i === 0) runChatSequence(); else clearChatTimers();
+        if (i === 1) runScoreSequence(); else clearScoreAnim();
+        if (manual) {
+          clearTimeout(resumeTimer);
+          resumeTimer = setTimeout(() => scheduleAdvance(i), 8000);
+        } else {
+          scheduleAdvance(i);
+        }
+      }
+
+      dots.forEach(dot => {
+        dot.addEventListener('click', () => goToSlide(Number(dot.dataset.dot), true));
       });
+
+      renderScoreCards();
+      runChatSequence();
+      scheduleAdvance(0);
     }
     initInviteCarousel();
 
