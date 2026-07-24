@@ -2,6 +2,11 @@
 // (not a direct browser fetch from landlords.html) specifically to avoid needing
 // CORS on nest-key-app's API -- server-to-server requests aren't subject to it.
 const NEST_KEY_APP_URL = process.env.NEST_KEY_APP_URL || 'https://nest-key-app.vercel.app';
+// Public-facing base for the applyUrl handed back to the browser -- kept
+// separate from NEST_KEY_APP_URL (the server-to-server call destination
+// above) so pointing tenant-facing links at a future custom domain (e.g.
+// app.nestandkey.ai) is a single env var change, not a code change.
+const NEST_KEY_APP_PUBLIC_URL = process.env.NEST_KEY_APP_PUBLIC_URL || NEST_KEY_APP_URL;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -27,7 +32,7 @@ export default async function handler(req, res) {
     }
 
     const { id } = await response.json();
-    const applyUrl = `${NEST_KEY_APP_URL}/apply.html?listing=${id}`;
+    const applyUrl = `${NEST_KEY_APP_PUBLIC_URL}/apply.html?listing=${id}`;
 
     return res.status(200).json({ id, applyUrl });
   } catch (err) {

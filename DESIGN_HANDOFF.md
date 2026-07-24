@@ -33,7 +33,7 @@ Rather than a listings board you scroll, Nest (for tenants) scans the market on 
 
 **Room income calculator (`/landlords#calculator`):** not a third audience or a standalone route — it's a section on the Landlords page (merged Jul 14 2026; the old standalone `/buyers` route now 301-redirects to `/landlords#calculator`, and `buyers.html` no longer exists). It extends the landlord story — the same "lower your rent/mortgage by sharing your home" value prop, run as numbers instead of a chat. It also supports a secondary "buying to invest" scenario (renting out a whole unit for cash flow). **Resolved Jul 14 2026 — this is not an exception to the two-audience positioning, kept as-is intentionally:** an unused whole house is just a larger unit of the same unused-space problem a spare room is — one property with zero people sharing it instead of one room. "Invest" is the same house-sharing logic scaled up to an entire property, not real-estate-investor framing bolted onto a house-sharing page. No calculator or copy change needed; this only resolves how Design/Code should reason about the scenario going forward.
 
-The brand positioning is deliberate: this is not Craigslist. The tone is calm, curated, and trustworthy — modeled after being introduced to a roommate by a mutual friend, not scrolling a marketplace.
+The brand positioning is deliberate: this is not Craigslist. **Nest & Key is a self-service tool** (updated 2026-07-21, supersedes the earlier "introduced by a mutual friend" framing below): renters run their own quality-first market scan, and hands-on landlords run their own housemate/tenant screening. **The user is always the one in control, making the decisions** — Nest & Key's job is to make the repetitive parts of that work faster, easier, and more effortless, not to curate or decide on the user's behalf. The tone stays calm, curated, and trustworthy — this is not a listings board you scroll — but that tone comes from the tool being well-made and respectful of the user's time, not from a human intermediary vetting things for them.
 
 **Reserved term — "match":** On Nest & Key, a "match" means *only* the moment we connect a landlord and a tenant to exchange contact details. Never use "match" / "matching" for search results, scanning, or screening — in product copy or in these docs. For results, say "homes we find", "homes we surface", "listings", or "results".
 
@@ -144,6 +144,24 @@ Net effect: hero keeps its current full-viewport height and content, pricing ban
 - **No on-site CTA for Casual/Active.** Both tiers are purchased downstream via email (see the day-29 upsell flow above) — there is no on-site checkout yet. "Choose Casual" / "Choose Active" buttons were removed; only Free's "Start with a free scan" CTA remains, since that's the one action that actually happens on this page. In their place, each card shows a quiet hint line — **"Available after your free scan"** — vertically centered in a `43px` slot (`.pricing-hint`) so it lines up exactly with the Free card's button row across all three cards.
 - **No "/" in price lines.** Changed "$19.99 / 30 days" → "$19.99 for 30 days" (same for Active). A slash reads as a recurring-billing convention; these are one-time payments unlocking a fixed 30-day window, not subscriptions.
 - **One-line "who it's for" caption under every price** (`.pricing-caption`, `12.5px`, `#8BAF8E` / `rgba(255,255,255,.55)` on Active, `12px` margin-top from the price): Free — "Try it, no commitment." · Casual — "For browsing the market." · Active — "For a real move-in plan." Same slot on all three cards, no box or legend — evaluated and rejected a shared legend row above the cards and per-card boxed callouts in favor of this quieter, more consistent treatment (fewer nested containers, reads as one typographic system rather than added chrome).
+
+### 1.7 UX writing principles
+
+Added Jul 2026 to give every surface (chat personas, confirm panels, emails, forms, error states) one shared, checkable standard — rather than re-deriving "does this read well" from scratch each time, or importing Apple's or Google's *voice* wholesale (neither matches §1.1's brand tone). Apple's and Google's UX writing guidance diverge on voice but converge heavily on mechanics; these principles are the converged, structural part, applied in Nest & Key's own tone.
+
+**The checklist:**
+1. **Clear.** Plain words, no jargon, no internal/technical terms leaking into user-facing text (a landlord should never see `photosStatus` or `fitCheck` — those are STATE-block names, not copy).
+2. **Concise.** Every word earns its place. Front-load the one thing the reader actually needs right now; don't bury it in a longer sentence.
+3. **Active voice, present tense.** "Key screens every inquiry and emails you the results" — not "inquiries are screened by Key" or "results will be emailed."
+4. **Sentence case**, not Title Case, in UI text (buttons, labels, headings) — Apple and Google both converge here. Exception: this doc's own Markdown headings, which follow standard doc conventions, not UI copy rules.
+5. **Consistent terminology.** One word per concept, everywhere. Enforced word choices so far (add to this list as new ones come up, and grep the whole codebase when one changes — this exact class of drift already happened once, see below):
+   - **"Renters"**, never "prospects", in any user-facing copy (landlord confirm panel, confirmation emails, etc.). *Caught live 2026-07-21: the confirm-panel copy was fixed during the Design handoff, but the landlord confirmation email (a different repo, `nest-key-app`) still said "prospects" — same rule, missed in one place because it wasn't centralized. That gap is exactly what this checklist entry exists to prevent going forward.*
+   - **"Match" / "matching"** is reserved for the moment Key connects a landlord and tenant to exchange contact details — never used for search, scanning, or screening mechanics (see §1.1 for the full rule and its narrative-writing exception).
+6. **Tell people what to do, not just what happened.** An error or empty state should point at the next action ("Check your inbox for the first email from Key" — not "Email sent"). Never surface a raw error code or backend term.
+7. **Speak directly.** "You"/"your", addressing the reader — not passive third-person distance ("the landlord's listing" when talking *to* the landlord).
+8. **Component-specific copy rules** (e.g. the confirmation component's "verb-led headline, no exclamation points" in Part 5) are specializations of this checklist, not separate rules — when in doubt, this section is the canonical source; component sections just call out what's non-obvious for that surface.
+
+**How to apply:** run new copy (or copy under review) through this checklist before treating it as final. When a new consistent-terminology decision gets made (like "renters" or "match"), add it to the list above immediately and grep the rest of the codebase for the old term — don't rely on remembering every place it appears.
 
 ---
 
@@ -356,9 +374,9 @@ Browser (chat card)
 
 ### 4.1 Who Nest is
 
-Nest is not a chatbot. The mental model is a trusted friend who knows the Bay Area rental market well — someone who would introduce you to a landlord personally, not post your profile on a listing board.
+Nest is not a chatbot, and it doesn't decide anything on the user's behalf (updated 2026-07-21, supersedes the earlier "introduce you to a landlord personally" framing below) — think of it as doing the repetitive legwork of scanning the Bay Area rental market so the user doesn't have to, while the user stays the one calling the shots on what's actually a fit. Self-service, not concierge.
 
-This shapes every word choice. Nest never sounds like a form, a customer service script, or a marketplace. Nest sounds like someone who already knows the context, has an opinion, and makes you feel like you're talking to a person.
+This shapes every word choice. Nest never sounds like a form, a customer service script, or a marketplace. Nest sounds like someone who already knows the context, has an opinion, and makes you feel like you're talking to a person — but it's still the user's own scan, running on their behalf, not a matchmaker vetting things for them.
 
 ### 4.2 Persona dimensions
 
@@ -505,11 +523,11 @@ Nest's closing message after confirmation:
 
 Then the "Submit my search →" button submits and the card transitions to the confirmation state.
 
-**Quality & onboarding review:** users drive their own search or listing — Nest & Key never takes over on their behalf. To keep intake quality high and help people get set up, the Nest & Key team reviews every submission (tenant *and* landlord) before scanning or pre-screening goes live. Frame this as a quick quality check that helps users get started — never as a done-for-you concierge service or a team acting on their behalf. How much it's foregrounded differs by audience:
+**Quality & onboarding review (updated 2026-07-21 — landlord side corrected to match Part 12; tenant side unchanged, not re-verified this pass):** users drive their own search or listing — Nest & Key never takes over on their behalf, and never decides on their behalf (see §1.1/§4.1). How submission is handled differs by audience:
 
-- **Tenants** — speed is the primary value. Keep confirmation immediate and AI-driven; frame the scan as already underway. Don't foreground a review step. Example (title + body): **You're in** — Nest is scanning the Bay Area now. First results will land in [email] shortly.
+- **Tenants** — speed is the primary value. Keep confirmation immediate and AI-driven; frame the scan as already underway. Don't foreground a review step. Example (title + body): **You're in** — Nest is scanning the Bay Area now. First results will land in [email] shortly. *(§3.4's data flow still describes the Nest & Key team reviewing submissions and initiating outreach manually on the backend — that may or may not still be current; wasn't re-checked as part of this pass, only the landlord side below was, via Part 12.)*
 
-- **Landlords and home buyers** — trust is the primary value. It's fine to note the quick quality check, framed as help getting set up rather than the team taking over. Keep the user in control of the outcome. Example (title + body + meta): **Listing submitted** — Our team will review your submission and reach out to [email] shortly. *(meta: You always make the final call on who you meet.)*
+- **Landlords** — **fully self-service, no team review step** (confirmed current, per Part 12): submitting the intake chat immediately creates the landlord's own personalized Key — an AI agent configured with their criteria — and hands them their own shareable screening link. **No listing is published anywhere by Nest & Key** — the landlord is the one who takes that link and pastes it into their own post, wherever they choose (Craigslist, Facebook, etc.); nothing about their room goes live on Nest & Key's own account or a Nest & Key–run marketplace. No one at Nest & Key reviews or gates the agent before it's handed over. The stale "Our team will review your submission and reach out shortly" copy this section previously described is gone; the actual current confirmation is the two-step "Key is ready to screen for you" panel documented in Part 5's D2 section — that's the copy to reference here, not a rewritten example.
 
 Button copy rule: use "Submit" (not "Start pre-screening" or "Start my scan") so it doesn't imply automated action — but confirmation copy handles the framing per audience above.
 
@@ -1199,7 +1217,7 @@ All rules live in `styles.css` lines 309–332.
 
 ## Part 12 — Real listing submission + shareable link (confirmation panel)
 
-Key's landlord intake now creates a real listing in the `nest-key-app` product backend (Postgres, via a server-side bridge at `api/submit-listing.js`) instead of only logging to the Google Sheet. The Sheet write is kept as a best-effort backup log — it no longer gates the confirmation shown to the landlord.
+Key's landlord intake now creates the landlord's own personalized Key — an AI screening agent configured with their criteria — in the `nest-key-app` product backend (Postgres, via a server-side bridge at `api/submit-listing.js`) instead of only logging to the Google Sheet. **Conceptually this is not "a listing" going live anywhere** — Nest & Key never publishes anything on the landlord's behalf; the landlord takes their own shareable link and posts it wherever they choose. (The current implementation stores this record in a database table named `listings` and API routes named accordingly — that's an internal naming detail from earlier in the project, not the product concept; a rename is a separate, not-yet-scoped decision, especially with a possible future tenant/landlord lead-sharing pool on the roadmap that could reshape this data model anyway.) The Sheet write is kept as a best-effort backup log — it no longer gates the confirmation shown to the landlord.
 
 **New criteria collected** (added to `KEY_PERSONA`'s conversation flow and `[[STATE]]` block, optional/soft like house rules — not required to reach `ready`): `minIncome`, `minCredit`, `petsPolicy`, `smokingPolicy`, `maxOccupancy`, `otherCriteria`. These power the tenant-facing screening chat's criteria-mapped questions on the other side of the system.
 
@@ -1211,3 +1229,27 @@ Key's landlord intake now creates a real listing in the `nest-key-app` product b
 - `.confirm__copy-btn` — copy-to-clipboard button, matches `nest-key-app`'s `admin.html` copy-chip pattern for consistency across the two repos
 
 **Must not change:** `SCRIPT_URL` fetch must stay `mode: 'no-cors'` and un-awaited relative to the real submission — it's fire-and-forget by design, not a gate.
+
+## Part 13 — Gateway/invitation overlay for cold-outreach leads
+
+A `?lead=<id>` link generated by the internal outreach tool (`generate-outreach-link.js`) now goes through a real claim step before reaching any chat, instead of silently prefilling the same chat every organic visitor sees. This gives `leads.status` a real middle state: `draft` → `claimed` → `converted`.
+
+**Where it lives:** the overlay renders on top of `landlords.html` — the real, unmodified marketing page (nav + hero visible, dimmed, behind the modal) — never a separate branded-differently page. This is a deliberate trust decision: one company website that stays visually consistent for every visitor, rather than the hero/homepage changing per lead.
+
+**Structure** (`#invite-gateway-backdrop` → `.invite-gateway-modal`, two columns):
+- Left: `.invite-gateway-carousel` — 3 slides (dot-navigated, no auto-advance): (1) Key interviewing the renter, styled chat bubbles; (2) Key scoring candidate fit, fit/not-fit cards; (3) the resulting email landing in the landlord's inbox. Labeled "Key, in action."
+- Right: `.invite-gateway-claim` — "Found Your Room on Facebook" trust card (populated per-lead from `city`/`neighborhood`/`rent`/`propertyType`), "Free during Closed Beta" badge (non-pill, square corners — deliberate, not a bug), "Congrats!" heading, intro copy, email input + "Claim your Key →" pill button, reassurance line, reserved space for terms (not yet designed).
+- **Hard gate, no dismiss** — no close button, no tap-outside/Escape handling. An invited lead either claims or leaves the page. (A dismissible fallback to the organic chat is a possible future iteration, not built now.)
+
+**Gating logic** (in `landlords.html`'s inline script, reading `/api/lead-info?lead=`):
+- No `lead` param → today's organic chat, unchanged.
+- Lead not found → same as no-lead.
+- `status: 'draft'` → show the overlay; the underlying chat card (`#key-chat-card`) stays fully inert (`disabled` in the markup, never bound/initialized).
+- `status: 'claimed'` → redirect straight to `key-intake.html?lead=<id>` (repeat visit, skip the overlay).
+- `status: 'converted'` → redirect to `adminUrl` (from `lead-summary`'s response) — their existing applications table, not a re-run of intake.
+
+**Claiming**: submitting the email form POSTs to `/api/claim-lead` (bridge → `nest-key-app`'s `api/claim-lead.js`, which validates the email, flips `leads.status` to `'claimed'`, and sends an NK alert). On success, redirects to `key-intake.html?lead=<id>`.
+
+**`key-intake.html`** (new page): the dedicated "special landlord intake" page a claimed lead lands on — same nav/footer/chat-card markup as `landlords.html`'s `#intake` section, marketing sections dropped, short static intro instead of the hero. Also reachable directly via the hero's new "Closed Beta (invite only)" button (no lead id — organic self-nomination into the same page). Gate at the top of its script: a `draft` lead bounces back to `landlords.html`'s overlay; a `converted` lead redirects to `adminUrl`; everything else (claimed, not found, or no lead param) runs the chat normally.
+
+**Shared code**: the Key-chat logic (`keyState`, prefill fetch, opener message, submission, brief-panel rendering) lives in one file, `key-chat-widget.js`, included by both `landlords.html` and `key-intake.html` via `<script src>` — not duplicated inline in each page, specifically to avoid future fixes/copy changes silently drifting out of sync between the two.

@@ -31,9 +31,175 @@
       background: #1E3A2F; color: #EFF4F0; font-size: 12px; line-height: 1.55;
       padding: 11px 14px; border-radius: 9px; box-shadow: 0 10px 30px rgba(30,58,47,0.28);
     }
+
+    .hero-block .cta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .btn-pill--outline { background: transparent; color: #2D5A3D; border: 1.5px solid #2D5A3D; box-shadow: none; }
+    .btn-pill--outline:hover { background: rgba(45,90,61,0.06); }
+
+    /* Gateway/invitation overlay -- shown over the real, unmodified page for
+       an invited cold-outreach lead (leads.status === 'draft'). Hard gate,
+       no dismiss: an invited lead either claims or leaves the page. */
+    #invite-gateway-backdrop {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(30,58,47,0.55); overflow-y: auto;
+      padding: 40px 20px; box-sizing: border-box;
+    }
+    #invite-gateway-backdrop.visible { display: flex; align-items: flex-start; justify-content: center; }
+    .invite-gateway-modal {
+      background: #fff; border-radius: 20px; box-shadow: 0 24px 60px rgba(30,58,47,0.35);
+      max-width: 860px; width: 100%; display: flex; overflow: hidden; margin: auto;
+    }
+    .invite-gateway-carousel, .invite-gateway-claim {
+      flex: 1; min-width: 0; padding: 36px 32px; box-sizing: border-box;
+    }
+    .invite-gateway-claim { background: #EDF2ED; border-left: 1px solid rgba(80,130,80,0.15); }
+    .invite-gateway-carousel-label { font-size: 13px; font-weight: 700; color: #8BAF8E; margin-bottom: 22px; letter-spacing: 0.02em; }
+    .invite-trust-card {
+      display: flex; align-items: flex-start; gap: 12px; margin-bottom: 22px;
+    }
+    .invite-trust-icon {
+      width: 28px; height: 28px; border-radius: 50%; background: #2D5A3D; color: #fff;
+      display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;
+    }
+    .invite-trust-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #8BAF8E; letter-spacing: 0.04em; }
+    .invite-trust-detail { font-size: 13px; font-weight: 600; color: #1E3A2F; margin-top: 2px; }
+    .invite-gateway-claim h2 { font-size: 24px; font-weight: 700; color: #1E3A2F; margin: 0 0 8px; }
+    .invite-gateway-claim .invite-sub { font-size: 15px; color: #4A6B52; margin: 0 0 18px; }
+    .invite-gateway-claim .invite-intro { font-size: 14px; color: #4A6B52; line-height: 1.55; margin: 0 0 18px; }
+    .invite-beta-badge { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #2D5A3D; border-radius: 0; margin-bottom: 18px; }
+    #invite-claim-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+    #invite-claim-email {
+      padding: 12px 16px; border-radius: 10px; border: 1.5px solid #B0C4B3; font-size: 14px;
+      font-family: inherit;
+    }
+    #invite-claim-submit {
+      background: #2D5A3D; color: #F4F7F4; font-size: 15px; font-weight: 600; border: none;
+      padding: 13px 28px; border-radius: 999px; cursor: pointer; transition: background 0.15s;
+    }
+    #invite-claim-submit:hover { background: #3D7A52; }
+    #invite-claim-submit:disabled { opacity: 0.6; cursor: default; }
+    #invite-claim-error { color: #B0522E; font-size: 13px; display: none; }
+    .invite-reassurance { font-size: 12.5px; color: #8BAF8E; margin: 0; }
+
+    .invite-slide-heading { font-size: 15px; font-weight: 700; color: #1E3A2F; margin-bottom: 14px; }
+    .invite-chat-demo { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; }
+    .invite-chat-msg { font-size: 13px; line-height: 1.45; padding: 9px 13px; border-radius: 12px; max-width: 85%; }
+    .invite-chat-msg.key { background: #EBF0EB; color: #1E3A2F; align-self: flex-start; }
+    .invite-chat-msg.user { background: #2D5A3D; color: #F4F7F4; align-self: flex-end; }
+    .invite-score-demo { display: flex; flex-direction: column; gap: 10px; max-height: 320px; overflow-y: auto; }
+    .invite-score-card { border-radius: 10px; padding: 12px 14px; font-size: 12.5px; }
+    .invite-score-card.fit { background: #F7FAF7; border: 1px solid rgba(80,130,80,0.15); }
+    .invite-score-card.not-fit { background: #FAF3E0; border: 1px solid rgba(196,144,64,0.25); }
+    .invite-score-row { display: flex; justify-content: space-between; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #1E3A2F; }
+    .invite-score-card.fit .invite-score-check { color: #0F6E56; }
+    .invite-score-card.not-fit .invite-score-check { color: #B0812E; }
+    .invite-score-check { font-size: 12px; margin-top: 2px; }
+    .invite-inbox-demo { font-size: 13px; color: #1E3A2F; line-height: 1.5; }
+    .invite-inbox-chrome { font-size: 11px; font-weight: 700; color: #8BAF8E; text-transform: uppercase; margin-bottom: 10px; }
+    .invite-inbox-from { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; font-size: 12.5px; }
+    .invite-inbox-avatar { width: 24px; height: 24px; border-radius: 50%; background: #2D5A3D; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+    .invite-inbox-to { color: #8BAF8E; font-size: 11px; }
+    .invite-inbox-subject { font-weight: 700; margin-bottom: 10px; }
+    .invite-carousel-dots { display: flex; gap: 8px; justify-content: center; margin-top: 18px; }
+    .invite-dot { width: 7px; height: 7px; border-radius: 50%; border: none; background: #C6D6C8; cursor: pointer; padding: 0; }
+    .invite-dot.active { background: #2D5A3D; }
+
+    @media (max-width: 720px) {
+      .invite-gateway-modal { flex-direction: column; }
+    }
   </style>
 </head>
 <body>
+
+  <div id="invite-gateway-backdrop">
+    <div class="invite-gateway-modal">
+      <div class="invite-gateway-carousel">
+        <div class="invite-gateway-carousel-label">Key, in action</div>
+        <div id="invite-carousel-viewport">
+
+          <div class="invite-slide" data-slide="0">
+            <div class="invite-slide-heading">Key interviews the renter</div>
+            <div class="invite-chat-demo">
+              <div class="invite-chat-msg key">Hi! Thanks for your interest — what's your move-in timeline looking like?</div>
+              <div class="invite-chat-msg user">Flexible, ideally within a month.</div>
+              <div class="invite-chat-msg key">Great — comfortable with a quiet, non-smoking household?</div>
+              <div class="invite-chat-msg user">Yes, that works for me!</div>
+              <div class="invite-chat-msg key">And is this just for you, or would anyone else be moving in?</div>
+              <div class="invite-chat-msg user">Just me — no pets either.</div>
+              <div class="invite-chat-msg key">Perfect, that all lines up well. I'll go ahead and submit your showing request to the homeowner now.</div>
+            </div>
+          </div>
+
+          <div class="invite-slide" data-slide="1" hidden>
+            <div class="invite-slide-heading">Key scores the fit</div>
+            <div class="invite-score-demo">
+              <div class="invite-score-card fit">
+                <div class="invite-score-row"><span>Jordan M.</span><span>92%</span></div>
+                <div class="invite-score-check">✓ Move-in timeline matches</div>
+                <div class="invite-score-check">✓ Non-smoking, as required</div>
+                <div class="invite-score-check">✓ Budget aligns with rent</div>
+              </div>
+              <div class="invite-score-card not-fit">
+                <div class="invite-score-row"><span>Casey T.</span><span>34%</span></div>
+                <div class="invite-score-check">✕ Move-in timeline conflicts</div>
+                <div class="invite-score-check">✕ Smoking not disclosed</div>
+                <div class="invite-score-check">✕ Budget below asking rent</div>
+              </div>
+              <div class="invite-score-card fit">
+                <div class="invite-score-row"><span>Sam K.</span><span>88%</span></div>
+                <div class="invite-score-check">✓ Move-in date matches</div>
+                <div class="invite-score-check">✓ Clean rental history</div>
+                <div class="invite-score-check">✓ Budget comfortably covers rent</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="invite-slide" data-slide="2" hidden>
+            <div class="invite-slide-heading">You get the result, instantly</div>
+            <div class="invite-inbox-demo">
+              <div class="invite-inbox-chrome">Inbox</div>
+              <div class="invite-inbox-from"><span class="invite-inbox-avatar">K</span><div><strong>Key</strong> &lt;key@nestandkey.ai&gt;<div class="invite-inbox-to">to me</div></div></div>
+              <div class="invite-inbox-subject">A new prospect for your place</div>
+              <p>Hi there,</p>
+              <p>Good news — I found a strong candidate for your room. Here's a quick look before you decide:</p>
+              <div class="invite-score-card fit">
+                <div class="invite-score-row"><span>Jordan M.</span><span>92%</span></div>
+                <div class="invite-score-check">✓ Move-in timeline matches</div>
+                <div class="invite-score-check">✓ Non-smoking, as required</div>
+                <div class="invite-score-check">✓ Budget aligns with rent</div>
+              </div>
+              <p>— Key, Nest &amp; Key</p>
+            </div>
+          </div>
+
+        </div>
+        <div class="invite-carousel-dots" id="invite-carousel-dots">
+          <button class="invite-dot active" data-dot="0" aria-label="Slide 1"></button>
+          <button class="invite-dot" data-dot="1" aria-label="Slide 2"></button>
+          <button class="invite-dot" data-dot="2" aria-label="Slide 3"></button>
+        </div>
+      </div>
+      <div class="invite-gateway-claim">
+        <div class="invite-trust-card">
+          <div class="invite-trust-icon">✓</div>
+          <div>
+            <div class="invite-trust-label">Found Your Room on Facebook</div>
+            <div class="invite-trust-detail" id="invite-trust-detail">Private room</div>
+          </div>
+        </div>
+        <span class="invite-beta-badge">Free during Closed Beta</span>
+        <h2>Congrats!</h2>
+        <p class="invite-sub">You're invited to join Nest &amp; Key's closed beta this month.</p>
+        <p class="invite-intro">Claim your AI screening assistant and build your own personalized agent — Key asks tailored questions to learn what matters most to you, screens renters for your room, and sends the results straight to your inbox, so you only meet people worth meeting.</p>
+        <form id="invite-claim-form">
+          <input type="email" id="invite-claim-email" placeholder="you@email.com" required />
+          <button type="submit" id="invite-claim-submit">Claim your Key →</button>
+          <p id="invite-claim-error"></p>
+        </form>
+        <p class="invite-reassurance">Takes about 2 minutes. You're always the one who decides who moves in.</p>
+      </div>
+    </div>
+  </div>
 
   <nav>
     <div class="nav-left">
@@ -72,7 +238,10 @@
       <h1>Share your home with the right person — and lower what you pay.</h1>
       <p class="sub">Key finds and pre-screens people who actually fit, based on your preferences. You only meet people you'd actually consider, and your rent or mortgage gets lighter.</p>
       <p class="waitlist-social" style="margin-top:24px;display:none;"><a href="/listing-sample-socal" style="color:#2D5A3D;font-weight:500;text-decoration:none;border-bottom:1px solid rgba(80,130,80,0.4);">See a sample listing →</a></p>
-      <div class="cta"><a href="#intake" onclick="document.getElementById('intake').scrollIntoView({behavior:'smooth'});" class="btn-pill">List your room in minutes →</a></div>
+      <div class="cta">
+        <a href="#intake" onclick="document.getElementById('intake').scrollIntoView({behavior:'smooth'});" class="btn-pill">List your room in minutes →</a>
+        <a href="/key-intake.html" class="btn-pill btn-pill--outline">Closed Beta (invite only) →</a>
+      </div>
     </div>
 
     <div class="content-section centered" id="calculator">
@@ -229,8 +398,8 @@
           </div>
           <div class="chat-messages" id="key-chat-messages"></div>
           <div class="chat-input-row" id="key-chat-input-row">
-            <textarea id="key-chat-input" placeholder="Type your answer…"></textarea>
-            <button class="chat-send" id="key-chat-send" aria-label="Send">↑</button>
+            <textarea id="key-chat-input" placeholder="Type your answer…" disabled></textarea>
+            <button class="chat-send" id="key-chat-send" aria-label="Send" disabled>↑</button>
           </div>
         </div>
 
@@ -286,410 +455,101 @@
   </footer>
 
   <script src="/shared.js"></script>
+  <script src="/key-chat-widget.js"></script>
   <script>
-    // TODO: Fill these in from your Cloudinary dashboard before deploying photo upload
-    const CLOUDINARY_CLOUD_NAME = 'pbmv9wra';
-    const CLOUDINARY_UPLOAD_PRESET = 'nest-key-listings';
+    // Gateway/invitation gating for a cold-outreach lead (?lead=<id>).
+    // landlords.html's own chat is for organic self-serve visitors only --
+    // an invited lead never uses it. See DESIGN_HANDOFF.md for the gateway
+    // overlay spec.
+    const urlLeadId = new URLSearchParams(window.location.search).get('lead');
 
-    let keyState = {
-      name:'', city:'', neighborhood:'', zip:'', propertyType:'', roomDetails:'',
-      furnished:'', availability:'', rent:'', utilities:'', minStay:'',
-      isOwner:'', household:'', parking:'', photosStatus:'', email:'', phone:'',
-      houseRules:'', lifestyle:''
-    };
-
-    // Cold-outreach lead support: if this chat was reached via a ?lead=<id>
-    // link generated by the internal outreach tool, fetch the draft facts NK
-    // already gathered from the landlord's FB/Craigslist post via a
-    // server-side bridge (api/lead-info.js -> nest-key-app's lead-summary
-    // endpoint), and use them to build a listing-aware opener -- same role
-    // the property-type question plays as an intent check for organic
-    // visitors. Replaces the old ?prefill= URL-blob mechanism, which had no
-    // server-side record at all. keyLeadId also gets sent along on final
-    // submission so the lead can be marked converted.
-    const keyLeadId = new URLSearchParams(window.location.search).get('lead');
-
-    async function fetchLeadPrefill() {
-      try {
-        if (!keyLeadId) return null;
-        const res = await fetch(`/api/lead-info?lead=${encodeURIComponent(keyLeadId)}`);
-        if (!res.ok) return null;
-        return await res.json();
-      } catch (_) {
-        return null;
-      }
+    function showInviteGateway(lead) {
+      const detail = document.getElementById('invite-trust-detail');
+      const place = [lead.neighborhood, lead.city].filter(Boolean).join(', ');
+      const rentPart = lead.rent ? `$${lead.rent}/mo` : '';
+      const parts = [lead.propertyType || 'Private room', rentPart, place].filter(Boolean);
+      detail.textContent = parts.join(' · ');
+      document.getElementById('invite-gateway-backdrop').classList.add('visible');
     }
 
-    function keyOpeningMessage(prefill) {
-      const generic = "Hi — I'm Key. I'll help you list your place and pre-screen renters who actually fit. First — is this a private room in a home you live in, or a separate property you're renting out?";
-      if (!prefill) return generic;
-      const place = [prefill.neighborhood, prefill.city].filter(Boolean).join(', ');
-      const rentPart = prefill.rent ? ` for $${prefill.rent}/month` : '';
-      if (!place && !rentPart) return generic;
-      return `Hi — I'm Key. I saw your room listed${place ? ' in ' + place : ''}${rentPart} and wanted to help you get it set up with Nest & Key. Let's fill in a few more details — is this a private room in a home you live in, or a separate property you're renting out?`;
-    }
-
-    let keyHistory = [];
-    let keyPhotoUrls = [];
-    let keyListingSubmitted = false;
-
-    setKeyChatEnabled(false);
-    (async function initKeyPrefill() {
-      const keyPrefill = await fetchLeadPrefill();
-      if (keyPrefill) {
-        for (const [k, v] of Object.entries(keyPrefill)) {
-          if (v !== '' && v !== null && v !== undefined && k in keyState) keyState[k] = v;
-        }
-      }
-      const opener = keyOpeningMessage(keyPrefill);
-      keyHistory = [{ role: 'assistant', content: opener }];
-      appendKeyMsg('assistant', opener);
-      if (keyPrefill) renderKeyBrief();
-      setKeyChatEnabled(true);
-    })();
-
-    const KEY_BRIEF_FIELDS = [
-      { key: 'name', label: 'Name', required: true },
-      { key: 'propertyType', label: 'Property type', required: true },
-      { key: 'isOwner', label: 'Owner-occupied', required: true },
-      { key: 'city', label: 'City', required: true },
-      { key: 'neighborhood', label: 'Neighborhood', required: true },
-      { key: 'zip', label: 'Zip', required: false },
-      { key: 'roomDetails', label: 'Room details', required: true },
-      { key: 'furnished', label: 'Furnished', required: true },
-      { key: 'availability', label: 'Available from', required: true },
-      { key: 'rent', label: 'Monthly rent', required: true },
-      { key: 'utilities', label: 'Utilities', required: false },
-      { key: 'minStay', label: 'Min stay', required: true },
-      { key: 'household', label: 'Household', required: false },
-      { key: 'parking', label: 'Parking', required: false },
-      { key: 'houseRules', label: 'House rules', required: false },
-      { key: 'lifestyle', label: 'Lifestyle fit', required: false },
-      { key: 'photosStatus', label: 'Photos', required: false },
-      { key: 'email', label: 'Email', required: true },
-      { key: 'phone', label: 'Phone', required: true },
-    ];
-
-    function renderKeyBrief() {
-      const fieldsEl = document.getElementById('key-brief-fields');
-      const statusEl = document.getElementById('key-brief-status');
-      if (!fieldsEl) return;
-
-      const filled = KEY_BRIEF_FIELDS.filter(f => (keyState[f.key] || '').trim() !== '');
-      fieldsEl.innerHTML = filled.length === 0
-        ? '<div class="key-brief-empty">Keep chatting — your brief will appear here.</div>'
-        : filled.map(f => `<div class="key-brief-row"><span class="key-brief-check">✓</span><div class="key-brief-row-text"><span class="key-brief-label">${f.label}</span><span class="key-brief-value">${escapeHtml(keyState[f.key])}</span></div></div>`).join('');
-
-      if (statusEl && !document.getElementById('key-brief-submit')) {
-        const allReq = KEY_BRIEF_FIELDS.filter(f => f.required).every(f => (keyState[f.key] || '').trim() !== '');
-        const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(keyState.email || '');
-        if (allReq && emailOk) {
-          const btn = document.createElement('button');
-          btn.id = 'key-brief-submit';
-          btn.className = 'key-brief-status ready';
-          btn.textContent = 'Submit my listing →';
-          btn.addEventListener('click', submitKeyListing);
-          statusEl.replaceWith(btn);
-        }
-      }
-      syncIntakeHeights();
-    }
-
-    async function sendKeyChat() {
-      const input = document.getElementById('key-chat-input');
-      const text = input.value.trim();
-      if (!text) {
-        input.classList.remove('shake');
-        void input.offsetWidth;
-        input.classList.add('shake');
-        input.addEventListener('animationend', () => input.classList.remove('shake'), { once: true });
-        return;
-      }
-
-      appendKeyMsg('user', text);
-      keyHistory.push({ role: 'user', content: text });
-      input.value = '';
-      setKeyChatEnabled(false);
-
-      const box = document.getElementById('key-chat-messages');
-      const typing = document.createElement('div');
-      typing.className = 'msg key typing-indicator';
-      typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
-      box.appendChild(typing);
-      box.scrollTop = box.scrollHeight;
-
-      try {
-        const res = await fetch('/api/key-chat', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ messages: keyHistory, state: keyState })
+    function initInviteCarousel() {
+      const slides = document.querySelectorAll('.invite-slide');
+      const dots = document.querySelectorAll('.invite-dot');
+      dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+          const idx = dot.dataset.dot;
+          slides.forEach(s => s.hidden = s.dataset.slide !== idx);
+          dots.forEach(d => d.classList.toggle('active', d.dataset.dot === idx));
         });
-        typing.remove();
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        // Merge API state: prefer non-empty values, never overwrite filled fields with empty
-        if (data.state && typeof data.state === 'object') {
-          for (const [k, v] of Object.entries(data.state)) {
-            if (v !== '' && v !== null && v !== undefined) keyState[k] = v;
-          }
-        }
-        keyHistory.push({ role: 'assistant', content: data.reply });
-        appendKeyMsg('assistant', data.reply);
-        renderKeyBrief();
-        if (data.ready) showKeyReady(); else setKeyChatEnabled(true);
-      } catch (_) {
-        typing.remove();
-        appendKeyError();
-        setKeyChatEnabled(true);
-      }
-    }
-
-    function appendKeyError() {
-      const box = document.getElementById('key-chat-messages');
-      const div = document.createElement('div');
-      div.className = 'msg error';
-      div.innerHTML = '<div class="msg-label">Key</div><div class="msg-text">Something went wrong. <button class="msg-retry-btn" onclick="retryLastKeyMessage()">Retry</button></div>';
-      box.appendChild(div);
-      box.scrollTop = box.scrollHeight;
-    }
-
-    function retryLastKeyMessage() {
-      const box = document.getElementById('key-chat-messages');
-      const err = box.querySelector('.msg.error');
-      if (err) err.remove();
-
-      setKeyChatEnabled(false);
-      const typing = document.createElement('div');
-      typing.className = 'msg key typing-indicator';
-      typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
-      box.appendChild(typing);
-      box.scrollTop = box.scrollHeight;
-
-      fetch('/api/key-chat', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ messages: keyHistory, state: keyState })
-      })
-        .then(res => { typing.remove(); if (!res.ok) throw new Error(); return res.json(); })
-        .then(data => {
-          if (data.state && typeof data.state === 'object') {
-            for (const [k, v] of Object.entries(data.state)) {
-              if (v !== '' && v !== null && v !== undefined) keyState[k] = v;
-            }
-          }
-          keyHistory.push({ role: 'assistant', content: data.reply });
-          appendKeyMsg('assistant', data.reply);
-          renderKeyBrief();
-          if (data.ready) showKeyReady(); else setKeyChatEnabled(true);
-        })
-        .catch(() => { typing.remove(); appendKeyError(); setKeyChatEnabled(true); });
-    }
-
-    function escapeHtml(s) {
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
-
-    // Escape first, always -- never trust raw text (landlord input or model
-    // output) as HTML. Only after escaping do we re-enable a narrow,
-    // controlled **bold**/*italic* markdown conversion for Key's own replies,
-    // so styling works without ever allowing arbitrary HTML injection. This
-    // matters beyond just this page: unescaped input here was a stored-XSS
-    // risk against whoever later views a saved transcript (e.g. NK's admin
-    // portal), not just the person typing.
-    function formatKeyText(text) {
-      const escaped = escapeHtml(text);
-      return escaped
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.+?)\*/g, '<em>$1</em>');
-    }
-
-    function appendKeyMsg(role, text) {
-      const box = document.getElementById('key-chat-messages');
-      const div = document.createElement('div');
-      div.className = 'msg ' + (role === 'assistant' ? 'key' : 'user');
-      div.innerHTML = role === 'assistant'
-        ? `<div class="msg-label">Key</div><div class="msg-text">${formatKeyText(text)}</div>`
-        : `<div class="msg-text">${escapeHtml(text)}</div>`;
-      box.appendChild(div);
-      box.scrollTop = box.scrollHeight;
-      syncIntakeHeights();
-    }
-
-    // Keeps the chat card and listing-brief panel visually matched in height
-    // as either one's content grows (e.g. the brief filling in, or the
-    // submitted confirm panel appearing) -- CSS grid's align-items: stretch
-    // handles most cases, but this makes it explicit and reliable at the
-    // exact points content changes, rather than depending on stretch alone.
-    function syncIntakeHeights() {
-      const card = document.getElementById('key-chat-card');
-      const brief = document.getElementById('key-brief-panel');
-      if (!card || !brief) return;
-      card.style.minHeight = '';
-      brief.style.minHeight = '';
-      const max = Math.max(card.offsetHeight, brief.offsetHeight);
-      card.style.minHeight = max + 'px';
-      brief.style.minHeight = max + 'px';
-    }
-
-    function setKeyChatEnabled(on) {
-      const input = document.getElementById('key-chat-input');
-      const btn = document.getElementById('key-chat-send');
-      if (input) input.disabled = !on;
-      if (btn) btn.disabled = !on;
-    }
-
-    function showKeyReady() {
-      renderKeyBrief();
-      setKeyChatEnabled(true);
-      const box = document.getElementById('key-chat-messages');
-      const existing = box.querySelector('.chat-ready-cta');
-      if (existing) existing.remove();
-      const cta = document.createElement('div');
-      cta.className = 'chat-ready-cta';
-      cta.innerHTML = `<button id="key-chat-submit-btn" onclick="submitKeyListing()">Submit my listing →</button>`;
-      box.appendChild(cta);
-      box.scrollTop = box.scrollHeight;
-      syncIntakeHeights();
-    }
-
-    async function submitKeyListing() {
-      if (keyListingSubmitted) return;
-      const btn = document.getElementById('key-brief-submit') || document.getElementById('key-start-btn');
-      const chatBtn = document.getElementById('key-chat-submit-btn');
-      if (btn) { btn.textContent = 'Submitting…'; btn.disabled = true; }
-      if (chatBtn) { chatBtn.textContent = 'Submitting…'; chatBtn.disabled = true; }
-
-      let applyUrl;
-      try {
-        const res = await fetch('/api/submit-listing', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ ...keyState, photoUrls: keyPhotoUrls, leadId: keyLeadId || undefined })
-        });
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        applyUrl = data.applyUrl;
-      } catch (_) {
-        if (btn) { btn.textContent = 'Submit my listing →'; btn.disabled = false; }
-        if (chatBtn) { chatBtn.textContent = 'Submit my listing →'; chatBtn.disabled = false; }
-        alert('Something went wrong submitting your listing. Please try again.');
-        return;
-      }
-
-      keyListingSubmitted = true;
-      const box = document.getElementById('key-chat-messages');
-      const cta = box.querySelector('.chat-ready-cta');
-      if (cta) cta.remove();
-      const confirm = document.createElement('div');
-      confirm.className = 'confirm confirm--panel';
-      confirm.innerHTML = `<span class="confirm__medallion">✓</span>
-        <div class="confirm__title">Your AI agent is now ready</div>
-        <div class="confirm__steps">
-          <div class="confirm__step">
-            <div class="confirm__step-label">Try now, Say hello to Key</div>
-            <p class="confirm__step-body">Key just sent you the first email. Check your inbox to ensure the email arrived your inbox well. Add key@nestandkey.ai to your contacts now (or mark it important) so nothing lands in spam.</p>
-          </div>
-          <div class="confirm__step">
-            <div class="confirm__step-label">How to use your AI agent for screening</div>
-            <p class="confirm__step-body">Copy this link and paste it into your listing on Craigslist, Facebook, or anywhere else. It's Key — your own AI agent, already trained on your screening criteria.</p>
-            <div class="confirm__link-row">
-              <input type="text" readonly value="${applyUrl}" onclick="this.select()" class="confirm__link-input" />
-              <button type="button" class="confirm__copy-btn" onclick="copyApplyLink(this, '${applyUrl}')">Copy</button>
-            </div>
-          </div>
-        </div>
-        <p class="confirm__meta">You always make the final call on who you meet.</p>`;
-      box.appendChild(confirm);
-      box.scrollTop = box.scrollHeight;
-      const inputRow = document.getElementById('key-chat-input-row');
-      if (inputRow) inputRow.style.display = 'none';
-      if (btn) { btn.textContent = '✓ Submitted'; btn.style.background = '#4A6B52'; }
-      syncIntakeHeights();
-    }
-
-    function copyApplyLink(btn, url) {
-      navigator.clipboard.writeText(url).then(() => {
-        const original = btn.textContent;
-        btn.textContent = 'Copied!';
-        setTimeout(() => { btn.textContent = original; }, 1500);
       });
     }
+    initInviteCarousel();
 
-    async function uploadKeyPhoto(file) {
-      if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) return null;
-      const fd = new FormData();
-      fd.append('file', file);
-      fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
-        { method: 'POST', body: fd }
-      );
-      const data = await res.json();
-      return data.secure_url || null;
-    }
-
-    document.getElementById('key-photo-input').addEventListener('change', async function(e) {
-      const files = Array.from(e.target.files).slice(0, 10 - keyPhotoUrls.length);
-      const list = document.getElementById('key-photo-list');
-      const grid = document.getElementById('key-photo-grid');
-      const photoBtn = document.querySelector('.key-photo-btn');
-      const drop = document.querySelector('.key-photo-drop');
-      let addedCount = 0;
-
-      for (const file of files) {
-        const localUrl = URL.createObjectURL(file);
-
-        const wrap = document.createElement('div');
-        wrap.className = 'key-photo-wrap';
-
-        const thumb = document.createElement('img');
-        thumb.className = 'key-photo-thumb';
-        thumb.src = localUrl;
-
-        const removeBtn = document.createElement('button');
-        removeBtn.className = 'key-photo-remove';
-        removeBtn.type = 'button';
-        removeBtn.textContent = '×';
-        removeBtn.addEventListener('click', () => {
-          const cloudUrl = wrap.dataset.url;
-          if (cloudUrl) keyPhotoUrls = keyPhotoUrls.filter(u => u !== cloudUrl);
-          wrap.remove();
-          if (keyPhotoUrls.length === 0) {
-            keyState.photosStatus = '';
-            document.getElementById('key-photo-hint').textContent = 'JPG, PNG, HEIC · up to 10 photos';
-            drop.style.borderColor = '';
-          } else {
-            document.getElementById('key-photo-hint').textContent = `${keyPhotoUrls.length} of 10 added ✓`;
-          }
-          renderKeyBrief();
+    let claimedLeadId = null;
+    document.getElementById('invite-claim-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('invite-claim-email').value.trim();
+      const btn = document.getElementById('invite-claim-submit');
+      const errEl = document.getElementById('invite-claim-error');
+      errEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Claiming…';
+      try {
+        const res = await fetch('/api/claim-lead', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ leadId: claimedLeadId, email })
         });
-
-        wrap.appendChild(thumb);
-        wrap.appendChild(removeBtn);
-        grid.appendChild(wrap);
-
-        const url = await uploadKeyPhoto(file);
-        if (url) {
-          wrap.dataset.url = url;
-          keyPhotoUrls.push(url);
-          keyState.photosStatus = 'provided';
-          addedCount++;
-          renderKeyBrief();
-        }
-      }
-
-      if (addedCount > 0) {
-        document.getElementById('key-photo-hint').textContent = `${keyPhotoUrls.length} of 10 added ✓`;
-        drop.style.borderColor = 'rgba(45,90,61,0.5)';
-        appendKeyMsg('assistant', `Got it — I've noted ${keyPhotoUrls.length} photo${keyPhotoUrls.length > 1 ? 's' : ''} for this listing. You can add more or keep chatting.`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'claim failed');
+        window.location.href = `/key-intake.html?lead=${encodeURIComponent(claimedLeadId)}`;
+      } catch (_) {
+        btn.disabled = false;
+        btn.textContent = 'Claim your Key →';
+        errEl.textContent = 'Something went wrong -- please try again.';
+        errEl.style.display = 'block';
       }
     });
 
-    document.getElementById('key-chat-send').addEventListener('click', sendKeyChat);
-    document.getElementById('key-chat-input').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendKeyChat(); }
-    });
-    initChatKeyboardFix('key-chat-input', 'key-chat-messages', 'key-chat-input-row');
+    (async function initLeadGate() {
+      if (!urlLeadId) {
+        // Organic visitor -- unchanged behavior.
+        bindKeyChatUI();
+        initKeyChat(null);
+        return;
+      }
+
+      let lead;
+      try {
+        const res = await fetch(`/api/lead-info?lead=${encodeURIComponent(urlLeadId)}`);
+        lead = res.ok ? await res.json() : null;
+      } catch (_) {
+        lead = null;
+      }
+
+      if (!lead) {
+        // Not found -- fall back to generic organic chat, same as no-lead.
+        bindKeyChatUI();
+        initKeyChat(null);
+        return;
+      }
+
+      if (lead.status === 'draft') {
+        // Chat card stays inert -- never bound, never initialized.
+        claimedLeadId = urlLeadId;
+        showInviteGateway(lead);
+        return;
+      }
+
+      if (lead.status === 'converted' && lead.adminUrl) {
+        window.location.href = lead.adminUrl;
+        return;
+      }
+
+      // status === 'claimed' (or converted with no adminUrl, shouldn't
+      // happen) -- repeat visit, skip the overlay entirely.
+      window.location.href = `/key-intake.html?lead=${encodeURIComponent(urlLeadId)}`;
+    })();
   </script>
   <script>
     let bScenario = 'livein';
