@@ -285,7 +285,7 @@ function showKeyReady() {
   if (existing) existing.remove();
   const cta = document.createElement('div');
   cta.className = 'chat-ready-cta';
-  cta.innerHTML = `<button id="key-chat-submit-btn" onclick="submitKeyListing()">Submit my listing →</button>`;
+  cta.innerHTML = `<button id="key-chat-submit-btn" onclick="submitKeyListing()">Submit my rental profile →</button>`;
   box.appendChild(cta);
   box.scrollTop = box.scrollHeight;
   syncIntakeHeights();
