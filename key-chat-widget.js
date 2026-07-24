@@ -115,7 +115,7 @@ function renderKeyBrief() {
       const btn = document.createElement('button');
       btn.id = 'key-brief-submit';
       btn.className = 'key-brief-status ready';
-      btn.textContent = 'Submit my listing →';
+      btn.textContent = 'Submit my rental profile →';
       btn.addEventListener('click', submitKeyListing);
       statusEl.replaceWith(btn);
     }
@@ -311,9 +311,9 @@ async function submitKeyListing() {
     const data = await res.json();
     applyUrl = data.applyUrl;
   } catch (_) {
-    if (btn) { btn.textContent = 'Submit my listing →'; btn.disabled = false; }
-    if (chatBtn) { chatBtn.textContent = 'Submit my listing →'; chatBtn.disabled = false; }
-    alert('Something went wrong submitting your listing. Please try again.');
+    if (btn) { btn.textContent = 'Submit my rental profile →'; btn.disabled = false; }
+    if (chatBtn) { chatBtn.textContent = 'Submit my rental profile →'; chatBtn.disabled = false; }
+    alert('Something went wrong submitting your rental profile. Please try again.');
     return;
   }
 
@@ -332,7 +332,7 @@ async function submitKeyListing() {
       </div>
       <div class="confirm__step">
         <div class="confirm__step-label">How to use your AI agent for screening</div>
-        <p class="confirm__step-body">Copy this link and paste it into your listing on Craigslist, Facebook, or anywhere else. It's Key — your own AI agent, already trained on your screening criteria.</p>
+        <p class="confirm__step-body">Copy this link and paste it into your post on Craigslist, Facebook, or anywhere else. It's Key — your own AI agent, already trained on your screening criteria.</p>
         <div class="confirm__link-row">
           <input type="text" readonly value="${applyUrl}" onclick="this.select()" class="confirm__link-input" />
           <button type="button" class="confirm__copy-btn" onclick="copyApplyLink(this, '${applyUrl}')">Copy</button>
@@ -426,7 +426,7 @@ function bindKeyChatUI() {
       if (addedCount > 0) {
         document.getElementById('key-photo-hint').textContent = `${keyPhotoUrls.length} of 10 added ✓`;
         drop.style.borderColor = 'rgba(45,90,61,0.5)';
-        appendKeyMsg('assistant', `Got it — I've noted ${keyPhotoUrls.length} photo${keyPhotoUrls.length > 1 ? 's' : ''} for this listing. You can add more or keep chatting.`);
+        appendKeyMsg('assistant', `Got it — I've noted ${keyPhotoUrls.length} photo${keyPhotoUrls.length > 1 ? 's' : ''} for this rental profile. You can add more or keep chatting.`);
       }
     });
   }

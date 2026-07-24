@@ -35,7 +35,7 @@ Rather than a listings board you scroll, Nest (for tenants) scans the market on 
 
 The brand positioning is deliberate: this is not Craigslist. **Nest & Key is a self-service tool** (updated 2026-07-21, supersedes the earlier "introduced by a mutual friend" framing below): renters run their own quality-first market scan, and hands-on landlords run their own housemate/tenant screening. **The user is always the one in control, making the decisions** — Nest & Key's job is to make the repetitive parts of that work faster, easier, and more effortless, not to curate or decide on the user's behalf. The tone stays calm, curated, and trustworthy — this is not a listings board you scroll — but that tone comes from the tool being well-made and respectful of the user's time, not from a human intermediary vetting things for them.
 
-**Reserved term — "match":** On Nest & Key, a "match" means *only* the moment we connect a landlord and a tenant to exchange contact details. Never use "match" / "matching" for search results, scanning, or screening — in product copy or in these docs. For results, say "homes we find", "homes we surface", "listings", or "results".
+**Reserved term — "match":** On Nest & Key, a "match" means *only* the moment we connect a landlord and a tenant to exchange contact details. Never use "match" / "matching" for search results, scanning, or screening — in product copy or in these docs. For results, say "homes we find", "homes we surface", or "results" — never "listings" (the word "listing" is reserved for the landlord's own third-party posts on Craigslist/Facebook/etc.; Nest & Key's own concept is a "rental profile," see below).
 
 **Clarification (Jul 15 2026):** this restricts *product-UI copy describing search/screening mechanics* — it does not ban the word from narrative/company-voice writing (About Us, brand storytelling) when it's naming the aspirational outcome the rule itself protects: two compatible people actually connecting. Example judged fine on this basis: About Us's founder story — "making the right match something you can count on, not just hope for" — describes the goal, not a mislabeled product feature. If in doubt, ask whether the sentence could be confused for describing search results or screening; if not, "match" in its reserved sense is available.
 
@@ -219,7 +219,7 @@ This does not require pixel-identical numbers on every page, but every transitio
 - H1: "Share your home with the right person — and lower what you pay."
 - Sub: "Key finds and pre-screens people who actually fit, based on your preferences. You only meet people you'd actually consider, and your rent or mortgage gets lighter."
 - Hero CTA: "List your room in minutes →" (pill button, scrolls to `#intake`). The old "See a sample listing →" link is hidden (`display:none`), not deleted — kept for a possible future re-purposing, per handoff.
-- Below fold, in order: **Room income calculator** (`id="calculator"`, relocated from the old `/buyers` page, unchanged behavior) with a result-panel CTA band → How listing with Key works (3 steps) → "A market built for this" (`market-stats-panel`, relocated from `/buyers`) → Key AI listing chat intake (`id="intake"`, now on a dark-green `.section-filled` band)
+- Below fold, in order: **Room income calculator** (`id="calculator"`, relocated from the old `/buyers` page, unchanged behavior) with a result-panel CTA band → How screening with Key works (3 steps) → "A market built for this" (`market-stats-panel`, relocated from `/buyers`) → Key AI listing chat intake (`id="intake"`, now on a dark-green `.section-filled` band)
 - The standalone `trust-box` that used to sit between the 3-step and the chat intake was **removed** — its stat now lives in the market-stats-panel instead (trust-box is "once per page," see Part 5)
 - Single canonical intake at `#intake`; the hero CTA and the calculator's result-band CTA are both entry points that scroll to it — do not add a second intake form
 
@@ -593,11 +593,11 @@ Use this three-tier structure (tag → h2.section-title → p.section-subtitle) 
 
 ### In-chat ready CTA (Key / Landlords page)
 
-When Key declares the listing brief complete (`data.ready = true`), a submit button is injected directly into the chat messages area — so users don't need to scroll to the debrief panel to act.
+When Key declares the rental profile brief complete (`data.ready = true`), a submit button is injected directly into the chat messages area — so users don't need to scroll to the debrief panel to act.
 
 ```html
 <div class="chat-ready-cta">
-  <button id="key-chat-submit-btn" onclick="submitKeyListing()">Submit my listing →</button>
+  <button id="key-chat-submit-btn" onclick="submitKeyListing()">Submit my rental profile →</button>
 </div>
 ```
 
@@ -655,14 +655,14 @@ CSS lives in `styles.css` and duplicated in the inline `<style>` of `listing-sam
   </div>
   <div class="confirm__step">
     <div class="confirm__step-label">Copy your AI screening link</div>
-    <p class="confirm__step-body">Copy this link and paste it into your listing on Craigslist, Facebook, or anywhere else. It's Key — your own AI agent, already trained on your screening criteria.</p>
+    <p class="confirm__step-body">Copy this link and paste it into your post on Craigslist, Facebook, or anywhere else. It's Key — your own AI agent, already trained on your screening criteria.</p>
     <div class="confirm__link-row">...</div>
   </div>
 </div>
 ```
 
 1. **"Set up your AI screening now"** (fine-tuned from initial handoff's "Try now" — same intent, more explicit about what Key actually does) — explains Key's ongoing job (screens every inquiry, emails the results) before the inbox/whitelist action, rather than just telling the landlord to check their inbox without saying why. Time-sensitive: the sending domain has no reputation yet, so alert emails are landing in spam during testing.
-2. **"Copy your AI screening link"** — the bigger task (copy-paste into their own listing elsewhere), done on the landlord's own time. Contains the `.confirm__link-row` sub-pattern (see Part 12 — that sub-pattern already existed; only its CSS values were refined here: border-radius 9→8px, link-input border opacity .25→.35 and text color changed from accent green to body-text `#4A6B52` for readability, copy-btn text now `#F4F7F4` with `font-weight: 600`).
+2. **"Copy your AI screening link"** — the bigger task (copy-paste into their own post elsewhere), done on the landlord's own time. Contains the `.confirm__link-row` sub-pattern (see Part 12 — that sub-pattern already existed; only its CSS values were refined here: border-radius 9→8px, link-input border opacity .25→.35 and text color changed from accent green to body-text `#4A6B52` for readability, copy-btn text now `#F4F7F4` with `font-weight: 600`).
 
 Both step labels share identical styling — no primary/secondary visual hierarchy; the two-step order communicates sequence, not importance. `.confirm--panel`'s gap increased 14px→28px and bottom padding added (32px→36px) to accommodate the two-step layout; this is a shared/global change to `.confirm--panel`, so it also slightly increases spacing on the three other surfaces using this variant (tenant chat, contact form, apply modal) — worth a visual check there next time those are touched, though the added gap is minor and non-breaking.
 
@@ -716,7 +716,7 @@ Replaces the old flat stack (nav-echo links, copyright, and privacy note all the
 
 **Wordmark is the real logo, not text (Jul 15 2026):** `.footer-mark` used to be a text link reading "Nest & Key" in a bold serif-ish weight. It now wraps the same `.nav-logo` SVG mark used top-left on every page (`viewBox="40 88 160 55"`, `fill="currentColor"`), scaled to `108×30px` via `.footer-logo svg`. Reuse the nav SVG's paths verbatim — do not redraw or regenerate the mark. Same "don't redraw the logo" rule that applies to `.nav-logo` now applies here too. `currentColor` is set via `.footer-logo { color: #2D5A3D }` / hover `#1E3A2F`, so it inherits the same green the text version used — verify contrast against the `#EBF0EB` footer band if either color ever changes.
 
-**Per-page privacy line** (inside `.footer-meta .footer-privacy`, optional): `index.html` — "Your data is used only to find homes you'd qualify for — never sold or shared." · `landlords.html` — "Your listing details are used only to pre-screen tenants — never sold or shared." · `about.html` and the listing page — none (neither collects the kind of data the line would apply to).
+**Per-page privacy line** (inside `.footer-meta .footer-privacy`, optional): `index.html` — "Your data is used only to find homes you'd qualify for — never sold or shared." · `landlords.html` — "Your rental profile details are used only to pre-screen tenants — never sold or shared." · `about.html` and the listing page — none (neither collects the kind of data the line would apply to).
 
 Shared across `index.html`, `landlords.html`, `about.html`, and (newly added, previously absent entirely) `listing-sample-socal/index.html` — the listing page's link row is contextual (`For Landlords` / `Contact`) rather than the main site's (`About Us` / `Contact`), matching its different audience.
 
@@ -1064,7 +1064,7 @@ The panel is currently **280px wide** at desktop. Design can adjust this but sho
 
   <!-- Header -->
   <div>
-    <div class="key-brief-title">Your listing brief</div>
+    <div class="key-brief-title">Your rental profile brief</div>
     <div class="key-brief-sub">Fills in as you chat with Key.</div>
   </div>
 
@@ -1147,7 +1147,7 @@ When all required fields are filled and email is valid, `renderKeyBrief()` repla
 const btn = document.createElement('button');
 btn.id = 'key-brief-submit';
 btn.className = 'key-brief-status ready';   // ← same class + 'ready' modifier
-btn.textContent = 'Submit my listing →';
+btn.textContent = 'Submit my rental profile →';
 btn.addEventListener('click', submitKeyListing);
 statusEl.replaceWith(btn);
 ```
@@ -1218,6 +1218,10 @@ All rules live in `styles.css` lines 309–332.
 ## Part 12 — Real listing submission + shareable link (confirmation panel)
 
 Key's landlord intake now creates the landlord's own personalized Key — an AI screening agent configured with their criteria — in the `nest-key-app` product backend (Postgres, via a server-side bridge at `api/submit-listing.js`) instead of only logging to the Google Sheet. **Conceptually this is not "a listing" going live anywhere** — Nest & Key never publishes anything on the landlord's behalf; the landlord takes their own shareable link and posts it wherever they choose. (The current implementation stores this record in a database table named `listings` and API routes named accordingly — that's an internal naming detail from earlier in the project, not the product concept; a rename is a separate, not-yet-scoped decision, especially with a possible future tenant/landlord lead-sharing pool on the roadmap that could reshape this data model anyway.) The Sheet write is kept as a best-effort backup log — it no longer gates the confirmation shown to the landlord.
+
+**Word rule (hard rule, as of this writing): never say "listing" in any user-facing copy anywhere in the app** — this product is a self-service screening tool for this closed-beta round, not a listing/marketplace service, and the word implies Nest & Key hosts or publishes something on the landlord's behalf, which it never does. Use **"rental profile"** instead (e.g. "Your rental profile brief," "Submit my rental profile →"). Two related distinctions to keep straight:
+- **"Post"/"posting"** stays reserved for the landlord's *own* action on a third-party site (Craigslist, Facebook, etc.) — e.g. "paste it into your post on Craigslist" — since that's genuinely their own listing on someone else's platform, not a Nest & Key concept, and "rental profile" doesn't fit there.
+- The internal `listings` DB table, its columns, and API route names (`/api/create-listing`, `/api/submit-listing`, `?listing=<id>` query params, `listingId` variables) are unaffected by this rule — see the naming-is-internal note above.
 
 **New criteria collected** (added to `KEY_PERSONA`'s conversation flow and `[[STATE]]` block, optional/soft like house rules — not required to reach `ready`): `minIncome`, `minCredit`, `petsPolicy`, `smokingPolicy`, `maxOccupancy`, `otherCriteria`. These power the tenant-facing screening chat's criteria-mapped questions on the other side of the system.
 
