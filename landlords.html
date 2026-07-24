@@ -55,31 +55,36 @@
     .invite-gateway-claim { background: #EDF2ED; border-left: 1px solid rgba(80,130,80,0.15); }
     .invite-gateway-carousel-label { font-size: 13px; font-weight: 700; color: #8BAF8E; margin-bottom: 22px; letter-spacing: 0.02em; }
     .invite-trust-card {
-      display: flex; align-items: flex-start; gap: 12px; margin-bottom: 22px;
+      background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 12px; padding: 14px;
+      display: flex; align-items: center; gap: 12px; margin-bottom: 28px; box-sizing: border-box;
     }
     .invite-trust-icon {
       width: 40px; height: 40px; border-radius: 50%; background: #2D5A3D; color: #fff;
       display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
     }
-    .invite-trust-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #8BAF8E; letter-spacing: 0.04em; }
-    .invite-trust-detail { font-size: 13px; font-weight: 600; color: #1E3A2F; margin-top: 2px; }
-    .invite-gateway-claim h2 { font-size: 24px; font-weight: 700; color: #1E3A2F; margin: 0 0 8px; }
-    .invite-gateway-claim .invite-sub { font-size: 15px; color: #4A6B52; margin: 0 0 18px; }
-    .invite-gateway-claim .invite-intro { font-size: 14px; color: #4A6B52; line-height: 1.55; margin: 0 0 18px; }
-    .invite-beta-badge { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #2D5A3D; border-radius: 0; margin-bottom: 18px; }
-    #invite-claim-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+    .invite-trust-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #8BAF8E; letter-spacing: 0.04em; margin-bottom: 3px; }
+    .invite-trust-detail { font-size: 13px; font-weight: 600; color: #1E3A2F; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .invite-gateway-claim h2 { font-size: 24px; font-weight: 700; color: #1E3A2F; margin: 0 0 10px; }
+    .invite-gateway-claim .invite-sub { font-size: 15px; color: #1E3A2F; line-height: 1.6; margin: 0 0 36px; }
+    .invite-gateway-claim .invite-intro { font-size: 14px; color: #4A6B52; line-height: 1.7; margin: 0 0 12px; }
+    .invite-beta-badge {
+      display: inline-flex; align-self: flex-start; align-items: center; white-space: nowrap; width: fit-content;
+      background: #EBF0EB; color: #2D5A3D; font-size: 11px; font-weight: 600; padding: 5px 10px;
+      border-radius: 0; margin-bottom: 20px;
+    }
+    #invite-claim-form { display: flex; flex-direction: column; gap: 14px; margin-top: auto; }
     #invite-claim-email {
-      padding: 12px 16px; border-radius: 10px; border: 1.5px solid #B0C4B3; font-size: 14px;
-      font-family: inherit;
+      padding: 13px 15px; border-radius: 10px; border: 1px solid rgba(80,130,80,0.3); font-size: 14.5px;
+      font-family: inherit; color: #1E3A2F; box-sizing: border-box;
     }
     #invite-claim-submit {
-      background: #2D5A3D; color: #F4F7F4; font-size: 15px; font-weight: 600; border: none;
-      padding: 13px 28px; border-radius: 999px; cursor: pointer; transition: background 0.15s;
+      background: #2D5A3D; color: #fff; font-size: 15px; font-weight: 600; border: none;
+      padding: 14px 22px; border-radius: 999px; cursor: pointer; transition: background 0.15s; font-family: inherit;
     }
     #invite-claim-submit:hover { background: #3D7A52; }
     #invite-claim-submit:disabled { opacity: 0.6; cursor: default; }
     #invite-claim-error { color: #B0522E; font-size: 13px; display: none; }
-    .invite-reassurance { font-size: 12.5px; color: #8BAF8E; margin: 0; }
+    .invite-reassurance { font-size: 12px; color: #8BAF8E; line-height: 1.5; margin: 10px 0 0; }
     .invite-terms-placeholder { margin-top: 24px; border-top: 1px dashed rgba(80,110,80,0.2); padding-top: 20px; font-size: 11px; color: #B7CBB9; }
 
     @keyframes invite-typing-bounce { 0%, 60%, 100% { transform: translateY(0); opacity: .4; } 30% { transform: translateY(-4px); opacity: 1; } }
@@ -134,12 +139,23 @@
     .invite-score-card.fit .invite-score-fade { background: linear-gradient(to bottom, rgba(247,250,247,0) 0%, rgba(247,250,247,0.85) 100%); }
     .invite-score-card.not-fit .invite-score-fade { background: linear-gradient(to bottom, rgba(250,243,224,0) 0%, rgba(250,243,224,0.85) 100%); }
 
-    .invite-inbox-demo { font-size: 13px; color: #1E3A2F; line-height: 1.5; height: 100%; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
-    .invite-inbox-chrome { font-size: 11px; font-weight: 700; color: #8BAF8E; text-transform: uppercase; margin-bottom: 10px; }
-    .invite-inbox-from { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; font-size: 12.5px; }
-    .invite-inbox-avatar { width: 24px; height: 24px; border-radius: 50%; background: #2D5A3D; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
-    .invite-inbox-to { color: #8BAF8E; font-size: 11px; }
-    .invite-inbox-subject { font-weight: 700; margin-bottom: 10px; }
+    .invite-inbox-frame {
+      background: #fff; border: 1px solid #dadce0; border-radius: 12px; box-shadow: 0 6px 18px rgba(30,58,47,0.08);
+      overflow: hidden; font-family: Arial, Helvetica, sans-serif; flex: 1; min-height: 0; display: flex; flex-direction: column;
+    }
+    .invite-inbox-chrome-bar { display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: #f1f3f4; border-bottom: 1px solid #e0e0e0; flex-shrink: 0; }
+    .invite-inbox-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+    .invite-inbox-chrome-label { margin-left: 8px; font-size: 11px; color: #5f6368; font-weight: 600; }
+    .invite-inbox-sender-block { padding: 14px 16px 10px; border-bottom: 1px solid #e8eaed; flex-shrink: 0; }
+    .invite-inbox-sender-row { display: flex; align-items: center; gap: 10px; }
+    .invite-inbox-avatar { width: 32px; height: 32px; border-radius: 50%; background: #2D5A3D; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .invite-inbox-nameline { display: flex; align-items: baseline; gap: 6px; }
+    .invite-inbox-name { font-size: 13px; font-weight: 700; color: #202124; }
+    .invite-inbox-email { font-size: 11px; color: #5f6368; }
+    .invite-inbox-tome { font-size: 11px; color: #5f6368; margin-top: 1px; }
+    .invite-inbox-subject { margin-top: 10px; font-size: 14px; font-weight: 700; color: #202124; }
+    .invite-inbox-body { padding: 14px 16px 16px; flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+    .invite-inbox-body p { margin: 0; font-size: 13px; color: #3c4043; line-height: 1.5; }
     .invite-inbox-card { border: 1px solid #e8eaed; border-radius: 10px; padding: 14px; background: #FAFCFA; }
     .invite-inbox-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
     .invite-inbox-card-name { font-size: 13px; font-weight: 700; color: #202124; }
@@ -176,10 +192,27 @@
 
           <div class="invite-slide" data-slide="2">
             <div class="invite-slide-heading">You get the result, instantly</div>
-            <div class="invite-inbox-demo">
-              <div class="invite-inbox-chrome">Inbox</div>
-              <div class="invite-inbox-from"><span class="invite-inbox-avatar">K</span><div><strong>Key</strong> &lt;key@nestandkey.ai&gt;<div class="invite-inbox-to">to me</div></div></div>
-              <div class="invite-inbox-subject">A new prospect for your place</div>
+            <div class="invite-inbox-frame">
+              <div class="invite-inbox-chrome-bar">
+                <span class="invite-inbox-dot" style="background:#ec6a5e"></span>
+                <span class="invite-inbox-dot" style="background:#f4bf4f"></span>
+                <span class="invite-inbox-dot" style="background:#61c554"></span>
+                <span class="invite-inbox-chrome-label">Inbox</span>
+              </div>
+              <div class="invite-inbox-sender-block">
+                <div class="invite-inbox-sender-row">
+                  <span class="invite-inbox-avatar">K</span>
+                  <div style="min-width:0">
+                    <div class="invite-inbox-nameline">
+                      <span class="invite-inbox-name">Key</span>
+                      <span class="invite-inbox-email">&lt;key@nestandkey.ai&gt;</span>
+                    </div>
+                    <div class="invite-inbox-tome">to me</div>
+                  </div>
+                </div>
+                <div class="invite-inbox-subject">A new prospect for your place</div>
+              </div>
+              <div class="invite-inbox-body">
               <p>Hi there,</p>
               <p>Good news — I found a strong candidate for your room. Here's a quick look before you decide:</p>
               <div class="invite-inbox-card">
@@ -199,6 +232,7 @@
                 </div>
               </div>
               <div class="invite-inbox-sig">— Key, Nest &amp; Key</div>
+              </div>
             </div>
           </div>
 
