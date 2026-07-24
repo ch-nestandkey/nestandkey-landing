@@ -365,7 +365,7 @@ section.section-multi .hero-block { min-height: 65vh; padding-top: 96px; padding
 /* Key listing intake */
 .key-intake-wrap { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: stretch; max-width: 1080px; margin: 0 auto; }
 .key-intake-wrap .chat-card { margin-top: 0; }
-.key-brief-panel { background: #EDF2ED; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 24px; box-shadow: none; display: flex; flex-direction: column; gap: 24px; text-align: left; }
+.key-brief-panel { background: #EDF2ED; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; padding: 24px; box-shadow: none; display: flex; flex-direction: column; gap: 24px; text-align: left; overflow-y: auto; box-sizing: border-box; }
 .key-brief-head { display: flex; flex-direction: column; justify-content: center; gap: 2px; text-align: left; height: 58px; margin: -24px -24px 0; padding: 0 24px; border-bottom: 1px solid rgba(80,110,80,0.1); box-sizing: border-box; }
 .key-brief-title { font-size: 14px; font-weight: 600; color: #1E3A2F; }
 .key-brief-sub { font-size: 12px; color: #5E7D64; line-height: 1.4; }

@@ -250,16 +250,25 @@ function appendKeyMsg(role, text) {
 // submitted confirm panel appearing) -- CSS grid's align-items: stretch
 // handles most cases, but this makes it explicit and reliable at the
 // exact points content changes, rather than depending on stretch alone.
+// Fits the chat card (and its brief panel) to whatever room is actually
+// left in the viewport below the card's own position, rather than a fixed
+// vh percentage -- landlords.html has a full marketing hero above the card,
+// key-intake.html has only a short intro, so a flat vh value is wrong for
+// one of them regardless of which value is picked. Recomputed on every
+// call site that already exists for this function, plus on resize, so the
+// input row never ends up pushed below the fold as content above the card
+// changes or the window is resized.
 function syncIntakeHeights() {
   const card = document.getElementById('key-chat-card');
   const brief = document.getElementById('key-brief-panel');
-  if (!card || !brief) return;
-  card.style.minHeight = '';
-  brief.style.minHeight = '';
-  const max = Math.max(card.offsetHeight, brief.offsetHeight);
-  card.style.minHeight = max + 'px';
-  brief.style.minHeight = max + 'px';
+  if (!card) return;
+  card.style.height = '';
+  const top = card.getBoundingClientRect().top;
+  const available = Math.max(420, window.innerHeight - top - 40);
+  card.style.height = available + 'px';
+  if (brief) brief.style.height = available + 'px';
 }
+window.addEventListener('resize', syncIntakeHeights);
 
 function setKeyChatEnabled(on) {
   const input = document.getElementById('key-chat-input');
