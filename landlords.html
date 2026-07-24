@@ -86,7 +86,8 @@
 
     .invite-slide-heading { font-size: 15px; font-weight: 700; color: #6B8F71; margin-bottom: 20px; flex-shrink: 0; }
     .invite-carousel-slide-body { flex: 1; position: relative; min-height: 220px; }
-    .invite-slide { position: absolute; inset: 0; display: flex; flex-direction: column; }
+    .invite-slide { position: absolute; inset: 0; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+    .invite-slide.active { opacity: 1; pointer-events: auto; }
     .invite-chat-demo { display: flex; flex-direction: column; gap: 12px; flex: 1; min-height: 0; overflow-y: auto; scroll-behavior: smooth; }
     .invite-chat-msg { font-size: 13.5px; line-height: 1.5; padding: 10px 14px; border-radius: 12px; max-width: 88%; }
     .invite-chat-msg.key { background: #EFF4F0; color: #1E3A2F; align-self: flex-start; }
@@ -163,17 +164,17 @@
         <div class="invite-gateway-carousel-label">Key, in action</div>
         <div class="invite-carousel-slide-body">
 
-          <div class="invite-slide" data-slide="0">
+          <div class="invite-slide active" data-slide="0">
             <div class="invite-slide-heading">Key interviews the renter</div>
             <div class="invite-chat-demo" id="invite-chat-messages"></div>
           </div>
 
-          <div class="invite-slide" data-slide="1" hidden>
+          <div class="invite-slide" data-slide="1">
             <div class="invite-slide-heading">Key scores the fit</div>
             <div class="invite-score-demo" id="invite-score-demo"></div>
           </div>
 
-          <div class="invite-slide" data-slide="2" hidden>
+          <div class="invite-slide" data-slide="2">
             <div class="invite-slide-heading">You get the result, instantly</div>
             <div class="invite-inbox-demo">
               <div class="invite-inbox-chrome">Inbox</div>
@@ -657,7 +658,7 @@
 
       function goToSlide(i, manual) {
         clearTimeout(advanceTimer);
-        slides.forEach(s => s.hidden = Number(s.dataset.slide) !== i);
+        slides.forEach(s => s.classList.toggle('active', Number(s.dataset.slide) === i));
         dots.forEach(d => d.classList.toggle('active', Number(d.dataset.dot) === i));
         if (i === 0) runChatSequence(); else clearChatTimers();
         if (i === 1) runScoreSequence(); else clearScoreAnim();
