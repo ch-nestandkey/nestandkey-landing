@@ -135,19 +135,24 @@ p.sub { margin-top: 24px; font-size: 18px; color: #6B8F71; max-width: 480px; lin
 .waitlist-success { margin-top: 40px; font-size: 17px; font-weight: 600; color: #2D5A3D; }
 
 /* Chat card */
-.chat-card { width: 100%; max-width: 760px; margin-top: 36px; background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; overflow: hidden; }
-.chat-header { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid rgba(80,110,80,0.1); text-align: left; }
+/* max-height (not a fixed px value) keeps the whole card -- header, messages,
+   and the input row -- always fully on-screen regardless of viewport height,
+   with only the messages list scrolling internally as the conversation
+   grows. Without this, a fixed-height messages area could push the input
+   row below the fold on shorter viewports. */
+.chat-card { width: 100%; max-width: 760px; margin-top: 36px; background: #fff; border: 1px solid rgba(80,130,80,0.15); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; max-height: 82vh; }
+.chat-header { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid rgba(80,110,80,0.1); text-align: left; flex-shrink: 0; }
 .chat-header .chat-avatar { width: 30px; height: 30px; border-radius: 50%; background: #2D5A3D; color: #F4F7F4; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
 .chat-header .chat-header-name { font-size: 14px; font-weight: 600; color: #1E3A2F; }
 .chat-header .chat-header-sub { font-size: 12px; color: #8BAF8E; }
-.chat-messages { padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; min-height: 400px; max-height: 500px; overflow-y: auto; }
+.chat-messages { padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; flex: 1; min-height: 0; overflow-y: auto; }
 .msg { max-width: 72%; font-size: 15px; line-height: 1.6; text-align: left; }
 .msg.nest, .msg.key { align-self: flex-start; }
 .msg.nest .msg-label, .msg.key .msg-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #2D5A3D; text-transform: uppercase; margin-bottom: 4px; text-align: left; }
 .msg.nest .msg-text, .msg.key .msg-text { background: #F4F7F4; color: #1E3A2F; padding: 12px 16px; border-radius: 0 12px 12px 12px; }
 .msg.user { align-self: flex-end; }
 .msg.user .msg-text { background: #2D5A3D; color: #F4F7F4; padding: 12px 16px; border-radius: 12px 0 12px 12px; }
-.chat-input-row { display: flex; gap: 10px; padding: 16px; border-top: 1px solid rgba(80,110,80,0.12); }
+.chat-input-row { display: flex; gap: 10px; padding: 16px; border-top: 1px solid rgba(80,110,80,0.12); flex-shrink: 0; }
 .chat-input-row textarea { flex: 1; padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(80,130,80,0.35); font-size: 15px; color: #1E3A2F; resize: none; height: 48px; font-family: inherit; outline: none; line-height: 1.4; }
 .chat-input-row textarea:focus { border-color: #2D5A3D; }
 .chat-send { min-width: 48px; min-height: 48px; border-radius: 8px; background: #2D5A3D; color: #F4F7F4; border: none; font-size: 18px; cursor: pointer; flex-shrink: 0; }
@@ -400,8 +405,7 @@ button.key-brief-status.ready:hover { background: #3D7A52; transform: translateY
   .steps-grid { grid-template-columns: 1fr; }
   .steps-grid-4 { grid-template-columns: repeat(2, 1fr); }
   .bcalc-card { padding: 28px 20px; }
-  .chat-card { max-width: 100%; }
-  .chat-messages { min-height: 320px; max-height: 420px; }
+  .chat-card { max-width: 100%; max-height: 78vh; }
   .key-intake-wrap { grid-template-columns: 1fr; align-items: start; }
   .chat-input-row textarea { font-size: 16px; }
 }
