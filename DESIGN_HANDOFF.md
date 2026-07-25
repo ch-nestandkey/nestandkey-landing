@@ -651,7 +651,7 @@ CSS lives in `styles.css` and duplicated in the inline `<style>` of `listing-sam
 <div class="confirm__steps">
   <div class="confirm__step">
     <div class="confirm__step-label">Set up your AI screening now</div>
-    <p class="confirm__step-body">Check your email! Ensure Key's first email arrived your inbox well.</p>
+    <p class="confirm__step-body">Check your email! Make sure Key's first email arrived your inbox well.</p>
   </div>
   <div class="confirm__step">
     <div class="confirm__step-label">Copy your AI screening link</div>
