@@ -245,30 +245,17 @@ function appendKeyMsg(role, text) {
   syncIntakeHeights();
 }
 
-// Keeps the chat card and listing-brief panel visually matched in height
-// as either one's content grows (e.g. the brief filling in, or the
-// submitted confirm panel appearing) -- CSS grid's align-items: stretch
-// handles most cases, but this makes it explicit and reliable at the
-// exact points content changes, rather than depending on stretch alone.
-// Fits the chat card (and its brief panel) to whatever room is actually
-// left in the viewport below the card's own position, rather than a fixed
-// vh percentage -- landlords.html has a full marketing hero above the card,
-// key-intake.html has only a short intro, so a flat vh value is wrong for
-// one of them regardless of which value is picked. Recomputed on every
-// call site that already exists for this function, plus on resize, so the
-// input row never ends up pushed below the fold as content above the card
-// changes or the window is resized.
-function syncIntakeHeights() {
-  const card = document.getElementById('key-chat-card');
-  const brief = document.getElementById('key-brief-panel');
-  if (!card) return;
-  card.style.height = '';
-  const top = card.getBoundingClientRect().top;
-  const available = Math.max(420, window.innerHeight - top - 40);
-  card.style.height = available + 'px';
-  if (brief) brief.style.height = available + 'px';
-}
-window.addEventListener('resize', syncIntakeHeights);
+// Chat card and brief panel height are handled entirely by CSS now
+// (.chat-card min-height/max-height + .chat-messages flex:1, brief panel
+// matched via the .key-intake-wrap grid's align-items: stretch) -- no JS
+// sizing needed. This used to compute an explicit px height from the
+// card's viewport position, but that only reflected the card's position
+// at the moment it last ran (page load, or a message arriving), not
+// wherever the viewer had actually scrolled to -- producing a too-short
+// card on pages like landlords.html where the card sits far below the
+// initial fold. Kept as a no-op so existing call sites don't need to be
+// touched.
+function syncIntakeHeights() {}
 
 function setKeyChatEnabled(on) {
   const input = document.getElementById('key-chat-input');
@@ -328,7 +315,7 @@ async function submitKeyListing() {
     <div class="confirm__steps">
       <div class="confirm__step">
         <div class="confirm__step-label">Try now, Say hello to Key</div>
-        <p class="confirm__step-body">Key just sent you the first email. Check your inbox to ensure the email arrived your inbox well. Add key@nestandkey.ai to your contacts now (or mark it important) so nothing lands in spam.</p>
+        <p class="confirm__step-body">Check your email! Make sure Key's first email arrived your inbox well.</p>
       </div>
       <div class="confirm__step">
         <div class="confirm__step-label">How to use your AI agent for screening</div>
