@@ -30,6 +30,36 @@ let keyHistory = [];
 let keyPhotoUrls = [];
 let keyListingSubmitted = false;
 let keyLeadId = null;
+let keyApplyUrl = null;
+let keyReady = false;
+
+// localStorage persistence -- without this, a refresh (or an accidental
+// tap of a browser back/forward gesture) wipes the whole conversation with
+// no way to recover it, since nothing is saved server-side until actual
+// submission. Scoped per lead (or 'organic' for a no-lead visit) so a
+// different lead's link on the same browser never restores a stale,
+// unrelated conversation. Wrapped in try/catch since localStorage can throw
+// in private browsing or when disabled -- persistence is a nice-to-have,
+// never something that should break the chat if unavailable.
+const KEY_SESSION_PREFIX = 'nk-key-chat:';
+function keySessionStorageKey() {
+  return KEY_SESSION_PREFIX + (keyLeadId || 'organic');
+}
+function saveKeySession() {
+  try {
+    localStorage.setItem(keySessionStorageKey(), JSON.stringify({
+      keyState, keyHistory, keyPhotoUrls, keyListingSubmitted, keyApplyUrl, keyReady
+    }));
+  } catch (_) { /* unavailable -- fail silently */ }
+}
+function loadKeySession() {
+  try {
+    const raw = localStorage.getItem(keySessionStorageKey());
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) {
+    return null;
+  }
+}
 
 async function fetchLeadPrefill(leadId) {
   try {
@@ -61,6 +91,26 @@ function keyOpeningMessage(prefill) {
 async function initKeyChat(leadId) {
   keyLeadId = leadId || null;
   setKeyChatEnabled(false);
+
+  const saved = loadKeySession();
+  if (saved && Array.isArray(saved.keyHistory) && saved.keyHistory.length > 0) {
+    keyState = { ...keyState, ...(saved.keyState || {}) };
+    keyHistory = saved.keyHistory;
+    keyPhotoUrls = Array.isArray(saved.keyPhotoUrls) ? saved.keyPhotoUrls : [];
+    keyListingSubmitted = !!saved.keyListingSubmitted;
+    keyApplyUrl = saved.keyApplyUrl || null;
+    keyReady = !!saved.keyReady;
+
+    for (const msg of keyHistory) appendKeyMsg(msg.role, msg.content);
+    renderKeyBrief();
+    renderRestoredKeyPhotos();
+
+    if (keyListingSubmitted && keyApplyUrl) renderKeySubmittedConfirm(keyApplyUrl);
+    else if (keyReady) showKeyReady();
+    else setKeyChatEnabled(true);
+    return;
+  }
+
   const prefill = await fetchLeadPrefill(keyLeadId);
   if (prefill) {
     for (const [k, v] of Object.entries(prefill)) {
@@ -72,6 +122,52 @@ async function initKeyChat(leadId) {
   appendKeyMsg('assistant', opener);
   if (prefill) renderKeyBrief();
   setKeyChatEnabled(true);
+  saveKeySession();
+}
+
+function renderRestoredKeyPhotos() {
+  if (!keyPhotoUrls.length) return;
+  const grid = document.getElementById('key-photo-grid');
+  const hint = document.getElementById('key-photo-hint');
+  const drop = document.querySelector('.key-photo-drop');
+  if (!grid) return;
+  keyPhotoUrls.forEach(url => grid.appendChild(buildKeyPhotoThumb(url)));
+  if (hint) hint.textContent = `${keyPhotoUrls.length} of 10 added ✓`;
+  if (drop) drop.style.borderColor = 'rgba(45,90,61,0.5)';
+}
+
+// Shared by both the live upload handler and session restore, so a
+// restored photo thumbnail behaves identically (including remove) to one
+// just uploaded.
+function buildKeyPhotoThumb(url) {
+  const wrap = document.createElement('div');
+  wrap.className = 'key-photo-wrap';
+  wrap.dataset.url = url;
+  const thumb = document.createElement('img');
+  thumb.className = 'key-photo-thumb';
+  thumb.src = url;
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'key-photo-remove';
+  removeBtn.type = 'button';
+  removeBtn.textContent = '×';
+  removeBtn.addEventListener('click', () => {
+    keyPhotoUrls = keyPhotoUrls.filter(u => u !== url);
+    wrap.remove();
+    const hint = document.getElementById('key-photo-hint');
+    const drop = document.querySelector('.key-photo-drop');
+    if (keyPhotoUrls.length === 0) {
+      keyState.photosStatus = '';
+      if (hint) hint.textContent = 'JPG, PNG, HEIC · up to 10 photos';
+      if (drop) drop.style.borderColor = '';
+    } else if (hint) {
+      hint.textContent = `${keyPhotoUrls.length} of 10 added ✓`;
+    }
+    renderKeyBrief();
+    saveKeySession();
+  });
+  wrap.appendChild(thumb);
+  wrap.appendChild(removeBtn);
+  return wrap;
 }
 
 const KEY_BRIEF_FIELDS = [
@@ -138,6 +234,7 @@ async function sendKeyChat() {
   keyHistory.push({ role: 'user', content: text });
   input.value = '';
   setKeyChatEnabled(false);
+  saveKeySession();
 
   const box = document.getElementById('key-chat-messages');
   const typing = document.createElement('div');
@@ -164,7 +261,9 @@ async function sendKeyChat() {
     keyHistory.push({ role: 'assistant', content: data.reply });
     appendKeyMsg('assistant', data.reply);
     renderKeyBrief();
+    keyReady = !!data.ready;
     if (data.ready) showKeyReady(); else setKeyChatEnabled(true);
+    saveKeySession();
   } catch (_) {
     typing.remove();
     appendKeyError();
@@ -208,7 +307,9 @@ function retryLastKeyMessage() {
       keyHistory.push({ role: 'assistant', content: data.reply });
       appendKeyMsg('assistant', data.reply);
       renderKeyBrief();
+      keyReady = !!data.ready;
       if (data.ready) showKeyReady(); else setKeyChatEnabled(true);
+      saveKeySession();
     })
     .catch(() => { typing.remove(); appendKeyError(); setKeyChatEnabled(true); });
 }
@@ -265,6 +366,7 @@ function setKeyChatEnabled(on) {
 }
 
 function showKeyReady() {
+  keyReady = true;
   renderKeyBrief();
   setKeyChatEnabled(true);
   const box = document.getElementById('key-chat-messages');
@@ -276,6 +378,7 @@ function showKeyReady() {
   box.appendChild(cta);
   box.scrollTop = box.scrollHeight;
   syncIntakeHeights();
+  saveKeySession();
 }
 
 // applyUrl is server-generated (built in submit-listing.js from a UUID),
@@ -305,6 +408,16 @@ async function submitKeyListing() {
   }
 
   keyListingSubmitted = true;
+  keyApplyUrl = applyUrl;
+  renderKeySubmittedConfirm(applyUrl);
+  saveKeySession();
+}
+
+// Builds the post-submission confirmation panel. Called right after a real
+// submission succeeds, and also when restoring a previously-completed
+// session from localStorage after a refresh -- so a refresh after
+// submitting never leaves the landlord looking at a broken/stuck chat.
+function renderKeySubmittedConfirm(applyUrl) {
   const box = document.getElementById('key-chat-messages');
   const cta = box.querySelector('.chat-ready-cta');
   if (cta) cta.remove();
@@ -331,7 +444,8 @@ async function submitKeyListing() {
   box.scrollTop = box.scrollHeight;
   const inputRow = document.getElementById('key-chat-input-row');
   if (inputRow) inputRow.style.display = 'none';
-  if (btn) { btn.textContent = '✓ Submitted'; btn.style.background = '#4A6B52'; }
+  const btn = document.getElementById('key-brief-submit') || document.getElementById('key-start-btn') || document.getElementById('key-chat-submit-btn');
+  if (btn) { btn.textContent = '✓ Submitted'; btn.disabled = true; btn.style.background = '#4A6B52'; }
   syncIntakeHeights();
 }
 
@@ -394,6 +508,7 @@ function bindKeyChatUI() {
             document.getElementById('key-photo-hint').textContent = `${keyPhotoUrls.length} of 10 added ✓`;
           }
           renderKeyBrief();
+          saveKeySession();
         });
 
         wrap.appendChild(thumb);
@@ -414,6 +529,7 @@ function bindKeyChatUI() {
         document.getElementById('key-photo-hint').textContent = `${keyPhotoUrls.length} of 10 added ✓`;
         drop.style.borderColor = 'rgba(45,90,61,0.5)';
         appendKeyMsg('assistant', `Got it — I've noted ${keyPhotoUrls.length} photo${keyPhotoUrls.length > 1 ? 's' : ''} for this rental profile. You can add more or keep chatting.`);
+        saveKeySession();
       }
     });
   }
