@@ -315,7 +315,7 @@ async function submitKeyListing() {
     <div class="confirm__steps">
       <div class="confirm__step">
         <div class="confirm__step-label">Try now, Say hello to Key</div>
-        <p class="confirm__step-body">Key just sent you the first email. Check your inbox to ensure the email arrived your inbox well. Add key@nestandkey.ai to your contacts now (or mark it important) so nothing lands in spam.</p>
+        <p class="confirm__step-body">Check your email! Ensure Key's first email arrived your inbox well.</p>
       </div>
       <div class="confirm__step">
         <div class="confirm__step-label">How to use your AI agent for screening</div>
