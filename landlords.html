@@ -39,6 +39,16 @@
     /* Gateway/invitation overlay -- shown over the real, unmodified page for
        an invited cold-outreach lead (leads.status === 'draft'). Hard gate,
        no dismiss: an invited lead either claims or leaves the page. */
+    /* Sticky banner reinforcing this page is private/invite-only -- pinned
+       just below the real nav, above the dimmed backdrop, visible the whole
+       time the gateway is up regardless of the backdrop's own scroll. */
+    #invite-private-banner {
+      display: none; position: fixed; top: 64px; left: 0; right: 0; z-index: 1000;
+      background: #1E3A2F; color: #EFF4F0; text-align: center;
+      font-size: 13px; font-weight: 600; padding: 10px 16px; box-sizing: border-box;
+    }
+    #invite-private-banner.visible { display: block; }
+
     #invite-gateway-backdrop {
       display: none; position: fixed; inset: 0; z-index: 999;
       background: rgba(30,58,47,0.55); overflow-y: auto;
@@ -65,6 +75,7 @@
     }
     .invite-trust-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #8BAF8E; letter-spacing: 0.04em; margin-bottom: 3px; }
     .invite-trust-detail { font-size: 13px; font-weight: 600; color: #1E3A2F; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .invite-trust-exclusive { font-size: 11.5px; color: #6B8F71; margin-top: 4px; }
     .invite-gateway-claim h2 { font-size: 24px; font-weight: 700; color: #1E3A2F; margin: 0 0 10px; }
     .invite-gateway-claim .invite-sub { font-size: 15px; color: #1E3A2F; line-height: 1.6; margin: 0 0 36px; }
     .invite-gateway-claim .invite-intro { font-size: 14px; color: #4A6B52; line-height: 1.7; margin: 0 0 12px; }
@@ -175,6 +186,8 @@
 </head>
 <body>
 
+  <div id="invite-private-banner">This page is private — only reachable through the link we sent you, not through nestandkey.ai.</div>
+
   <div id="invite-gateway-backdrop">
     <div class="invite-gateway-modal">
       <div class="invite-gateway-carousel">
@@ -250,6 +263,7 @@
           <div style="min-width:0">
             <div class="invite-trust-label">Found Your Room on Facebook</div>
             <div class="invite-trust-detail" id="invite-trust-detail">Private room</div>
+            <div class="invite-trust-exclusive">This link was created just for you — you won't find this page by browsing our site.</div>
           </div>
         </div>
         <h2>Congrats!</h2>
@@ -261,7 +275,7 @@
           <button type="submit" id="invite-claim-submit">Claim your Key →</button>
           <p id="invite-claim-error"></p>
         </form>
-        <p class="invite-reassurance">Takes about 2 minutes. You're always the one who decides who moves in.</p>
+        <p class="invite-reassurance">Takes about 2 minutes. You're always the one who decides who moves in. This page isn't listed anywhere on our site — just for you.</p>
         <div class="invite-terms-placeholder">[Terms/agreement — reserved, not yet designed]</div>
       </div>
     </div>
@@ -536,6 +550,7 @@
       const parts = [lead.propertyType || 'Private room', rentPart, place].filter(Boolean);
       detail.textContent = parts.join(' · ');
       document.getElementById('invite-gateway-backdrop').classList.add('visible');
+      document.getElementById('invite-private-banner').classList.add('visible');
     }
 
     // Carousel behavior ported line-for-line from Claude Design's canvas
